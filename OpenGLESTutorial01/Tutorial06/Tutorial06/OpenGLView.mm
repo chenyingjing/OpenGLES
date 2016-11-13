@@ -250,10 +250,10 @@ const int SurfaceMaxCount = 6;
 
 - (void)setCurrentSurface:(int)index
 {
-    index = index % [_vboArray count];
-    _currentVBO = [_vboArray objectAtIndex:index];
-    
-    [self resetRotation];
+//    index = index % [_vboArray count];
+//    _currentVBO = [_vboArray objectAtIndex:index];
+//    
+//    [self resetRotation];
     
     [self render];
 }
@@ -286,7 +286,7 @@ const int SurfaceMaxCount = 6;
     GLuint vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
+//    glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
     
     // Create the VBO for the line indice
     //
@@ -360,9 +360,11 @@ const int SurfaceMaxCount = 6;
 
 - (void)drawSurface
 {
+/*    
     if (_currentVBO == nil)
         return;
-    
+
+
     glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, [_currentVBO vertexSize] * sizeof(GLfloat), 0);
     glEnableVertexAttribArray(_positionSlot);
@@ -380,6 +382,20 @@ const int SurfaceMaxCount = 6;
     glDrawElements(GL_LINES, [_currentVBO lineIndexCount], GL_UNSIGNED_SHORT, 0);
     
     glDisableVertexAttribArray(_positionSlot);
+*/
+    GLfloat vertices[] = {
+        0.0f,  0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        0.5f,  -0.5f, 0.0f };
+    
+    // Load the vertex data
+    //
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
+    glEnableVertexAttribArray(_positionSlot);
+    
+    // Draw triangle
+    //
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     
 }
 
