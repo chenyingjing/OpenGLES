@@ -133,6 +133,35 @@
     
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_SHORT, indices);
     
+    
+    
+    glVertexAttrib4f(_colorSlot, 0.0, 0.0, 0.0, 1.0);
+    
+    const GLushort lineIndices[] = {
+        // Front face
+        3, 2,  2, 1,  1, 3,   3, 1, 1, 0, 0, 3,
+        
+        // Back face
+        7, 5,  5, 4,  4, 7,   7, 6, 6, 5, 5, 7,
+        
+        // Left face
+        0, 1,  1, 7,  7, 0,   7, 1, 1, 6, 6, 7,
+        
+        // Right face
+        3, 4,  4, 5,  5, 3,   3, 5, 5, 2, 2, 3,
+        
+        // Up face
+        1, 2,  2, 5,  5, 1,   1, 5, 5, 6, 6, 1,
+        
+        // Down face
+        0, 7,  7, 3,  3, 0,   3, 7, 7, 4, 4, 3
+    };
+    
+    glDrawElements(GL_LINES, sizeof(lineIndices)/sizeof(lineIndices[0]), GL_UNSIGNED_SHORT, lineIndices);
+    
+    
+    
+    
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
@@ -250,8 +279,8 @@
     
     //ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
     
-//    ksRotate(&_modelViewMatrix, 30.0, 0.0, 1.0, 0.0);
-//    ksRotate(&_modelViewMatrix, -15.0, 1.0, 0.0, 0.0);
+    ksRotate(&_modelViewMatrix, 30.0, 0.0, 1.0, 0.0);
+    ksRotate(&_modelViewMatrix, -15.0, 1.0, 0.0, 0.0);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
