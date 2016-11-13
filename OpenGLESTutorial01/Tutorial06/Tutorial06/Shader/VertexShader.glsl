@@ -7,7 +7,6 @@ varying vec4 vDestinationColor;
 
 void main(void)
 {
-    //gl_Position = projection * modelView * vPosition;
-    //vDestinationColor = vSourceColor;
-    gl_Position = vPosition;
+    gl_Position = projection * modelView * vPosition;
+    vDestinationColor = vSourceColor;
 }
