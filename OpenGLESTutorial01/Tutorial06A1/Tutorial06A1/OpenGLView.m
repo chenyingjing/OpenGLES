@@ -102,6 +102,8 @@
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
     glEnableVertexAttribArray(_positionSlot);
     
+    glVertexAttrib4f(_colorSlot, 1.0, 1.0, 0.0, 1.0);
+    
     // Draw triangle
     //
     //glDrawArrays(GL_LINE_LOOP, 0, 3);
@@ -189,6 +191,10 @@
     // Get attribute slot from program
     //
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
+
+    // Get the attribute color slot from program
+    //
+    _colorSlot = glGetAttribLocation(_programHandle, "vSourceColor");
 
     // Get the uniform model-view matrix slot from program
     //

@@ -22,6 +22,7 @@
     GLuint _positionSlot;
     GLuint _modelViewSlot;
     GLuint _projectionSlot;
+    GLuint _colorSlot;
 
     KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;
