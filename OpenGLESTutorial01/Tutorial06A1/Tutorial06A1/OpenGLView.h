@@ -20,7 +20,10 @@
     GLuint _frameBuffer;
     GLuint _programHandle;
     GLuint _positionSlot;
+    GLuint _modelViewSlot;
     GLuint _projectionSlot;
+
+    KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;
     
 }

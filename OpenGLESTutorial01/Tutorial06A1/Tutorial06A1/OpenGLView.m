@@ -90,11 +90,12 @@
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     
-    GLfloat z = -5.0f;
+    [self updateSurfaceTransform];
+    
     GLfloat vertices[] = {
-        0.0f,  0.5f, z,
-        -0.5f, -0.5f, z,
-        0.5f,  -0.5f, z };
+        0.0f,  0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        0.5f,  -0.5f, 0.0f };
     
     // Load the vertex data
     //
@@ -189,6 +190,10 @@
     //
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
 
+    // Get the uniform model-view matrix slot from program
+    //
+    _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
+
     // Get the uniform projection matrix slot from program
     //
     _projectionSlot = glGetUniformLocation(_programHandle, "projection");
@@ -200,10 +205,22 @@
     //
     float aspect = self.frame.size.width / self.frame.size.height;
     ksMatrixLoadIdentity(&_projectionMatrix);
-    ksPerspective(&_projectionMatrix, 60.0, aspect, 0.01f, 50.0f);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 1.0f, 50.0f);
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
+}
+
+- (void)updateSurfaceTransform
+{
+    ksMatrixLoadIdentity(&_modelViewMatrix);
+    
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -5);
+    
+    //ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
+    
+    // Load the model-view matrix
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
 @end
