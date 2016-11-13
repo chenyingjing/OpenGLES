@@ -25,7 +25,7 @@ int Cube::GetVertexCount() const
 
 int Cube::GetLineIndexCount() const
 {
-    return 72;
+    return 36;
 }
 
 int Cube::GetTriangleIndexCount() const
@@ -61,22 +61,22 @@ void Cube::GenerateLineIndices(unsigned short * indices) const
     
     const GLushort lineIndices[] = {
         // Front face
-        3, 2,  2, 1,  1, 3,   3, 1, 1, 0, 0, 3,
+        3, 2,  2, 1,  1, 3,   /*3, 1,*/ 1, 0, 0, 3,
         
         // Back face
-        7, 5,  5, 4,  4, 7,   7, 6, 6, 5, 5, 7,
+        7, 5,  5, 4,  4, 7,   7, 6, 6, 5, /*5, 7,*/
         
         // Left face
-        0, 1,  1, 7,  7, 0,   7, 1, 1, 6, 6, 7,
+        /*0, 1,*/  1, 7,  7, 0,   /*7, 1,*/ 1, 6, /*6, 7,*/
         
         // Right face
-        3, 4,  4, 5,  5, 3,   3, 5, 5, 2, 2, 3,
+        3, 4,  /*4, 5,*/  5, 3,   /*3, 5,*/ 5, 2, /*2, 3,*/
         
         // Up face
-        1, 2,  2, 5,  5, 1,   1, 5, 5, 6, 6, 1,
+        /*1, 2,*/  /*2, 5,*/  5, 1,   /*1, 5,*/ /*5, 6,*/ /*6, 1,*/
         
         // Down face
-        0, 7,  7, 3,  3, 0,   3, 7, 7, 4, 4, 3
+        /*0, 7,*/  7, 3  /*,3, 0,*/   /*3, 7,*/ /*7, 4,*/ /*4, 3*/
     };
     
     memcpy(indices, lineIndices, sizeof(lineIndices));
