@@ -92,10 +92,17 @@
     
     [self updateSurfaceTransform];
     
-    GLfloat vertices[] = {
-        0.0f,  0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f,  -0.5f, 0.0f };
+    const GLfloat vertices[] = {
+        -1.5f, -1.5f, 1.5f,// -0.577350, -0.577350, 0.577350,
+        -1.5f, 1.5f, 1.5f,// -0.577350, 0.577350, 0.577350,
+        1.5f, 1.5f, 1.5f,// 0.577350, 0.577350, 0.577350,
+        1.5f, -1.5f, 1.5f,// 0.577350, -0.577350, 0.577350,
+        
+        1.5f, -1.5f, -1.5f,// 0.577350, -0.577350, -0.577350,
+        1.5f, 1.5f, -1.5f,// 0.577350, 0.577350, -0.577350,
+        -1.5f, 1.5f, -1.5f,// -0.577350, 0.577350, -0.577350,
+        -1.5f, -1.5f, -1.5f//, -0.577350, -0.577350, -0.577350
+    };
     
     // Load the vertex data
     //
@@ -104,17 +111,27 @@
     
     glVertexAttrib4f(_colorSlot, 1.0, 0.0, 0.0, 1.0);
     
-    // Draw triangle
-    //
-    //glDrawArrays(GL_LINE_LOOP, 0, 3);
-    //glDrawArrays(GL_TRIANGLES, 0, 3);
-    //glDrawArrays(GL_POINTS, 0, 3);
-    
-    GLubyte indices[] = {
-        0, 1, 2
+    const GLushort indices[] = {
+        // Front face
+        3, 2, 1, 3, 1, 0,
+        
+        // Back face
+        7, 5, 4, 7, 6, 5,
+        
+        // Left face
+        0, 1, 7, 7, 1, 6,
+        
+        // Right face
+        3, 4, 5, 3, 5, 2,
+        
+        // Up face
+        1, 2, 5, 1, 5, 6,
+        
+        // Down face
+        0, 7, 3, 3, 7, 4
     };
-    //glDrawElements(GL_LINE_LOOP, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
-    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
+    
+    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_SHORT, indices);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -221,15 +238,20 @@
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
+    
+    glEnable(GL_CULL_FACE);
 }
 
 - (void)updateSurfaceTransform
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -5);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -7);
     
     //ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
+    
+//    ksRotate(&_modelViewMatrix, 30.0, 0.0, 1.0, 0.0);
+//    ksRotate(&_modelViewMatrix, -15.0, 1.0, 0.0, 0.0);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
