@@ -102,13 +102,19 @@
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
     glEnableVertexAttribArray(_positionSlot);
     
-    glVertexAttrib4f(_colorSlot, 1.0, 1.0, 0.0, 1.0);
+    glVertexAttrib4f(_colorSlot, 1.0, 0.0, 0.0, 1.0);
     
     // Draw triangle
     //
     //glDrawArrays(GL_LINE_LOOP, 0, 3);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    //glDrawArrays(GL_TRIANGLES, 0, 3);
     //glDrawArrays(GL_POINTS, 0, 3);
+    
+    GLubyte indices[] = {
+        0, 1, 2
+    };
+    //glDrawElements(GL_LINE_LOOP, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
+    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
