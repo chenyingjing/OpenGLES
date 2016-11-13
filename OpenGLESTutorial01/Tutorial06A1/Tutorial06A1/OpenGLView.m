@@ -8,7 +8,11 @@
 
 #import "OpenGLView.h"
 
-@interface OpenGLView()
+@interface OpenGLView() {
+    GLuint vertexBuffer;
+    GLuint lineIndexBuffer;
+    GLuint triangleIndexBuffer;
+}
 
 - (void)setupLayer;
 - (void)setupContext;
@@ -92,72 +96,20 @@
     
     [self updateSurfaceTransform];
     
-    const GLfloat vertices[] = {
-        -1.5f, -1.5f, 1.5f,// -0.577350, -0.577350, 0.577350,
-        -1.5f, 1.5f, 1.5f,// -0.577350, 0.577350, 0.577350,
-        1.5f, 1.5f, 1.5f,// 0.577350, 0.577350, 0.577350,
-        1.5f, -1.5f, 1.5f,// 0.577350, -0.577350, 0.577350,
-        
-        1.5f, -1.5f, -1.5f,// 0.577350, -0.577350, -0.577350,
-        1.5f, 1.5f, -1.5f,// 0.577350, 0.577350, -0.577350,
-        -1.5f, 1.5f, -1.5f,// -0.577350, 0.577350, -0.577350,
-        -1.5f, -1.5f, -1.5f//, -0.577350, -0.577350, -0.577350
-    };
-    
-    // Load the vertex data
-    //
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
     glEnableVertexAttribArray(_positionSlot);
+
     
     glVertexAttrib4f(_colorSlot, 1.0, 0.0, 0.0, 1.0);
-    
-    const GLushort indices[] = {
-        // Front face
-        3, 2, 1, 3, 1, 0,
-        
-        // Back face
-        7, 5, 4, 7, 6, 5,
-        
-        // Left face
-        0, 1, 7, 7, 1, 6,
-        
-        // Right face
-        3, 4, 5, 3, 5, 2,
-        
-        // Up face
-        1, 2, 5, 1, 5, 6,
-        
-        // Down face
-        0, 7, 3, 3, 7, 4
-    };
-    
-    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_SHORT, indices);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleIndexBuffer);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
     
     
     
     glVertexAttrib4f(_colorSlot, 0.0, 0.0, 0.0, 1.0);
-    
-    const GLushort lineIndices[] = {
-        // Front face
-        3, 2,  2, 1,  1, 3,   3, 1, 1, 0, 0, 3,
-        
-        // Back face
-        7, 5,  5, 4,  4, 7,   7, 6, 6, 5, 5, 7,
-        
-        // Left face
-        0, 1,  1, 7,  7, 0,   7, 1, 1, 6, 6, 7,
-        
-        // Right face
-        3, 4,  4, 5,  5, 3,   3, 5, 5, 2, 2, 3,
-        
-        // Up face
-        1, 2,  2, 5,  5, 1,   1, 5, 5, 6, 6, 1,
-        
-        // Down face
-        0, 7,  7, 3,  3, 0,   3, 7, 7, 4, 4, 3
-    };
-    
-    glDrawElements(GL_LINES, sizeof(lineIndices)/sizeof(lineIndices[0]), GL_UNSIGNED_SHORT, lineIndices);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lineIndexBuffer);
+    glDrawElements(GL_LINES, 72, GL_UNSIGNED_SHORT, 0);
     
     
     
@@ -183,8 +135,85 @@
     
     [self setupProjection];
     
+    [self setupVBOs];
+    
     [self render];
     
+}
+
+- (void)setupVBOs
+{
+    // Create the VBO for the vertice.
+    //
+    const GLfloat vertices[] = {
+        -1.5f, -1.5f, 1.5f,// -0.577350, -0.577350, 0.577350,
+        -1.5f, 1.5f, 1.5f,// -0.577350, 0.577350, 0.577350,
+        1.5f, 1.5f, 1.5f,// 0.577350, 0.577350, 0.577350,
+        1.5f, -1.5f, 1.5f,// 0.577350, -0.577350, 0.577350,
+        
+        1.5f, -1.5f, -1.5f,// 0.577350, -0.577350, -0.577350,
+        1.5f, 1.5f, -1.5f,// 0.577350, 0.577350, -0.577350,
+        -1.5f, 1.5f, -1.5f,// -0.577350, 0.577350, -0.577350,
+        -1.5f, -1.5f, -1.5f//, -0.577350, -0.577350, -0.577350
+    };
+    
+    
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+    // Create the VBO for the line indice
+    //
+    
+    const GLushort lineIndices[] = {
+        // Front face
+        3, 2,  2, 1,  1, 3,   3, 1, 1, 0, 0, 3,
+        
+        // Back face
+        7, 5,  5, 4,  4, 7,   7, 6, 6, 5, 5, 7,
+        
+        // Left face
+        0, 1,  1, 7,  7, 0,   7, 1, 1, 6, 6, 7,
+        
+        // Right face
+        3, 4,  4, 5,  5, 3,   3, 5, 5, 2, 2, 3,
+        
+        // Up face
+        1, 2,  2, 5,  5, 1,   1, 5, 5, 6, 6, 1,
+        
+        // Down face
+        0, 7,  7, 3,  3, 0,   3, 7, 7, 4, 4, 3
+    };
+    glGenBuffers(1, &lineIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lineIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(lineIndices), lineIndices, GL_STATIC_DRAW);
+    
+    // Create the VBO for the triangle indice
+    //
+    const GLushort indices[] = {
+        // Front face
+        3, 2, 1, 3, 1, 0,
+        
+        // Back face
+        7, 5, 4, 7, 6, 5,
+        
+        // Left face
+        0, 1, 7, 7, 1, 6,
+        
+        // Right face
+        3, 4, 5, 3, 5, 2,
+        
+        // Up face
+        1, 2, 5, 1, 5, 6,
+        
+        // Down face
+        0, 7, 3, 3, 7, 4
+    };
+    
+    glGenBuffers(1, &triangleIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 }
 
 - (void)setupProgram
