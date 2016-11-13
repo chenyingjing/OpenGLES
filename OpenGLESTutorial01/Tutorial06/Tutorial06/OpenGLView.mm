@@ -10,6 +10,7 @@
 #import "GLESUtils.h"
 #import "ParametricEquations.h"
 #import "Quaternion.h"
+#include "Cube.h"
 
 //
 // DrawableVBO implementation
@@ -213,20 +214,24 @@
     glEnable(GL_CULL_FACE);
 }
 
-//const int SurfaceSphere = 0;
+const int SurfaceSphere = 0;
 const int SurfaceCone = 1;
 const int SurfaceTorus = 2;
 const int SurfaceTrefoilKnot = 3;
 const int SurfaceKleinBottle = 4;
 const int SurfaceMobiusStrip = 5;
+const int SurfaceCube = 6;
 
-const int SurfaceMaxCount = 6;
+const int SurfaceMaxCount = 7;
 
 - (ISurface *)createSurface:(int)type
 {
     ISurface * surface = NULL;
     
-    if (type == SurfaceCone) {
+    if (type == SurfaceSphere) {
+        surface = new Sphere(2.0f);
+    }
+    else if (type == SurfaceCone) {
         surface = new Cone(4, 1);
     }
     else if (type == SurfaceTorus) {
@@ -241,8 +246,11 @@ const int SurfaceMaxCount = 6;
     else if (type == SurfaceMobiusStrip) {
         surface = new MobiusStrip(1.4);
     }
+    else if (type == SurfaceCube) {
+        surface = new Cube();
+    }
     else {
-        surface = new Sphere(2.0f);
+        surface = NULL;
     }
     
     return surface;

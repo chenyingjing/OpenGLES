@@ -38,6 +38,7 @@
                                             <segment title="4"/>
                                             <segment title="5"/>
                                             <segment title="6"/>
+                                            <segment title="7"/>
                                         </segments>
                                         <connections>
                                             <action selector="segmentSelectionChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="a5w-v9-ArW"/>

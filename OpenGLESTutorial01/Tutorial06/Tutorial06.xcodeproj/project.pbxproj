@@ -19,6 +19,7 @@
 		232474791DD6BC6B00FD1FFB /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2324746D1DD6BC6B00FD1FFB /* ParametricSurface.cpp */; };
 		2324747A1DD6BC6B00FD1FFB /* GLESMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 232474701DD6BC6B00FD1FFB /* GLESMath.c */; };
 		2324747B1DD6BC6B00FD1FFB /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 232474731DD6BC6B00FD1FFB /* GLESUtils.m */; };
+		23ED67C51DD8663B00D97F6B /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED67C31DD8663B00D97F6B /* Cube.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,8 @@
 		232474731DD6BC6B00FD1FFB /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLESUtils.m; sourceTree = "<group>"; };
 		232474741DD6BC6B00FD1FFB /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
 		232474751DD6BC6B00FD1FFB /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		23ED67C31DD8663B00D97F6B /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
+		23ED67C41DD8663B00D97F6B /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +121,8 @@
 				2324746C1DD6BC6B00FD1FFB /* ParametricEquations.h */,
 				2324746D1DD6BC6B00FD1FFB /* ParametricSurface.cpp */,
 				2324746E1DD6BC6B00FD1FFB /* ParametricSurface.h */,
+				23ED67C31DD8663B00D97F6B /* Cube.cpp */,
+				23ED67C41DD8663B00D97F6B /* Cube.h */,
 			);
 			path = Surface;
 			sourceTree = "<group>";
@@ -209,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23ED67C51DD8663B00D97F6B /* Cube.cpp in Sources */,
 				232474571DD6B34700FD1FFB /* ViewController.m in Sources */,
 				2324747B1DD6BC6B00FD1FFB /* GLESUtils.m in Sources */,
 				232474761DD6BC6B00FD1FFB /* OpenGLView.mm in Sources */,
@@ -372,6 +378,7 @@
 				232474651DD6B34700FD1FFB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
