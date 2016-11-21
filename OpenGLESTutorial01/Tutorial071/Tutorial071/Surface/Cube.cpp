@@ -11,11 +11,18 @@
 
 void Cube::SetVertexFlags(unsigned char flags)
 {
+    m_vertexFlags = flags;
 }
 
 int Cube::GetVertexSize() const
 {
-    return 6;
+    int floatsPerVertex = 3;
+    if (m_vertexFlags & VertexFlagsNormals)
+        floatsPerVertex += 3;
+//    if (m_vertexFlags & VertexFlagsTexCoords)
+//    floatsPerVertex += 2;
+    
+    return floatsPerVertex;
 }
 
 int Cube::GetVertexCount() const
@@ -38,8 +45,20 @@ void Cube::GenerateVertices(float * vertices) const
     if (!vertices) {
         return;
     }
-    
+
     const GLfloat verticesData[] = {
+        -1.5f, -1.5f, 1.5f,
+        -1.5f, 1.5f, 1.5f,
+        1.5f, 1.5f, 1.5f, 
+        1.5f, -1.5f, 1.5f,
+        
+        1.5f, -1.5f, -1.5f, 
+        1.5f, 1.5f, -1.5f,
+        -1.5f, 1.5f, -1.5f, 
+        -1.5f, -1.5f, -1.5f
+    };
+    
+    const GLfloat verticesDataWithNormal[] = {
         -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350,
         -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350,
         1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350,
@@ -50,7 +69,11 @@ void Cube::GenerateVertices(float * vertices) const
         -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350,
         -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350
     };
-    memcpy(vertices, verticesData, sizeof(verticesData));
+    if (m_vertexFlags & VertexFlagsNormals) {
+        memcpy(vertices, verticesDataWithNormal, sizeof(verticesDataWithNormal));
+    } else {
+        memcpy(vertices, verticesData, sizeof(verticesData));
+    }
 }
 
 void Cube::GenerateLineIndices(unsigned short * indices) const

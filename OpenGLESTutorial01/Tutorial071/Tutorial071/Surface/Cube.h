@@ -24,7 +24,9 @@ public:
     void GenerateVertices(float * vertices) const;
     void GenerateLineIndices(unsigned short * indices) const;
     void GenerateTriangleIndices(unsigned short * indices) const;
-
+    
+private:
+    unsigned char m_vertexFlags;
 };
 
 
