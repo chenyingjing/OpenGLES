@@ -22,6 +22,7 @@
 		239C9A621DE47BC300FA5A82 /* GLESMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 239C9A571DE47BC300FA5A82 /* GLESMath.c */; };
 		239C9A631DE47BC300FA5A82 /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 239C9A5A1DE47BC300FA5A82 /* GLESUtils.m */; };
 		239C9A661DE47CA300FA5A82 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 239C9A641DE47CA300FA5A82 /* Main.storyboard */; };
+		23ECE1901DE998630080B933 /* PerPixelToonFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23ECE18F1DE998630080B933 /* PerPixelToonFragment.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		239C9A5B1DE47BC300FA5A82 /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
 		239C9A5C1DE47BC300FA5A82 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		239C9A651DE47CA300FA5A82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		23ECE18F1DE998630080B933 /* PerPixelToonFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerPixelToonFragment.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		239C9A4D1DE47BC300FA5A82 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				23ECE18F1DE998630080B933 /* PerPixelToonFragment.glsl */,
 				2319756C1DE4821A00D60122 /* PerPixelFragment.glsl */,
 				2319756A1DE481C600D60122 /* PerPixelVertex.glsl */,
 				239C9A4E1DE47BC300FA5A82 /* FragmentShader.glsl */,
@@ -211,6 +214,7 @@
 				2319756B1DE481C600D60122 /* PerPixelVertex.glsl in Resources */,
 				2374E1951DE4768200706ACA /* Assets.xcassets in Resources */,
 				239C9A5F1DE47BC300FA5A82 /* VertexShader.glsl in Resources */,
+				23ECE1901DE998630080B933 /* PerPixelToonFragment.glsl in Resources */,
 				239C9A5E1DE47BC300FA5A82 /* FragmentShader.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

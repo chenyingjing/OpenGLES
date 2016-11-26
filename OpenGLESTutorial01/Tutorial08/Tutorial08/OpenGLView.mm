@@ -18,7 +18,7 @@ enum LightMode {
     PerPixelToon,
     PerPixelSelfShadowing
 };
-const enum LightMode CurrentLightMode = PerPixel;
+const enum LightMode CurrentLightMode = PerPixelToon;
 
 
 //
