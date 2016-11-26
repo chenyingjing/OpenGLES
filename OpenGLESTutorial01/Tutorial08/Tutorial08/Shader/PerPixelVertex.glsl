@@ -10,6 +10,7 @@ attribute vec4 vDiffuseMaterial;
 
 varying vec3 vEyeSpaceNormal;
 varying vec4 vDiffuse;
+varying vec4 vPosInWorld;
 
 void main(void)
 {
@@ -17,5 +18,6 @@ void main(void)
     
     vEyeSpaceNormal = normalMatrix * vNormal;
     vDiffuse = vDiffuseMaterial;
+    vPosInWorld = modelView * vPosition;
 }
 
