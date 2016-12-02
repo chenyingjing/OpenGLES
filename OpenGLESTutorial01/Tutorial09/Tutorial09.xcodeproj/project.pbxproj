@@ -17,6 +17,7 @@
 		2348F60F1DEDBAFB008E3D56 /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2348F5FF1DEDBAFB008E3D56 /* ParametricSurface.cpp */; };
 		2348F6101DEDBAFB008E3D56 /* GLESMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 2348F6021DEDBAFB008E3D56 /* GLESMath.c */; };
 		2348F6111DEDBAFB008E3D56 /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2348F6051DEDBAFB008E3D56 /* GLESUtils.m */; };
+		2381C0D01DF05F3F0087733A /* Monkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2381C0CF1DF05F3F0087733A /* Monkey.obj */; };
 		23A538801DEF0DE80094471B /* Ninja.obj in Resources */ = {isa = PBXBuildFile; fileRef = 23A5387E1DEF0DE80094471B /* Ninja.obj */; };
 		23A538811DEF0DE80094471B /* Wizards_Hat.obj in Resources */ = {isa = PBXBuildFile; fileRef = 23A5387F1DEF0DE80094471B /* Wizards_Hat.obj */; };
 		23A538841DEF0E420094471B /* ModelSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A538821DEF0E420094471B /* ModelSurface.cpp */; };
@@ -47,6 +48,7 @@
 		2348F6051DEDBAFB008E3D56 /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLESUtils.m; sourceTree = "<group>"; };
 		2348F6061DEDBAFB008E3D56 /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
 		2348F6071DEDBAFB008E3D56 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		2381C0CF1DF05F3F0087733A /* Monkey.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.obj; sourceTree = "<group>"; };
 		23A5387E1DEF0DE80094471B /* Ninja.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ninja.obj; sourceTree = "<group>"; };
 		23A5387F1DEF0DE80094471B /* Wizards_Hat.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Wizards_Hat.obj; sourceTree = "<group>"; };
 		23A538821DEF0E420094471B /* ModelSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModelSurface.cpp; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		23A5387D1DEF0DE80094471B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2381C0CF1DF05F3F0087733A /* Monkey.obj */,
 				23A5387E1DEF0DE80094471B /* Ninja.obj */,
 				23A5387F1DEF0DE80094471B /* Wizards_Hat.obj */,
 			);
@@ -228,6 +231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A538811DEF0DE80094471B /* Wizards_Hat.obj in Resources */,
+				2381C0D01DF05F3F0087733A /* Monkey.obj in Resources */,
 				23BABBBB1DEDB6D7003713FA /* LaunchScreen.storyboard in Resources */,
 				2348F60C1DEDBAFB008E3D56 /* PerPixelVertex.glsl in Resources */,
 				23BABBB81DEDB6D7003713FA /* Assets.xcassets in Resources */,

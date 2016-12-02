@@ -246,7 +246,7 @@ const enum LightMode CurrentLightMode = PerPixel;
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
     
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -259,7 +259,7 @@ const enum LightMode CurrentLightMode = PerPixel;
 const int SurfaceCube = 0;
 
 //const int SurfaceMaxCount = 7;
-const int SurfaceMaxCount = 3;
+const int SurfaceMaxCount = 4;
 
 - (ISurface *)createSurface:(int)type
 {
@@ -290,6 +290,7 @@ const int SurfaceMaxCount = 3;
         NSArray * modelList = [NSArray arrayWithObjects:
                                @"Ninja",
                                @"Wizards_Hat",
+                               @"Monkey",
                                nil];
         
         type = (type - 1) % [modelList count];

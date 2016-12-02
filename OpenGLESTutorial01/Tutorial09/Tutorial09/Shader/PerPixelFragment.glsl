@@ -43,7 +43,8 @@ void main(void)
     
     highp vec3 surfaceToCamera = normalize(E - surfacePos); //also a unit
     highp float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
-    highp float df = max(0.0, dot(N, L));
+    //highp float df = max(0.0, dot(N, L));
+    highp float df = abs(dot(N, L));
     highp float sf = 0.0;
     if (cosAngle > 0.0) {
         sf = pow(cosAngle, shininess);
