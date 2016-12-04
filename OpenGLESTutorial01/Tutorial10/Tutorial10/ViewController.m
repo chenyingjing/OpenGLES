@@ -47,4 +47,11 @@
     self.openGLView.filterMode = value;
 }
 
+- (IBAction)surfaceSegmentSelectionChanged:(id)sender {
+    UISegmentedControl * segment = (UISegmentedControl *)sender;
+    int value = (int)[segment selectedSegmentIndex];
+    
+    [self.openGLView setCurrentSurface:value];
+}
+
 @end

@@ -16,6 +16,7 @@
 - (IBAction)textureSegmentSelectionChanged:(id)sender;
 - (IBAction)wrapSegmentSelectionChanged:(id)sender;
 - (IBAction)filterSegmentSelectionChanged:(id)sender;
+- (IBAction)surfaceSegmentSelectionChanged:(id)sender;
 
 
 @end

@@ -259,50 +259,17 @@ const enum LightMode CurrentLightMode = PerVertex;
 const int SurfaceCube = 0;
 
 //const int SurfaceMaxCount = 7;
-const int SurfaceMaxCount = 4;
+const int SurfaceMaxCount = 2;
 
 - (ISurface *)createSurface:(int)type
 {
     ISurface * surface = NULL;
-    
-//    if (type == SurfaceSphere) {
-//        surface = new Sphere(3.0f);
-//    }
-//    else if (type == SurfaceCone) {
-//        surface = new Cone(4, 1);
-//    }
-//    else if (type == SurfaceTorus) {
-//        surface = new Torus(2.0f, 0.3f);
-//    }
-//    else if (type == SurfaceTrefoilKnot) {
-//        surface = new TrefoilKnot(2.4f);
-//    }
-//    else if (type == SurfaceKleinBottle) {
-//        surface = new KleinBottle(0.25f);
-//    }
-//    else if (type == SurfaceMobiusStrip) {
-//        surface = new MobiusStrip(1.4);
-//    }
+
     if (type == SurfaceCube) {
         surface = new Cube();
-        //surface = new Sphere(3.0f);
     }
     else {
-        NSArray * modelList = [NSArray arrayWithObjects:
-                               @"Ninja",
-                               @"Wizards_Hat",
-                               @"Monkey",
-                               nil];
-        
-        type = (type - 1) % [modelList count];
-        
-        //ISurface * surface = NULL;
-        
-        NSString * modelpath = [[NSBundle mainBundle] pathForResource:[modelList objectAtIndex:type]
-                                                               ofType:@"obj"];
-        surface = new ModelSurface(modelpath.UTF8String);
-        
-        return surface;
+        surface = new Sphere(3.0f);
     }
     
     return surface;
