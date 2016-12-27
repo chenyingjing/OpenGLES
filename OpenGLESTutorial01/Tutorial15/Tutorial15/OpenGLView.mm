@@ -1,6 +1,6 @@
 //
 //  OpenGLView.m
-//  Tutorial11
+//  Tutorial06
 //
 //  Created by kesalin@gmail.com on 12-12-24.
 //  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
@@ -8,9 +8,21 @@
 
 #import "OpenGLView.h"
 #import "GLESUtils.h"
+#import "ParametricEquations.h"
 #import "Quaternion.h"
-#import "TextureHelper.h"
-#import "DrawableVBOFactory.h"
+#include "Cube.h"
+#import "ModelSurface.h"
+#import "ParametricEquations.h"
+
+enum LightMode {
+    PerVertex,
+    PerPixel,
+    PerPixelToon,
+    PerPixelSelfShadowing
+};
+//const enum LightMode CurrentLightMode = PerVertex;
+
+
 
 //
 // OpenGLView anonymous category
@@ -26,39 +38,12 @@
     KSMatrix4 _rotationMatrix;
 }
 
-- (void)setupLayer;
-- (void)setupContext;
-- (void)setupBuffers;
-- (void)destoryBuffer:(GLuint *)buffer;
-- (void)destoryBuffers;
-
-- (void)setupProgram;
-- (void)getSlotsFromProgram;
-- (void)setupProjection;
-
-- (void)setupLights;
-- (void)updateLights;
-
-- (void)setupTextures;
-- (void)destoryTextures;
-
-- (void)setupVBOs;
-- (void)destoryVBOs;
-
-- (void)updateSurface;
-- (void)drawSurface;
-
-- (vec3)mapToSphere:(ivec2) touchpoint;
-- (void)resetRotation;
-
 @end
 
 //
 // OpenGLView implementation
 //
 @implementation OpenGLView
-
-@synthesize textureMode = _textureMode;
 
 #pragma mark- Initilize GL
 
@@ -167,6 +152,7 @@
     _context = nil;
 }
 
+
 - (void)setupProgram
 {
     // Load shaders
@@ -188,7 +174,7 @@
     [self getSlotsFromProgram];
 }
 
-#pragma mark - Surface
+#pragma mark
 
 - (void)setCurrentSurface:(int)index
 {
@@ -231,8 +217,6 @@
     _currentVBO = nil;
 }
 
-#pragma mark - Light
-
 - (void)setupLights
 {
     // Initialize various state.
@@ -258,13 +242,11 @@
 {
     glUniform3f(_eyePositionSlot, _eyePosition.x, _eyePosition.y, _eyePosition.z);
     glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
-    glUniform3f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b);
-    glUniform3f(_specularSlot, _specular.r, _specular.g, _specular.b);
+    glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
+    glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
     glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
     glUniform1f(_shininessSlot, _shininess);
 }
-
-#pragma mark - Texture
 
 - (void)setupTextures
 {
@@ -302,8 +284,6 @@
     [TextureHelper deleteTexture:&_textureCubemap];
     [TextureHelper deleteTexture:&_texture2D];
 }
-
-#pragma mark - Draw object
 
 - (void)getSlotsFromProgram
 {
@@ -359,6 +339,7 @@
     glEnable(GL_CULL_FACE);
 }
 
+
 - (void)resetRotation
 {
     ksMatrixLoadIdentity(&_rotationMatrix);
@@ -377,7 +358,7 @@
     KSMatrix3 modelMatrix3;
     ksMatrix4ToMatrix3(&modelMatrix3, &modelMatrix);
     glUniformMatrix3fv(_modelSlot, 1, GL_FALSE, (GLfloat*)&modelMatrix3.m[0][0]);
-    
+
     // View matrix
     //
     KSMatrix4 viewMatrix;
@@ -409,7 +390,7 @@
 - (void)drawSurface
 {
     if (_currentVBO == nil)
-    return;
+        return;
     
     int stride = [_currentVBO vertexSize] * sizeof(GLfloat);
     const GLvoid* normalOffset = (const GLvoid*)(3 * sizeof(GLfloat));
@@ -420,10 +401,11 @@
     glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
     glVertexAttribPointer(_textureCoordSlot, 2, GL_FLOAT, GL_FALSE, stride, texCoordOffset);
     
-    // Draw the triangles.
-    //
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO triangleIndexBuffer]);
     glDrawElements(GL_TRIANGLES, [_currentVBO triangleIndexCount], GL_UNSIGNED_SHORT, 0);
+    
+    
 }
 
 - (void)render
@@ -444,8 +426,6 @@
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
-#pragma mark
-
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -454,12 +434,12 @@
         [self setupContext];
         [self setupProgram];
         [self setupProjection];
-        
         [self setupLights];
-        
         [self setupTextures];
         
         [self resetRotation];
+        
+        //_vboArray = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -478,6 +458,8 @@
     
     [self render];
 }
+
+#pragma mark
 
 #pragma mark - Touch events
 
@@ -542,7 +524,131 @@
     return mapped / radius;
 }
 
-#pragma mark - properties
+#pragma mark
+
+
+-(void)setAmbient:(KSColor)ambient
+{
+    _ambient = ambient;
+    [self render];
+}
+
+-(void)setSpecular:(KSColor)specular
+{
+    _specular = specular;
+    [self render];
+}
+
+- (void)setLightPosition:(KSVec3)lightPosition
+{
+    _lightPosition = lightPosition;
+    [self render];
+}
+
+-(void)setDiffuse:(KSColor)diffuse
+{
+    _diffuse = diffuse;
+    [self render];
+}
+
+-(void)setShininess:(GLfloat)shininess
+{
+    _shininess = shininess;
+    [self render];
+}
+
+
+- (void)updateTextureParameter
+{
+    // It can be GL_NICEST or GL_FASTEST or GL_DONT_CARE. GL_DONT_CARE by default.
+    //
+    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
+}
+
+-(void)setTextureIndex:(NSUInteger)textureIndex
+{
+    _textureIndex = textureIndex % _textureCount;
+    [self render];
+}
+
+-(void)setWrapMode:(GLint)wrapMode
+{
+    if (wrapMode == 0) {
+        _wrapMode = GL_REPEAT;
+    }
+    else if (wrapMode == 1) {
+        _wrapMode = GL_CLAMP_TO_EDGE;
+    }
+    else {
+        _wrapMode = GL_MIRRORED_REPEAT;
+    }
+    
+    [self render];
+}
+
+-(void)setFilterMode:(GLint)filterMode
+{
+    if (filterMode == 0) {
+        _filterMode = GL_LINEAR;
+    }
+    else if (filterMode == 1) {
+        _filterMode = GL_NEAREST;
+    }
+    else if (filterMode == 2){
+        _filterMode = GL_LINEAR_MIPMAP_NEAREST;
+    }
+    else if (filterMode == 3){
+        _filterMode = GL_NEAREST_MIPMAP_LINEAR;
+    }
+    else if (filterMode == 4){
+        _filterMode = GL_LINEAR_MIPMAP_LINEAR;
+    }
+    else {
+        _filterMode = GL_NEAREST_MIPMAP_NEAREST;
+    }
+    
+    [self render];
+}
+
+-(void)setBlendMode:(NSUInteger)blendMode
+{
+    _blendMode = blendMode;
+    [self render];
+}
+
+-(NSString *)currentBlendModeName
+{
+    const NSArray * nameList = [NSArray arrayWithObjects:
+                                @"0 Multiply",
+                                @"1 Add",
+                                @"2 Subtract",
+                                @"3 Darken",
+                                @"4 Color Burn",
+                                @"5 Linear Burn",
+                                @"6 Lighten",
+                                @"7 Screen",
+                                @"8 Color Dodge",
+                                @"9 Overlay",
+                                @"10 Soft Light",
+                                @"11 Hard Light",
+                                @"12 Vivid Light",
+                                @"13 Linear Light",
+                                @"14 Pin Light",
+                                @"15 Difference",
+                                @"16 Exclusion",
+                                @"17 Interpolate",
+                                @"18 Add Signed",
+                                nil];
+    
+    NSUInteger index = _blendMode % [nameList count];
+    NSString * name = [nameList objectAtIndex:index];
+    return name;
+}
 
 - (void) setTextureMode:(GLint)textureMode
 {
@@ -550,4 +656,5 @@
     
     [self render];
 }
+
 @end
