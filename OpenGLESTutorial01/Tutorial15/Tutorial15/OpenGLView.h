@@ -78,6 +78,11 @@
     GLuint _modelSlot;
     
     KSMatrix4 _viewBaseMatrix;
+    GLuint _offscreenColorRenderBuffer;
+    GLuint _offscreenFrameBuffer;
+    GLuint _offscreenSurface;
+    
+    
 }
 
 - (void)render;

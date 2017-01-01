@@ -131,7 +131,8 @@ void ksFrustum(KSMatrix4 *result, float left, float right, float bottom, float t
     
     
     void ksLookAt(KSMatrix4 * result, const KSVec3 * eye, const KSVec3 * target, const KSVec3 * up);
-    
+
+    int ksMatrixInvert(KSMatrix4 * out, const KSMatrix4 * in);
 #ifdef __cplusplus
 }
 #endif

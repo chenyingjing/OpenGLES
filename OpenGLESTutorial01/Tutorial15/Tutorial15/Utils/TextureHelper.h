@@ -15,5 +15,6 @@
 + (GLuint)createTexture:(NSString *)textureFilename isPVR:(Boolean)isPVR;
 + (void)deleteTexture:(GLuint *)textureHandle;
 + (GLuint)createTextureCubemap:(NSArray *)textureFilenames;
++ (GLuint)createTextureCubemap1:(NSString *)textureFile;
 
 @end

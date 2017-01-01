@@ -36,6 +36,13 @@ enum LightMode {
     Quaternion _orientation;
     Quaternion _previousOrientation;
     KSMatrix4 _rotationMatrix;
+
+    CADisplayLink * _displayLink;
+    float _timestamp;
+    float _fboTransition;
+    float _theta;
+    float _totalTheta;
+
 }
 
 @end
@@ -82,6 +89,14 @@ enum LightMode {
     }
 }
 
+- (CGSize)getFrameBufferSize
+{
+    int width, height;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+    return CGSizeMake(width, height);
+}
+
 - (void)setupBuffers
 {
     // Setup color render buffer
@@ -89,17 +104,6 @@ enum LightMode {
     glGenRenderbuffers(1, &_colorRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
-    
-    // Setup depth render buffer
-    //
-    int width, height;
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
-    
-    // Create a depth buffer that has the same size as the color buffer.
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
     
     // Setup frame buffer
     //
@@ -109,13 +113,55 @@ enum LightMode {
     // Attach color render buffer and depth render buffer to frameBuffer
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                               GL_RENDERBUFFER, _colorRenderBuffer);
+
     
+    CGSize size = [self getFrameBufferSize];
+    
+    glGenRenderbuffers(1, &_offscreenColorRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _offscreenColorRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, size.width, size.height);
+    
+    
+    
+    // Setup depth render buffer
+    //
+    
+    // Create a depth buffer that has the same size as the color buffer.
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, size.width, size.height);
+    
+    
+    glGenFramebuffers(1, &_offscreenFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _offscreenFrameBuffer);
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                              GL_RENDERBUFFER, _offscreenColorRenderBuffer);
+//    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
                               GL_RENDERBUFFER, _depthRenderBuffer);
     
+    glGenTextures(1, &_offscreenSurface);
+    glBindTexture(GL_TEXTURE_2D, _offscreenSurface);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _offscreenSurface, 0);
+
+    // Check FBO satus
+    //
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE) {
+        NSLog(@"Error: Frame buffer is not completed.");
+        exit(1);
+    }
+    
     // Set color render buffer as current render buffer
     //
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    //glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
 }
 
 - (void)destoryBuffer:(GLuint *)buffer
@@ -195,15 +241,15 @@ enum LightMode {
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceCube];
-        [_vboArray addObject:vbo];
-        vbo = nil;
-        
         vbo = [DrawableVBOFactory createDrawableVBO:SurfaceKleinBottle];
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        [self setCurrentSurface:0]; // Change model
+        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceQuad];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+        
+        //[self setCurrentSurface:0]; // Change model
     }
 }
 
@@ -240,7 +286,7 @@ enum LightMode {
 
 - (void)updateLights
 {
-    glUniform3f(_eyePositionSlot, _eyePosition.x, _eyePosition.y, _eyePosition.z);
+    //glUniform3f(_eyePositionSlot, _eyePosition.x, _eyePosition.y, _eyePosition.z);
     glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
     glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
     glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
@@ -250,16 +296,10 @@ enum LightMode {
 
 - (void)setupTextures
 {
-    NSArray * textureFilenames = [NSArray arrayWithObjects:
-                                  @"right.png", @"left.png",
-                                  @"sky.png", @"ground.png",
-                                  @"front.png", @"back.png",
-                                  nil];
-    
     // Load texture for stage 0 - Cubemap
     //
     glActiveTexture(GL_TEXTURE0);
-    _textureCubemap = [TextureHelper createTextureCubemap:textureFilenames];
+    _textureCubemap = [TextureHelper createTextureCubemap1:@"tibet.jpg"];
     
     // Load texture for stage 1 - 2D
     //
@@ -292,8 +332,8 @@ enum LightMode {
     _projectionSlot = glGetUniformLocation(_programHandle, "projection");
     _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
     _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
-    _modelSlot = glGetUniformLocation(_programHandle, "model");
-    _eyePositionSlot = glGetUniformLocation(_programHandle, "vEyePosition");
+//    _modelSlot = glGetUniformLocation(_programHandle, "model");
+//    _eyePositionSlot = glGetUniformLocation(_programHandle, "vEyePosition");
     
     _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
     _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
@@ -336,7 +376,7 @@ enum LightMode {
     // Initialize states
     //
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 }
 
 
@@ -349,37 +389,29 @@ enum LightMode {
 
 - (void)updateSurface
 {
-    // Model matrix
+    // Load projection matrix
     //
-    KSMatrix4 modelMatrix;
-    ksMatrixLoadIdentity(&modelMatrix);
-    ksMatrixMultiply(&modelMatrix, &_rotationMatrix, &modelMatrix); // Rotate model
+    ksMatrixLoadIdentity(&_projectionMatrix);
+    CGSize size = [self getFrameBufferSize];
+    float aspect = size.width / size.height;
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 12.0f);
     
-    KSMatrix3 modelMatrix3;
-    ksMatrix4ToMatrix3(&modelMatrix3, &modelMatrix);
-    glUniformMatrix3fv(_modelSlot, 1, GL_FALSE, (GLfloat*)&modelMatrix3.m[0][0]);
+    glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
+    
+    
+    // Load the model-view matrix
+    //
+    ksMatrixLoadIdentity(&_modelViewMatrix);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -9);
+    ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
 
-    // View matrix
-    //
-    KSMatrix4 viewMatrix;
-    ksCopyMatrix4(&viewMatrix, &_viewBaseMatrix);
-    ksTranslate(&viewMatrix, 0.0, 0.0, -9);
-    
-    //ksMatrixMultiply(&viewMatrix, &_rotationMatrix, &viewMatrix); // Rotate camera
-    
-    
-    // Model-View matrix
-    //
-    KSMatrix4 modelViewMatrix;
-    ksMatrixLoadIdentity(&modelViewMatrix);
-    ksMatrixMultiply(&modelViewMatrix, &modelMatrix, &viewMatrix);
-    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&modelViewMatrix.m[0][0]);
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
     
     // Load the normal matrix.
     // It's orthogonal, so its Inverse-Transpose is itself!
     //
     KSMatrix3 normalMatrix3;
-    ksMatrix4ToMatrix3(&normalMatrix3, &modelViewMatrix);
+    ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
     
     [self updateLights];
@@ -387,43 +419,127 @@ enum LightMode {
     [self updateTextures];
 }
 
-- (void)drawSurface
+- (void)drawSurface:(DrawableVBO *) vbo
 {
-    if (_currentVBO == nil)
+    if (vbo == nil)
         return;
     
-    int stride = [_currentVBO vertexSize] * sizeof(GLfloat);
+    int stride = [vbo vertexSize] * sizeof(GLfloat);
     const GLvoid* normalOffset = (const GLvoid*)(3 * sizeof(GLfloat));
     const GLvoid* texCoordOffset = (const GLvoid*)(6 * sizeof(GLfloat));
     
-    glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
+    glBindBuffer(GL_ARRAY_BUFFER, [vbo vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
     glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
     glVertexAttribPointer(_textureCoordSlot, 2, GL_FLOAT, GL_FALSE, stride, texCoordOffset);
     
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO triangleIndexBuffer]);
-    glDrawElements(GL_TRIANGLES, [_currentVBO triangleIndexCount], GL_UNSIGNED_SHORT, 0);
-    
-    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [vbo triangleIndexBuffer]);
+    glDrawElements(GL_TRIANGLES, [vbo triangleIndexCount], GL_UNSIGNED_SHORT, 0);
 }
+
+- (void)updateOffscreenSurface
+{
+    // Load projection matrix
+    //
+    ksMatrixLoadIdentity(&_projectionMatrix);
+    ksFrustum(&_projectionMatrix, -0.5, 0.5, -0.5, 0.5, 4.0, 12.0f);
+    
+    glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
+    
+    // Load the model-view matrix
+    //
+    ksMatrixLoadIdentity(&_modelViewMatrix);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -8);
+    
+    ksRotate(&_modelViewMatrix, _theta, 0, 1, 0);
+    
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
+    
+    // Load the normal matrix.
+    // It's orthogonal, so its Inverse-Transpose is itself!
+    //
+    KSMatrix3 normalMatrix3;
+    ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
+    glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
+    
+    [self updateLights];
+    
+    GLint savedTextureMode = _textureMode;
+    _textureMode = 1;   // texture2D
+    [self updateTextures];
+    _textureMode = savedTextureMode;
+}
+
+- (Boolean)isPositive
+{
+    return (_theta > 270 || _theta < 90);
+
+}
+
 
 - (void)render
 {
     if (_context == nil)
-    return;
+        return;
     
-    glClearColor(0.0f, 1.0f, 0.0f, 1);
+    int vboIndex = 0;
+    KSColor bgColor;
+    if ([self isPositive]) {
+        vboIndex = 0;
+        _textureMode = 0;
+        bgColor.r = bgColor.a = 1.0;
+        bgColor.g = bgColor.b = 0.0;
+    }
+    else {
+        vboIndex = 1;
+        _textureMode = 1;
+        bgColor.b = bgColor.a = 1.0;
+        bgColor.r = bgColor.g = 0.0;
+    }
+    
+    // Draw to offscreen framebuffer
+    //
+    glEnable(GL_DEPTH_TEST);
+    DrawableVBO * vbo = [_vboArray objectAtIndex:vboIndex];
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, _offscreenFrameBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _offscreenColorRenderBuffer);
+    
+    CGSize doubleSize = [self getFrameBufferSize];
+    glViewport(0, 0, doubleSize.width, doubleSize.height);
+    
+    glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // Setup viewport
-    //
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, _texture2D);
     
     [self updateSurface];
-    [self drawSurface];
+    [self drawSurface:vbo];
+    
+    // Switch to onscreen framebuffer
+    //
+    glDisable(GL_DEPTH_TEST);
+    vbo = [_vboArray objectAtIndex:2]; // quad
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    
+    CGSize normalSize = [self getFrameBufferSize];
+    glViewport(0, 0, normalSize.width, normalSize.height);
+    
+    glClearColor(0.0, 1.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, _offscreenSurface);
+    
+    [self updateOffscreenSurface];
+    [self drawSurface:vbo];
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
+
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -439,7 +555,10 @@ enum LightMode {
         
         [self resetRotation];
         
+        [self toggleDisplayLink];
+        
         //_vboArray = [[NSMutableArray alloc] init];
+        
     }
     
     return self;
@@ -484,6 +603,10 @@ enum LightMode {
     _orientation = delta.Rotated(_previousOrientation);
     _orientation.ToMatrix4(&_rotationMatrix);
     
+    if (![self isPositive]) {
+        ksMatrixInvert(&_rotationMatrix, &_rotationMatrix);
+    }
+    
     [self render];
 }
 
@@ -498,6 +621,10 @@ enum LightMode {
     Quaternion delta = Quaternion::CreateFromVectors(start, end);
     _orientation = delta.Rotated(_previousOrientation);
     _orientation.ToMatrix4(&_rotationMatrix);
+    
+    if (![self isPositive]) {
+        ksMatrixInvert(&_rotationMatrix, &_rotationMatrix);
+    }
     
     [self render];
 }
@@ -653,6 +780,41 @@ enum LightMode {
 - (void) setTextureMode:(GLint)textureMode
 {
     _textureMode = textureMode;
+    
+    [self render];
+}
+
+- (void)toggleDisplayLink
+{
+    if (_displayLink == nil) {
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
+        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    }
+    else {
+        [_displayLink invalidate];
+        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        _displayLink = nil;
+    }
+}
+
+- (void)displayLinkCallback:(CADisplayLink*)displayLink
+{
+    // If the FBO transition animation is active, update it.
+    if (_fboTransition != 0) {
+        _fboTransition -= displayLink.duration * 150;
+        if (_fboTransition < 0)
+            _fboTransition = 0;
+        
+        _theta = int(_totalTheta - _fboTransition) % 360;
+    }
+    
+    // Start a new FBO transition every four seconds.
+    _timestamp += displayLink.duration;
+    if (_timestamp > 4 && _fboTransition == 0) {
+        _totalTheta += 180;
+        _fboTransition = 180;
+        _timestamp = 0;
+    }
     
     [self render];
 }

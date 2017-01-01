@@ -2,6 +2,7 @@ precision mediump float;
 
 varying vec4 vDestinationColor;
 varying vec2 vTextureCoordOut;
+varying vec3 vDestinationNormal;
 
 uniform float Alpha;
 uniform int BlendMode;
@@ -129,10 +130,10 @@ vec3 blend (vec4 srcColor, vec4 dstColor, int mode)
 void main()
 {
     if (textureMode == 0) {
-        gl_FragColor = textureCube(samplerForCube, vReflectDirection) * vDestinationColor;
+        gl_FragColor = textureCube(samplerForCube, vDestinationNormal);// * vDestinationColor;
     }
     else {
-        gl_FragColor = texture2D(samplerFor2D, vTextureCoordOut) * vDestinationColor;
+        gl_FragColor = texture2D(samplerFor2D, vTextureCoordOut);// * vDestinationColor;
     }
 
 }

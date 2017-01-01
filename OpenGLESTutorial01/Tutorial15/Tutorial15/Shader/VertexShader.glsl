@@ -17,6 +17,7 @@ varying vec4 vDestinationColor;
 varying vec2 vTextureCoordOut;
 uniform vec3 vEyePosition;
 varying vec3 vReflectDirection;
+varying vec3 vDestinationNormal;
 
 
 void main(void)
@@ -46,7 +47,8 @@ void main(void)
 
     // compute relect direction
     //
-    vec3 eyeDirection = normalize(vPosition.xyz - vEyePosition);
-    vReflectDirection = reflect(eyeDirection, vNormal); // Reflection in object space
-    vReflectDirection = model * vReflectDirection;      // Transform to world sapce
+    //vec3 eyeDirection = normalize(vPosition.xyz - vEyePosition);
+    //vReflectDirection = reflect(eyeDirection, vNormal); // Reflection in object space
+    //vReflectDirection = model * vReflectDirection;      // Transform to world sapce
+    vDestinationNormal = vNormal;
 }
