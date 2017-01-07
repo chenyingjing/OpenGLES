@@ -118,7 +118,8 @@
 //    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("hazard", "png"));
 //    bmp.flipVertically();
 //    gTexture = new tdogl::Texture(bmp);
-//    
+    
+/*
     std::string filePath = ResourcePath("hazard", "png");
     int width, height, channels;
     unsigned char* pixels = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
@@ -169,6 +170,97 @@
     glBindTexture(GL_TEXTURE_2D, 0);
     
     stbi_image_free(pixels);
+*/
+
+    
+    NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
+    NSString* fullPath = [resourcePath stringByAppendingPathComponent:@"hazard.png"];
+    
+    UIImage* uiImage = [UIImage imageWithContentsOfFile:fullPath];
+    CGImageRef cgImage = uiImage.CGImage;
+    
+    CGSize _imageSize;
+    CGSize _originalSize;
+    
+    _originalSize.width = CGImageGetWidth(cgImage);
+    _originalSize.height = CGImageGetHeight(cgImage);
+
+    _imageSize = _originalSize;
+
+    unsigned short _bitsPerComponent;
+    _bitsPerComponent = 8;
+    
+    //TextureFormat _format;
+    //_format = TextureFormatRGBA;
+    
+    unsigned short _mipCount;
+    _mipCount = 1;
+    
+    int bpp = _bitsPerComponent / 2;
+    int byteCount = _imageSize.width * _imageSize.height * bpp;
+    unsigned char* data = (unsigned char*) calloc(byteCount, 1);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGBitmapInfo bitmapInfo = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
+    CGContextRef context = CGBitmapContextCreate(data,
+                                                 _imageSize.width,
+                                                 _imageSize.height,
+                                                 _bitsPerComponent,
+                                                 bpp * _imageSize.width,
+                                                 colorSpace,
+                                                 bitmapInfo);
+    CGColorSpaceRelease(colorSpace);
+    CGRect rect = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
+    CGContextDrawImage(context, rect, uiImage.CGImage);
+    CGContextRelease(context);
+    
+    NSData* _imageData;
+    _imageData = [NSData dataWithBytesNoCopy:data length:byteCount freeWhenDone:YES];
+    //_hasPvrHeader = FALSE;
+    
+    int width = _imageSize.width;
+    int height = _imageSize.height;
+    int channels = 4;
+    
+    unsigned char *pixels = (unsigned char *)[_imageData bytes];
+    
+    unsigned long rowSize = channels *width;
+    unsigned char* rowBuffer = new unsigned char[rowSize];
+    unsigned halfRows = height / 2;
+    
+    for (unsigned rowIdx = 0; rowIdx < halfRows; ++rowIdx) {
+        unsigned char* row = pixels + (rowIdx * width + 0) * channels;//GetPixelOffset(0, rowIdx, _width, _height, _format);
+        unsigned char* oppositeRow = pixels + ((height - rowIdx - 1) * width + 0) * channels;//GetPixelOffset(0, _height - rowIdx - 1, _width, _height, _format);
+        
+        memcpy(rowBuffer, row, rowSize);
+        memcpy(row, oppositeRow, rowSize);
+        memcpy(oppositeRow, rowBuffer, rowSize);
+    }
+    
+    CGSize size = _imageSize;
+    
+    GLenum format= GL_RGBA;
+//    GLenum type = GL_UNSIGNED_BYTE;
+
+    glGenTextures(1, &gTex);
+    glBindTexture(GL_TEXTURE_2D, gTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 format,
+                 (GLsizei)size.width,
+                 (GLsizei)size.height,
+                 0,
+                 format,
+                 GL_UNSIGNED_BYTE,
+                 pixels);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
 }
 
 - (void)LoadShaders
