@@ -163,7 +163,7 @@
                  (GLsizei)width,
                  (GLsizei)height,
                  0,
-                 internalformat,
+                 GL_BGRA,
                  GL_UNSIGNED_BYTE,
                  pixels);
     glBindTexture(GL_TEXTURE_2D, 0);
