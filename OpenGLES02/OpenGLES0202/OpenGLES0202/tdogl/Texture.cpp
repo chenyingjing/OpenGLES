@@ -32,6 +32,17 @@ static GLenum TextureFormatForBitmapFormat(Bitmap::Format format)
     }
 }
 
+static GLenum BitmapFormat(Bitmap::Format format)
+{
+    switch (format) {
+        case Bitmap::Format_Grayscale: return GL_LUMINANCE;
+        case Bitmap::Format_GrayscaleAlpha: return GL_LUMINANCE_ALPHA;
+        case Bitmap::Format_RGB: return GL_RGB;
+        case Bitmap::Format_RGBA: return GL_BGRA;
+        default: throw std::runtime_error("Unrecognised Bitmap::Format");
+    }
+}
+
 Texture::Texture(const Bitmap& bitmap, GLint minMagFiler, GLint wrapMode) :
     _originalWidth((GLfloat)bitmap.width()),
     _originalHeight((GLfloat)bitmap.height())
@@ -48,7 +59,7 @@ Texture::Texture(const Bitmap& bitmap, GLint minMagFiler, GLint wrapMode) :
                  (GLsizei)bitmap.width(), 
                  (GLsizei)bitmap.height(),
                  0, 
-                 TextureFormatForBitmapFormat(bitmap.format()), 
+                 BitmapFormat(bitmap.format()),
                  GL_UNSIGNED_BYTE, 
                  bitmap.pixelBuffer());
     glBindTexture(GL_TEXTURE_2D, 0);
