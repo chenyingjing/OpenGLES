@@ -11,12 +11,14 @@
 #include "Program.h"
 #include "ResourcePath/ResourcePath.hpp"
 #include "tdogl/Texture.h"
+#include "common/thirdparty/stb_image/stb_image.h"
 
 @interface OpenGLView() {
     tdogl::Program* gProgram;
     GLuint gVAO;
     GLuint gVBO;
-    tdogl::Texture* gTexture;
+    //tdogl::Texture* gTexture;
+    GLuint gTex;
 }
 
 - (void)setupLayer;
@@ -113,9 +115,60 @@
 
 - (void)LoadTexture
 {
-    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("hazard", "png"));
-    bmp.flipVertically();
-    gTexture = new tdogl::Texture(bmp);
+//    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("hazard", "png"));
+//    bmp.flipVertically();
+//    gTexture = new tdogl::Texture(bmp);
+//    
+    std::string filePath = ResourcePath("hazard", "png");
+    int width, height, channels;
+    unsigned char* pixels = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
+    if (!pixels)
+    {
+        throw std::runtime_error(stbi_failure_reason());
+    }
+    unsigned long rowSize = channels *width;
+    unsigned char* rowBuffer = new unsigned char[rowSize];
+    unsigned halfRows = height / 2;
+    
+    for (unsigned rowIdx = 0; rowIdx < halfRows; ++rowIdx) {
+        unsigned char* row = pixels + (rowIdx * width + 0) * channels;//GetPixelOffset(0, rowIdx, _width, _height, _format);
+        unsigned char* oppositeRow = pixels + ((height - rowIdx - 1) * width + 0) * channels;//GetPixelOffset(0, _height - rowIdx - 1, _width, _height, _format);
+        
+        memcpy(rowBuffer, row, rowSize);
+        memcpy(row, oppositeRow, rowSize);
+        memcpy(oppositeRow, rowBuffer, rowSize);
+    }
+    
+    delete[] rowBuffer;
+
+    glGenTextures(1, &gTex);
+    glBindTexture(GL_TEXTURE_2D, gTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    GLint internalformat;
+    switch (channels) {
+        case 1: internalformat = GL_LUMINANCE; break;
+        case 2: internalformat = GL_LUMINANCE_ALPHA; break;
+        case 3: internalformat = GL_RGB; break;
+        case 4: internalformat = GL_RGBA; break;
+        default: throw std::runtime_error("Unrecognised Bitmap::Format");
+    }
+    
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 internalformat,
+                 (GLsizei)width,
+                 (GLsizei)height,
+                 0,
+                 internalformat,
+                 GL_UNSIGNED_BYTE,
+                 pixels);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    stbi_image_free(pixels);
 }
 
 - (void)LoadShaders
@@ -173,7 +226,8 @@
     
     
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gTexture->object());
+    //glBindTexture(GL_TEXTURE_2D, gTexture->object());
+    glBindTexture(GL_TEXTURE_2D, gTex);
 //    gProgram->setUniform("tex", 0);
     GLint samplerSlot = glGetUniformLocation(gProgram->object(), "tex");
     glUniform1i(samplerSlot, 0);
