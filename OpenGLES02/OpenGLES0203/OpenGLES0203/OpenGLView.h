@@ -16,6 +16,7 @@
     EAGLContext* _context;
     GLuint _colorRenderBuffer;
     GLuint _frameBuffer;
+    GLuint _depthRenderBuffer;
     GLuint _programHandle;
     GLuint _positionSlot;
     

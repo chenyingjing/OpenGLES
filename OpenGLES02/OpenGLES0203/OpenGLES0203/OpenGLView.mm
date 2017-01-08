@@ -12,6 +12,7 @@
 #include "ResourcePath/ResourcePath.hpp"
 #include "tdogl/Texture.h"
 #include "common/thirdparty/stb_image/stb_image.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 @interface OpenGLView() {
     tdogl::Program* gProgram;
@@ -19,6 +20,8 @@
     GLuint gVBO;
     tdogl::Texture* gTexture;
     //GLuint gTex;
+    GLfloat gDegreesRotated;
+    CADisplayLink * _displayLink;
 }
 
 - (void)setupLayer;
@@ -82,12 +85,39 @@
                               GL_RENDERBUFFER, _colorRenderBuffer);
 }
 
+- (void)setupDepthBuffer
+{
+    int width, height;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+    
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                              GL_RENDERBUFFER, _depthRenderBuffer);
+    
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+
+}
+
 - (void)destoryRenderAndFrameBuffer
 {
-    glDeleteFramebuffers(1, &_frameBuffer);
-    _frameBuffer = 0;
-    glDeleteRenderbuffers(1, &_colorRenderBuffer);
-    _colorRenderBuffer = 0;
+    if (_colorRenderBuffer != 0) {
+        glDeleteRenderbuffers(1, &_colorRenderBuffer);
+        _colorRenderBuffer = 0;
+    }
+    
+    if (_frameBuffer != 0) {
+        glDeleteFramebuffers(1, &_frameBuffer);
+        _frameBuffer = 0;
+    }
+    
+    if (_depthRenderBuffer != 0) {
+        glDeleteFramebuffers(1, &_depthRenderBuffer);
+        _depthRenderBuffer = 0;
+    }
 }
 
 - (void)layoutSubviews {
@@ -96,13 +126,15 @@
     
     [self setupContext];
     
-    
+    [self InitGL];
     
     [self destoryRenderAndFrameBuffer];
     
     [self setupRenderBuffer];
     
     [self setupFrameBuffer];
+    
+    [self setupDepthBuffer];
     
     [self LoadTexture];
     
@@ -113,9 +145,23 @@
     [self Render];
 }
 
+- (void)InitGL
+{
+    NSLog(@"OpenGL version: %s", glGetString(GL_VERSION));
+    NSLog(@"GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    NSLog(@"Vendor: %s", glGetString(GL_VENDOR));
+    NSLog(@"Renderer: %s", glGetString(GL_RENDERER));
+    
+    glEnable(GL_DEPTH_TEST);
+    //glDepthFunc(GL_LESS);
+    //glDepthFunc(GL_GREATER);
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 - (void)LoadTexture
 {
-    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("hazard", "png"));
+    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("wooden-crate", "jpg"));
     bmp.flipVertically();
     gTexture = new tdogl::Texture(bmp);
 }
@@ -126,6 +172,17 @@
     shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("VertexShader", "glsl"), GL_VERTEX_SHADER));
     shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("FragmentShader", "glsl"), GL_FRAGMENT_SHADER));
     gProgram = new tdogl::Program(shaders);
+    
+    gProgram->use();
+    
+    glm::mat4 camera = glm::lookAt(glm::vec3(3,3,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    gProgram->setUniform("camera", camera);
+    
+    float aspect = self.frame.size.width/self.frame.size.height;
+    glm::mat4 projection = glm::perspective(glm::radians(50.0f), aspect, 0.1f, 10.0f);
+    gProgram->setUniform("projection", projection);
+
+    gProgram->stopUsing();
 }
 
 - (void)LoadTriangle
@@ -141,9 +198,53 @@
     // Put the three triangle verticies into the VBO
     GLfloat vertexData[] = {
         //  X     Y     Z       U     V
-        0.0f, 0.8f, 0.0f,   0.5f, 1.0f,
-        -0.8f,-0.8f, 0.0f,   0.0f, 0.0f,
-        0.8f,-0.8f, 0.0f,   1.0f, 0.0f,
+        // bottom
+        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
+        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
+        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+        
+        // top
+        -1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
+        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+        1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+        1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+        
+        // front
+        -1.0f,-1.0f, 1.0f,   1.0f, 0.0f,
+        1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
+        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+        1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+        
+        // back
+        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
+        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
+        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
+        1.0f, 1.0f,-1.0f,   1.0f, 1.0f,
+        
+        // left
+        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
+        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+        
+        // right
+        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
+        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+        1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
+        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
+        1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,   0.0f, 1.0f
     };
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
@@ -166,13 +267,16 @@
 {
     // clear everything
     glClearColor(0, 0, 0, 1); // black
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     
     // bind the program (the shaders)
     glUseProgram(gProgram->object());
     
+    float scale = 0.8;
+    glm::mat4 _model = glm::scale(glm::mat4(), glm::vec3(scale, scale, scale));
+    gProgram->setUniform("model", glm::rotate(_model, glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
@@ -185,7 +289,7 @@
     glBindVertexArrayOES(gVAO);
     
     // draw the VAO
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 6*2*3);
     
     // unbind the VAO
     glBindVertexArrayOES(0);
@@ -195,6 +299,48 @@
     
     // swap the display buffers (displays what was just drawn)
     [_context presentRenderbuffer:GL_RENDERBUFFER];
+}
+
+- (void)Update: (float)secondsElapsed
+{
+    const GLfloat degreesPerSecond = 180.0f;
+    gDegreesRotated += secondsElapsed * degreesPerSecond;
+    
+    //don't go over 360 degrees
+    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+
+        
+        [self toggleDisplayLink];
+        
+    }
+    
+    return self;
+}
+
+- (void)toggleDisplayLink
+{
+    if (_displayLink == nil) {
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
+        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    }
+    else {
+        [_displayLink invalidate];
+        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        _displayLink = nil;
+    }
+}
+
+- (void)displayLinkCallback:(CADisplayLink*)displayLink
+{
+    [self Update:displayLink.duration];
+    
+    [self Render];
 }
 
 @end

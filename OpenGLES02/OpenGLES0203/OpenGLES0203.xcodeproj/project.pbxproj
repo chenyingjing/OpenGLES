@@ -130,6 +130,7 @@
 		235DEE2B1E21F474009985DF /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 235DEDB31E21F474009985DF /* Shader.cpp */; };
 		235DEE2C1E21F474009985DF /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 235DEDB51E21F474009985DF /* Texture.cpp */; };
 		235DEE2D1E21F474009985DF /* hazard.png in Resources */ = {isa = PBXBuildFile; fileRef = 235DEDB81E21F474009985DF /* hazard.png */; };
+		235DEE2F1E21FD3C009985DF /* wooden-crate.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 235DEE2E1E21FD3C009985DF /* wooden-crate.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -412,6 +413,7 @@
 		235DEDB51E21F474009985DF /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		235DEDB61E21F474009985DF /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		235DEDB81E21F474009985DF /* hazard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hazard.png; sourceTree = "<group>"; };
+		235DEE2E1E21FD3C009985DF /* wooden-crate.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "wooden-crate.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -825,6 +827,7 @@
 		235DEDB71E21F474009985DF /* texture */ = {
 			isa = PBXGroup;
 			children = (
+				235DEE2E1E21FD3C009985DF /* wooden-crate.jpg */,
 				235DEDB81E21F474009985DF /* hazard.png */,
 			);
 			path = texture;
@@ -982,6 +985,7 @@
 				235DEE1A1E21F474009985DF /* spline.inl in Resources */,
 				235DEDF11E21F474009985DF /* component_wise.inl in Resources */,
 				235DEDE61E21F474009985DF /* random.inl in Resources */,
+				235DEE2F1E21FD3C009985DF /* wooden-crate.jpg in Resources */,
 				235DEE051E21F474009985DF /* matrix_query.inl in Resources */,
 				235DEDCC1E21F474009985DF /* precision.inl in Resources */,
 				235DEDC11E21F474009985DF /* func_packing.inl in Resources */,
@@ -1180,6 +1184,7 @@
 				235DEC9F1E21F3D6009985DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
