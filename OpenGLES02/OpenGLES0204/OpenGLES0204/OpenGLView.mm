@@ -308,6 +308,24 @@
     
     //don't go over 360 degrees
     while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+
+    //move position of camera based on WASD keys
+    const float moveSpeed = 2.0; //units per second
+    if (self.backwardButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.forward());
+    } else if (self.forwardButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.forward());
+    }
+    if (self.leftButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.right());
+    } else if (self.rightButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.right());
+    }
+    if (self.downButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -glm::vec3(0,1,0));
+    } else if (self.upButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
+    }
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder

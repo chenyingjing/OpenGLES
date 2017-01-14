@@ -16,7 +16,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.openGLView.leftButton = self.leftButton;
+    self.openGLView.backwardButton = self.backwardButton;
+    self.openGLView.forwardButton = self.forwardButton;
+    self.openGLView.rightButton = self.rightButton;
+    self.openGLView.downButton = self.downButton;
+    self.openGLView.upButton = self.upButton;
 }
 
 
