@@ -326,6 +326,16 @@
     } else if (self.upButton.highlighted){
         gCamera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
     }
+    
+    const float mouseSensitivity = 0.1f;
+    gCamera.offsetOrientation(mouseSensitivity * self.moveY, mouseSensitivity * self.moveX);
+    
+    float fieldOfView = 50;
+    fieldOfView *= self.scale;
+    if(fieldOfView < 5.0f) fieldOfView = 5.0f;
+    if(fieldOfView > 130.0f) fieldOfView = 130.0f;
+    gCamera.setFieldOfView(fieldOfView);
+
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder

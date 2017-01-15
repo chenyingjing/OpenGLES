@@ -25,6 +25,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="yqD-hI-a8f" appends="YES" id="RtW-fg-2ES"/>
+                                    <outletCollection property="gestureRecognizers" destination="D2W-qf-Jzb" appends="YES" id="WX4-ZZ-D47"/>
+                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P82-dB-aeg">
                                 <rect key="frame" x="20" y="590" width="42" height="43"/>
@@ -76,6 +81,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="yqD-hI-a8f">
+                    <connections>
+                        <action selector="panAction:" destination="BYZ-38-t0r" id="lb0-Dk-FJS"/>
+                    </connections>
+                </panGestureRecognizer>
+                <pinchGestureRecognizer id="D2W-qf-Jzb">
+                    <connections>
+                        <action selector="pinchAction:" destination="BYZ-38-t0r" id="IBN-kq-ssj"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.23188405797103" y="138.58695652173915"/>
         </scene>

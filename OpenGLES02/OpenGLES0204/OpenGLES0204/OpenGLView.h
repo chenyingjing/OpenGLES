@@ -29,4 +29,8 @@
 @property (weak, nonatomic) UIButton *downButton;
 @property (weak, nonatomic) UIButton *upButton;
 
+@property float moveX;
+@property float moveY;
+@property float scale;
+
 @end
