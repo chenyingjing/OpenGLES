@@ -33,14 +33,14 @@ struct ModelInstance {
 };
 
 @interface OpenGLView() {
-//    ModelAsset gWoodenCrate;
-//    std::list<ModelInstance> gInstances;
+    ModelAsset gWoodenCrate;
+    std::list<ModelInstance> gInstances;
     
-    tdogl::Program* gProgram;
-    GLuint gVAO;
-    GLuint gVBO;
-    tdogl::Texture* gTexture;
-    GLuint gTex;
+//    tdogl::Program* gProgram;
+//    GLuint gVAO;
+//    GLuint gVBO;
+//    tdogl::Texture* gTexture;
+//    GLuint gTex;
     
     GLfloat gDegreesRotated;
     CADisplayLink * _displayLink;
@@ -159,15 +159,9 @@ struct ModelInstance {
     
     [self setupDepthBuffer];
     
-//    [self LoadWoodenCrateAsset];
-//    
-//    [self CreateInstances];
+    [self LoadWoodenCrateAsset];
     
-    gTexture = [self LoadTexture:"wooden-crate" ext:"jpg"];
-    
-    gProgram = [self LoadShaders:"VertexShader" fs:"FragmentShader"];
-
-    [self LoadTriangle];
+    [self CreateInstances];
     
     [self Render];
 }
@@ -198,145 +192,48 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     return glm::scale(glm::mat4(), glm::vec3(x, y, z));
 }
 
-//- (void) CreateInstances {
-//    ModelInstance dot;
-//    dot.asset = &gWoodenCrate;
-//    dot.transform = glm::mat4();
-//    gInstances.push_back(dot);
-//    
-//    ModelInstance i;
-//    i.asset = &gWoodenCrate;
-//    i.transform = translate(0,-4,0) * scale(1,2,1);
-//    gInstances.push_back(i);
-//    
-//    ModelInstance hLeft;
-//    hLeft.asset = &gWoodenCrate;
-//    hLeft.transform = translate(-8,0,0) * scale(1,6,1);
-//    gInstances.push_back(hLeft);
-//    
-//    ModelInstance hRight;
-//    hRight.asset = &gWoodenCrate;
-//    hRight.transform = translate(-4,0,0) * scale(1,6,1);
-//    gInstances.push_back(hRight);
-//    
-//    ModelInstance hMid;
-//    hMid.asset = &gWoodenCrate;
-//    hMid.transform = translate(-6,0,0) * scale(2,1,0.8);
-//    gInstances.push_back(hMid);
-//}
-//
-//- (void)LoadWoodenCrateAsset
-//{
-//    gWoodenCrate.shaders = [self LoadShaders:"VertexShader" fs:"FragmentShader"];
-//    gWoodenCrate.drawType = GL_TRIANGLES;
-//    gWoodenCrate.drawStart = 0;
-//    gWoodenCrate.drawCount = 6*2*3;
-//    gWoodenCrate.texture = [self LoadTexture:"wooden-crate" ext:"jpg"];
-//    
-//    
-////    glGenBuffers(1, &gWoodenCrate.vbo);
-////    glGenVertexArraysOES(1, &gWoodenCrate.vao);
-//    
-//    // make and bind the VBO
-//    glGenBuffers(1, &gWoodenCrate.vbo);
-//    glBindBuffer(GL_ARRAY_BUFFER, gWoodenCrate.vbo);
-//    
-//    // make and bind the VAO
-//    glGenVertexArraysOES(1, &gWoodenCrate.vao);
-//    glBindVertexArrayOES(gWoodenCrate.vao);
-//    
-//    // Put the three triangle verticies into the VBO
-//    GLfloat vertexData[] = {
-//        //  X     Y     Z       U     V
-//        // bottom
-//        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
-//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
-//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-//        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
-//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
-//        
-//        // top
-//        -1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
-//        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-//        1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
-//        1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
-//        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-//        1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-//        
-//        // front
-//        -1.0f,-1.0f, 1.0f,   1.0f, 0.0f,
-//        1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
-//        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-//        1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
-//        1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-//        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-//        
-//        // back
-//        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
-//        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
-//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-//        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
-//        1.0f, 1.0f,-1.0f,   1.0f, 1.0f,
-//        
-//        // left
-//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
-//        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
-//        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
-//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
-//        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-//        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
-//        
-//        // right
-//        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
-//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
-//        1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
-//        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
-//        1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
-//        1.0f, 1.0f, 1.0f,   0.0f, 1.0f
-//    };
-//    
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-//    
-//    
-//    // connect the xyz to the "vert" attribute of the vertex shader
-//    glEnableVertexAttribArray(gWoodenCrate.shaders->attrib("vert"));
-//    glVertexAttribPointer(gWoodenCrate.shaders->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
-//    
-//    glEnableVertexAttribArray(gWoodenCrate.shaders->attrib("vertTexCoord"));
-//    glVertexAttribPointer(gWoodenCrate.shaders->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE,  5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
-//    
-//    // unbind the VBO and VAO
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
-//    glBindVertexArrayOES(0);
-//    
-//}
-
-- (tdogl::Texture *)LoadTexture: (const char *)filename ext: (const char *)ext
-{
-    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath(filename, ext));
-    bmp.flipVertically();
-    return new tdogl::Texture(bmp);
+- (void) CreateInstances {
+    ModelInstance dot;
+    dot.asset = &gWoodenCrate;
+    dot.transform = glm::mat4();
+    gInstances.push_back(dot);
+    
+    ModelInstance i;
+    i.asset = &gWoodenCrate;
+    i.transform = translate(0,-4,0) * scale(1,2,1);
+    gInstances.push_back(i);
+    
+    ModelInstance hLeft;
+    hLeft.asset = &gWoodenCrate;
+    hLeft.transform = translate(-8,0,0) * scale(1,6,1);
+    gInstances.push_back(hLeft);
+    
+    ModelInstance hRight;
+    hRight.asset = &gWoodenCrate;
+    hRight.transform = translate(-4,0,0) * scale(1,6,1);
+    gInstances.push_back(hRight);
+    
+    ModelInstance hMid;
+    hMid.asset = &gWoodenCrate;
+    hMid.transform = translate(-6,0,0) * scale(2,1,0.8);
+    gInstances.push_back(hMid);
 }
 
-- (tdogl::Program *)LoadShaders: (const char *)vShader fs:(const char *)fShader
+- (void)LoadWoodenCrateAsset
 {
-    std::vector<tdogl::Shader> shaders;
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath(vShader, "glsl"), GL_VERTEX_SHADER));
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath(fShader, "glsl"), GL_FRAGMENT_SHADER));
-    return new tdogl::Program(shaders);
-}
-
-- (void)LoadTriangle
-{
-    // make and bind the VAO
-    glGenVertexArraysOES(1, &gVAO);
-    glBindVertexArrayOES(gVAO);
+    gWoodenCrate.shaders = [self LoadShaders:"VertexShader" fs:"FragmentShader"];
+    gWoodenCrate.drawType = GL_TRIANGLES;
+    gWoodenCrate.drawStart = 0;
+    gWoodenCrate.drawCount = 6*2*3;
+    gWoodenCrate.texture = [self LoadTexture:"wooden-crate" ext:"jpg"];
     
     // make and bind the VBO
-    glGenBuffers(1, &gVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+    glGenBuffers(1, &gWoodenCrate.vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, gWoodenCrate.vbo);
+    
+    // make and bind the VAO
+    glGenVertexArraysOES(1, &gWoodenCrate.vao);
+    glBindVertexArrayOES(gWoodenCrate.vao);
     
     // Put the three triangle verticies into the VBO
     GLfloat vertexData[] = {
@@ -389,68 +286,66 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
         1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
         1.0f, 1.0f, 1.0f,   0.0f, 1.0f
     };
-
+    
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-
+    
     
     // connect the xyz to the "vert" attribute of the vertex shader
-    glEnableVertexAttribArray(gProgram->attrib("vert"));
-    glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
+    glEnableVertexAttribArray(gWoodenCrate.shaders->attrib("vert"));
+    glVertexAttribPointer(gWoodenCrate.shaders->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
     
-    glEnableVertexAttribArray(gProgram->attrib("vertTexCoord"));
-    glVertexAttribPointer(gProgram->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE,  5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
-
+    glEnableVertexAttribArray(gWoodenCrate.shaders->attrib("vertTexCoord"));
+    glVertexAttribPointer(gWoodenCrate.shaders->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE,  5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
+    
     // unbind the VBO and VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArrayOES(0);
     
 }
 
-//- (void) RenderInstance: (const ModelInstance&)inst
-//{
-//    ModelAsset* asset = inst.asset;
-//    tdogl::Program* shaders = asset->shaders;
-//    
-//    //bind the shaders
-//    shaders->use();
-//    
-//    //set the shader uniforms
-//    shaders->setUniform("camera", gCamera.matrix());
-//    shaders->setUniform("model", inst.transform);
-////    shaders->setUniform("tex", 0); //set to 0 because the texture will be bound to GL_TEXTURE0
-//    GLint samplerSlot = glGetUniformLocation(shaders->object(), "tex");
-//    glUniform1i(samplerSlot, 0);
-//    
-//    //bind the texture
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, asset->texture->object());
-//    
-//    //bind VAO and draw
-//    glBindVertexArrayOES(asset->vao);
-//    glDrawArrays(asset->drawType, asset->drawStart, asset->drawCount);
-//    
-//    //unbind everything
-//    glBindVertexArrayOES(0);
-//    glBindTexture(GL_TEXTURE_2D, 0);
-//    shaders->stopUsing();
-//}
+- (tdogl::Texture *)LoadTexture: (const char *)filename ext: (const char *)ext
+{
+    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath(filename, ext));
+    bmp.flipVertically();
+    return new tdogl::Texture(bmp);
+}
 
-//- (void)Renderx
-//{
-//    // clear everything
-//    glClearColor(0, 0, 0, 1); // black
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    
-//    // render all the instances
-//    std::list<ModelInstance>::const_iterator it;
-////    for(it = gInstances.begin(); it != gInstances.end(); ++it){
-////        [self RenderInstance:*it];
-////    }
-//    it = gInstances.begin();
-//    [self RenderInstance:(*it)];
-//    
-//    [_context presentRenderbuffer:GL_RENDERBUFFER];
-//}
+- (tdogl::Program *)LoadShaders: (const char *)vShader fs:(const char *)fShader
+{
+    std::vector<tdogl::Shader> shaders;
+    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath(vShader, "glsl"), GL_VERTEX_SHADER));
+    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath(fShader, "glsl"), GL_FRAGMENT_SHADER));
+    return new tdogl::Program(shaders);
+}
+
+- (void) RenderInstance: (const ModelInstance&)inst
+{
+    ModelAsset* asset = inst.asset;
+    tdogl::Program* shaders = asset->shaders;
+    
+    //bind the shaders
+    shaders->use();
+    
+    //set the shader uniforms
+    shaders->setUniform("camera", gCamera.matrix());
+    shaders->setUniform("model", inst.transform);
+//    shaders->setUniform("tex", 0); //set to 0 because the texture will be bound to GL_TEXTURE0
+    GLint samplerSlot = glGetUniformLocation(shaders->object(), "tex");
+    glUniform1i(samplerSlot, 0);
+    
+    //bind the texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, asset->texture->object());
+    
+    //bind VAO and draw
+    glBindVertexArrayOES(asset->vao);
+    glDrawArrays(asset->drawType, asset->drawStart, asset->drawCount);
+    
+    //unbind everything
+    glBindVertexArrayOES(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    shaders->stopUsing();
+}
 
 - (void)Render
 {
@@ -460,37 +355,11 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     
-    // bind the program (the shaders)
-    glUseProgram(gProgram->object());
+    std::list<ModelInstance>::const_iterator it;
+    for(it = gInstances.begin(); it != gInstances.end(); ++it){
+        [self RenderInstance:*it];
+    }
     
-    gProgram->setUniform("camera", gCamera.matrix());
-    
-    float scale = 0.8;
-    glm::mat4 _model = glm::scale(glm::mat4(), glm::vec3(scale, scale, scale));
-    gProgram->setUniform("model", glm::rotate(_model, glm::radians(gDegreesRotated), glm::vec3(0,1,0)));
-    //NSLog(@"gDegreesRotated:%f", gDegreesRotated);
-    //gProgram->setUniform("model", _model);
-    
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gTexture->object());
-    //glBindTexture(GL_TEXTURE_2D, gTex);
-//    gProgram->setUniform("tex", 0);
-    GLint samplerSlot = glGetUniformLocation(gProgram->object(), "tex");
-    glUniform1i(samplerSlot, 0);
-    
-    // bind the VAO (the triangle)
-    glBindVertexArrayOES(gVAO);
-    
-    // draw the VAO
-    glDrawArrays(GL_TRIANGLES, 0, 6*2*3);
-    
-    // unbind the VAO
-    glBindVertexArrayOES(0);
-    
-    // unbind the program
-    glUseProgram(0);
-    
-    // swap the display buffers (displays what was just drawn)
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
