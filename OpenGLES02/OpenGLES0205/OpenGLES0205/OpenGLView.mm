@@ -15,13 +15,33 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 #include "tdogl/Camera.h"
+#include<list>
+
+struct ModelAsset {
+    tdogl::Program* shaders;
+    tdogl::Texture* texture;
+    GLuint vbo;
+    GLuint vao;
+    GLenum drawType;
+    GLint drawStart;
+    GLint drawCount;
+};
+
+struct ModelInstance {
+    ModelAsset* asset;
+    glm::mat4 transform;
+};
 
 @interface OpenGLView() {
+//    ModelAsset gWoodenCrate;
+//    std::list<ModelInstance> gInstances;
+    
     tdogl::Program* gProgram;
     GLuint gVAO;
     GLuint gVBO;
     tdogl::Texture* gTexture;
-    //GLuint gTex;
+    GLuint gTex;
+    
     GLfloat gDegreesRotated;
     CADisplayLink * _displayLink;
     tdogl::Camera gCamera;
@@ -139,9 +159,13 @@
     
     [self setupDepthBuffer];
     
-    [self LoadTexture];
+//    [self LoadWoodenCrateAsset];
+//    
+//    [self CreateInstances];
     
-    [self LoadShaders];
+    gTexture = [self LoadTexture:"wooden-crate" ext:"jpg"];
+    
+    gProgram = [self LoadShaders:"VertexShader" fs:"FragmentShader"];
 
     [self LoadTriangle];
     
@@ -163,22 +187,145 @@
     
     gCamera.setPosition(glm::vec3(0, 0, 10));
     gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
-    //gCamera.setNearAndFarPlanes(0.1, 5000);
+    gCamera.setNearAndFarPlanes(0.1, 5000);
 }
 
-- (void)LoadTexture
+glm::mat4 translate(GLfloat x, GLfloat y, GLfloat z) {
+    return glm::translate(glm::mat4(), glm::vec3(x, y, z));
+}
+
+glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
+    return glm::scale(glm::mat4(), glm::vec3(x, y, z));
+}
+
+//- (void) CreateInstances {
+//    ModelInstance dot;
+//    dot.asset = &gWoodenCrate;
+//    dot.transform = glm::mat4();
+//    gInstances.push_back(dot);
+//    
+//    ModelInstance i;
+//    i.asset = &gWoodenCrate;
+//    i.transform = translate(0,-4,0) * scale(1,2,1);
+//    gInstances.push_back(i);
+//    
+//    ModelInstance hLeft;
+//    hLeft.asset = &gWoodenCrate;
+//    hLeft.transform = translate(-8,0,0) * scale(1,6,1);
+//    gInstances.push_back(hLeft);
+//    
+//    ModelInstance hRight;
+//    hRight.asset = &gWoodenCrate;
+//    hRight.transform = translate(-4,0,0) * scale(1,6,1);
+//    gInstances.push_back(hRight);
+//    
+//    ModelInstance hMid;
+//    hMid.asset = &gWoodenCrate;
+//    hMid.transform = translate(-6,0,0) * scale(2,1,0.8);
+//    gInstances.push_back(hMid);
+//}
+//
+//- (void)LoadWoodenCrateAsset
+//{
+//    gWoodenCrate.shaders = [self LoadShaders:"VertexShader" fs:"FragmentShader"];
+//    gWoodenCrate.drawType = GL_TRIANGLES;
+//    gWoodenCrate.drawStart = 0;
+//    gWoodenCrate.drawCount = 6*2*3;
+//    gWoodenCrate.texture = [self LoadTexture:"wooden-crate" ext:"jpg"];
+//    
+//    
+////    glGenBuffers(1, &gWoodenCrate.vbo);
+////    glGenVertexArraysOES(1, &gWoodenCrate.vao);
+//    
+//    // make and bind the VBO
+//    glGenBuffers(1, &gWoodenCrate.vbo);
+//    glBindBuffer(GL_ARRAY_BUFFER, gWoodenCrate.vbo);
+//    
+//    // make and bind the VAO
+//    glGenVertexArraysOES(1, &gWoodenCrate.vao);
+//    glBindVertexArrayOES(gWoodenCrate.vao);
+//    
+//    // Put the three triangle verticies into the VBO
+//    GLfloat vertexData[] = {
+//        //  X     Y     Z       U     V
+//        // bottom
+//        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
+//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+//        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
+//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+//        
+//        // top
+//        -1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
+//        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+//        1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+//        1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+//        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+//        1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+//        
+//        // front
+//        -1.0f,-1.0f, 1.0f,   1.0f, 0.0f,
+//        1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
+//        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+//        1.0f,-1.0f, 1.0f,   0.0f, 0.0f,
+//        1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+//        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+//        
+//        // back
+//        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
+//        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
+//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+//        -1.0f, 1.0f,-1.0f,   0.0f, 1.0f,
+//        1.0f, 1.0f,-1.0f,   1.0f, 1.0f,
+//        
+//        // left
+//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+//        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+//        -1.0f,-1.0f,-1.0f,   0.0f, 0.0f,
+//        -1.0f,-1.0f, 1.0f,   0.0f, 1.0f,
+//        -1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+//        -1.0f, 1.0f,-1.0f,   1.0f, 0.0f,
+//        
+//        // right
+//        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
+//        1.0f,-1.0f,-1.0f,   1.0f, 0.0f,
+//        1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
+//        1.0f,-1.0f, 1.0f,   1.0f, 1.0f,
+//        1.0f, 1.0f,-1.0f,   0.0f, 0.0f,
+//        1.0f, 1.0f, 1.0f,   0.0f, 1.0f
+//    };
+//    
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+//    
+//    
+//    // connect the xyz to the "vert" attribute of the vertex shader
+//    glEnableVertexAttribArray(gWoodenCrate.shaders->attrib("vert"));
+//    glVertexAttribPointer(gWoodenCrate.shaders->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
+//    
+//    glEnableVertexAttribArray(gWoodenCrate.shaders->attrib("vertTexCoord"));
+//    glVertexAttribPointer(gWoodenCrate.shaders->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE,  5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
+//    
+//    // unbind the VBO and VAO
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindVertexArrayOES(0);
+//    
+//}
+
+- (tdogl::Texture *)LoadTexture: (const char *)filename ext: (const char *)ext
 {
-    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("wooden-crate", "jpg"));
+    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath(filename, ext));
     bmp.flipVertically();
-    gTexture = new tdogl::Texture(bmp);
+    return new tdogl::Texture(bmp);
 }
 
-- (void)LoadShaders
+- (tdogl::Program *)LoadShaders: (const char *)vShader fs:(const char *)fShader
 {
     std::vector<tdogl::Shader> shaders;
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("VertexShader", "glsl"), GL_VERTEX_SHADER));
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("FragmentShader", "glsl"), GL_FRAGMENT_SHADER));
-    gProgram = new tdogl::Program(shaders);
+    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath(vShader, "glsl"), GL_VERTEX_SHADER));
+    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath(fShader, "glsl"), GL_FRAGMENT_SHADER));
+    return new tdogl::Program(shaders);
 }
 
 - (void)LoadTriangle
@@ -259,6 +406,52 @@
     
 }
 
+//- (void) RenderInstance: (const ModelInstance&)inst
+//{
+//    ModelAsset* asset = inst.asset;
+//    tdogl::Program* shaders = asset->shaders;
+//    
+//    //bind the shaders
+//    shaders->use();
+//    
+//    //set the shader uniforms
+//    shaders->setUniform("camera", gCamera.matrix());
+//    shaders->setUniform("model", inst.transform);
+////    shaders->setUniform("tex", 0); //set to 0 because the texture will be bound to GL_TEXTURE0
+//    GLint samplerSlot = glGetUniformLocation(shaders->object(), "tex");
+//    glUniform1i(samplerSlot, 0);
+//    
+//    //bind the texture
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D, asset->texture->object());
+//    
+//    //bind VAO and draw
+//    glBindVertexArrayOES(asset->vao);
+//    glDrawArrays(asset->drawType, asset->drawStart, asset->drawCount);
+//    
+//    //unbind everything
+//    glBindVertexArrayOES(0);
+//    glBindTexture(GL_TEXTURE_2D, 0);
+//    shaders->stopUsing();
+//}
+
+//- (void)Renderx
+//{
+//    // clear everything
+//    glClearColor(0, 0, 0, 1); // black
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    
+//    // render all the instances
+//    std::list<ModelInstance>::const_iterator it;
+////    for(it = gInstances.begin(); it != gInstances.end(); ++it){
+////        [self RenderInstance:*it];
+////    }
+//    it = gInstances.begin();
+//    [self RenderInstance:(*it)];
+//    
+//    [_context presentRenderbuffer:GL_RENDERBUFFER];
+//}
+
 - (void)Render
 {
     // clear everything
@@ -308,6 +501,8 @@
     
     //don't go over 360 degrees
     while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+//    gInstances.front().transform = glm::rotate(glm::mat4(), gDegreesRotated, glm::vec3(0,1,0));
+
 
     //move position of camera based on WASD keys
     const float moveSpeed = 2.0; //units per second
