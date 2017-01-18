@@ -36,12 +36,6 @@ struct ModelInstance {
     ModelAsset gWoodenCrate;
     std::list<ModelInstance> gInstances;
     
-//    tdogl::Program* gProgram;
-//    GLuint gVAO;
-//    GLuint gVBO;
-//    tdogl::Texture* gTexture;
-//    GLuint gTex;
-    
     GLfloat gDegreesRotated;
     CADisplayLink * _displayLink;
     tdogl::Camera gCamera;
@@ -179,7 +173,7 @@ struct ModelInstance {
 //    glEnable(GL_BLEND);
 //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    gCamera.setPosition(glm::vec3(0, 0, 10));
+    gCamera.setPosition(glm::vec3(-4, 0, 17));
     gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
     gCamera.setNearAndFarPlanes(0.1, 5000);
 }
@@ -329,9 +323,8 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     //set the shader uniforms
     shaders->setUniform("camera", gCamera.matrix());
     shaders->setUniform("model", inst.transform);
-//    shaders->setUniform("tex", 0); //set to 0 because the texture will be bound to GL_TEXTURE0
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "tex");
-    glUniform1i(samplerSlot, 0);
+    glUniform1i(samplerSlot, 0); //set to 0 because the texture will be bound to GL_TEXTURE0
     
     //bind the texture
     glActiveTexture(GL_TEXTURE0);
@@ -370,7 +363,7 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     
     //don't go over 360 degrees
     while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
-//    gInstances.front().transform = glm::rotate(glm::mat4(), gDegreesRotated, glm::vec3(0,1,0));
+    gInstances.front().transform = glm::rotate(glm::mat4(), gDegreesRotated, glm::vec3(0,1,0));
 
 
     //move position of camera based on WASD keys
