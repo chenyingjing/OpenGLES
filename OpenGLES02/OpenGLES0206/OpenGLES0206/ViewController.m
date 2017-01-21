@@ -23,6 +23,10 @@
     self.openGLView.rightButton = self.rightButton;
     self.openGLView.downButton = self.downButton;
     self.openGLView.upButton = self.upButton;
+    self.openGLView.lightPositionButton = self.lightPositionButton;
+    self.openGLView.lightRedButton = self.lightRedButton;
+    self.openGLView.lightBlueButton = self.lightBlueButton;
+    self.openGLView.lightWhiteButton = self.lightWhiteButton;
     
     self.openGLView.scale = 1;
 }

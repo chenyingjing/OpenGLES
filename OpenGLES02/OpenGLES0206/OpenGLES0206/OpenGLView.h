@@ -28,6 +28,10 @@
 @property (weak, nonatomic) UIButton *rightButton;
 @property (weak, nonatomic) UIButton *downButton;
 @property (weak, nonatomic) UIButton *upButton;
+@property (weak, nonatomic) UIButton *lightPositionButton;
+@property (weak, nonatomic) UIButton *lightRedButton;
+@property (weak, nonatomic) UIButton *lightBlueButton;
+@property (weak, nonatomic) UIButton *lightWhiteButton;
 
 @property float moveX;
 @property float moveY;

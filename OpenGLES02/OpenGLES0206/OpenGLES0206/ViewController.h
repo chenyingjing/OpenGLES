@@ -18,6 +18,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *rightButton;
 @property (weak, nonatomic) IBOutlet UIButton *backwardButton;
 @property (weak, nonatomic) IBOutlet UIButton *forwardButton;
+@property (weak, nonatomic) IBOutlet UIButton *lightPositionButton;
+@property (weak, nonatomic) IBOutlet UIButton *lightRedButton;
+@property (weak, nonatomic) IBOutlet UIButton *lightBlueButton;
+@property (weak, nonatomic) IBOutlet UIButton *lightWhiteButton;
 
 @end
 
