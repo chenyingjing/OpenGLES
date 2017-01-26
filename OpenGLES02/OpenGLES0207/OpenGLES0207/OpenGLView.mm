@@ -20,6 +20,8 @@
 struct Light {
     glm::vec3 position;
     glm::vec3 intensities; //a.k.a. the color of the light
+    float attenuation;
+    float ambientCoefficient;
 };
 
 struct ModelAsset {
@@ -30,6 +32,8 @@ struct ModelAsset {
     GLenum drawType;
     GLint drawStart;
     GLint drawCount;
+    GLfloat shininess;
+    glm::vec3 specularColor;
 };
 
 struct ModelInstance {
@@ -186,6 +190,8 @@ struct ModelInstance {
     
     gLight.position = gCamera.position();
     gLight.intensities = glm::vec3(1, 1, 1); //white
+    gLight.attenuation = 0.005f;
+    gLight.ambientCoefficient = 0.005f;
 }
 
 glm::mat4 translate(GLfloat x, GLfloat y, GLfloat z) {
@@ -230,6 +236,8 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     gWoodenCrate.drawStart = 0;
     gWoodenCrate.drawCount = 6*2*3;
     gWoodenCrate.texture = [self LoadTexture:"wooden-crate" ext:"jpg"];
+    gWoodenCrate.shininess = 80.0;
+    gWoodenCrate.specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
     
     // make and bind the VBO
     glGenBuffers(1, &gWoodenCrate.vbo);
@@ -341,10 +349,18 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     shaders->setUniform("model", inst.transform);
     
     glm::mat3 normalMatrix3 = glm::transpose(glm::inverse(glm::mat3(inst.transform)));
-    
     shaders->setUniform("normalMatrix", normalMatrix3);
-    GLint samplerSlot = glGetUniformLocation(shaders->object(), "tex");
+    
+    GLint samplerSlot = glGetUniformLocation(shaders->object(), "materialTex");
     glUniform1i(samplerSlot, 0); //set to 0 because the texture will be bound to GL_TEXTURE0
+    
+    shaders->setUniform("materialShininess", asset->shininess);
+    shaders->setUniform("materialSpecularColor", asset->specularColor);
+    shaders->setUniform("light.position", gLight.position);
+    shaders->setUniform("light.intensities", gLight.intensities);
+    shaders->setUniform("light.attenuation", gLight.attenuation);
+    shaders->setUniform("light.ambientCoefficient", gLight.ambientCoefficient);
+    shaders->setUniform("cameraPosition", gCamera.position());
     
     //bind the texture
     glActiveTexture(GL_TEXTURE0);
