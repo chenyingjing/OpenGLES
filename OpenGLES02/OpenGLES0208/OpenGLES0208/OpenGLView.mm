@@ -449,15 +449,17 @@ void SetLightUniform(tdogl::Program* shaders, const char* propertyName, size_t l
         gCamera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
     }
     
-//    if(self.lightPositionButton.highlighted)
-//        gLight.position = gCamera.position();
-//    
-//    if(self.lightRedButton.highlighted)
-//        gLight.intensities = glm::vec3(1,0,0); //red
-//    else if(self.lightBlueButton.highlighted)
-//        gLight.intensities = glm::vec3(0,0,1); //blue
-//    else if(self.lightWhiteButton.highlighted)
-//        gLight.intensities = glm::vec3(1,1,1); //white
+    if(self.lightPositionButton.highlighted) {
+        gLights[0].position = glm::vec4(gCamera.position(), 1.0);
+        gLights[0].coneDirection = gCamera.forward();
+    }
+    
+    if(self.lightRedButton.highlighted)
+        gLights[0].intensities = glm::vec3(1,0,0); //red
+    else if(self.lightBlueButton.highlighted)
+        gLights[0].intensities = glm::vec3(0,0,1); //blue
+    else if(self.lightWhiteButton.highlighted)
+        gLights[0].intensities = glm::vec3(1,1,1); //white
     
     const float mouseSensitivity = 0.1f;
     gCamera.offsetOrientation(mouseSensitivity * self.moveY, mouseSensitivity * self.moveX);
