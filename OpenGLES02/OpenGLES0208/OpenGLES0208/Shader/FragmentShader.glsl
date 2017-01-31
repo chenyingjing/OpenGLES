@@ -9,23 +9,60 @@ uniform sampler2D materialTex;
 uniform float materialShininess;
 uniform vec3 materialSpecularColor;
 
+#define MAX_LIGHTS 10
+uniform int numLights;
 uniform struct Light {
-    vec3 position;
+    vec4 position;
     vec3 intensities; //a.k.a the color of the light
     float attenuation;
     float ambientCoefficient;
-} light;
+    float coneAngle;
+    vec3 coneDirection;
+} allLights[MAX_LIGHTS];
 
 varying vec2 fragTexCoord;
 varying vec3 fragNormal;
 varying vec3 fragVert;
 
+vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera);
+
 void main() {
     vec3 normal = normalize(normalMatrix * fragNormal);
     vec3 surfacePos = vec3(model * vec4(fragVert, 1));
     vec4 surfaceColor = texture2D(materialTex, fragTexCoord);
-    vec3 surfaceToLight = normalize(light.position - surfacePos);
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
+
+    vec3 linearColor = vec3(0);
+    for(int i = 0; i < numLights; ++i){
+        linearColor += ApplyLight(allLights[i], surfaceColor.rgb, normal, surfacePos, surfaceToCamera);
+    }
+    
+    //final color (after gamma correction)
+//    vec3 gamma = vec3(1.0/2.2);
+//    gl_FragColor = vec4(pow(linearColor, gamma), surfaceColor.a);
+
+    gl_FragColor = vec4(linearColor, surfaceColor.a);
+}
+
+vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera) {
+    vec3 surfaceToLight;
+    float attenuation = 1.0;
+    if(light.position.w == 0.0) {
+        //directional light
+        surfaceToLight = normalize(light.position.xyz);
+        attenuation = 1.0; //no attenuation for directional lights
+    } else {
+        //point light
+        surfaceToLight = normalize(light.position.xyz - surfacePos);
+        float distanceToLight = length(light.position.xyz - surfacePos);
+        attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2.0));
+        
+        //cone restrictions (affects attenuation)
+        float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(light.coneDirection))));
+        if(lightToSurfaceAngle > light.coneAngle){
+            attenuation = 0.0;
+        }
+    }
     
     //ambient
     vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.intensities;
@@ -40,16 +77,6 @@ void main() {
         specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materialShininess);
     vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
     
-    //attenuation
-    float distanceToLight = length(light.position - surfacePos);
-    float attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2.0));
-    
     //linear color (color before gamma correction)
-    vec3 linearColor = ambient + attenuation*(diffuse + specular);
-    
-    //final color (after gamma correction)
-//    vec3 gamma = vec3(1.0/2.2);
-//    gl_FragColor = vec4(pow(linearColor, gamma), surfaceColor.a);
-
-    gl_FragColor = vec4(linearColor, surfaceColor.a);
+    return ambient + attenuation*(diffuse + specular);
 }

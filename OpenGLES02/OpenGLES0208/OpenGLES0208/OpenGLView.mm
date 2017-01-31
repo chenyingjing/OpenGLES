@@ -15,13 +15,16 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 #include "tdogl/Camera.h"
-#include<list>
+#include <list>
+#include <sstream>
 
 struct Light {
-    glm::vec3 position;
+    glm::vec4 position;
     glm::vec3 intensities; //a.k.a. the color of the light
     float attenuation;
     float ambientCoefficient;
+    float coneAngle;
+    glm::vec3 coneDirection;
 };
 
 struct ModelAsset {
@@ -49,7 +52,8 @@ struct ModelInstance {
     CADisplayLink * _displayLink;
     tdogl::Camera gCamera;
     
-    Light gLight;
+    //Light gLight;
+    std::vector<Light> gLights;
 }
 
 - (void)setupLayer;
@@ -188,10 +192,21 @@ struct ModelInstance {
     gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
     gCamera.setNearAndFarPlanes(0.1, 5000);
     
-    gLight.position = gCamera.position();
-    gLight.intensities = glm::vec3(1, 1, 1); //white
-    gLight.attenuation = 0.005f;
-    gLight.ambientCoefficient = 0.005f;
+    Light spotlight;
+    spotlight.position = glm::vec4(-4,0,10,1);
+    spotlight.intensities = glm::vec3(2,2,2); //strong white light
+    spotlight.attenuation = 0.1f;
+    spotlight.ambientCoefficient = 0.0f; //no ambient light
+    spotlight.coneAngle = 15.0f;
+    spotlight.coneDirection = glm::vec3(0,0,-1);
+    
+    Light directionalLight;
+    directionalLight.position = glm::vec4(1, 0.8, 0.6, 0); //w == 0 indications a directional light
+    directionalLight.intensities = glm::vec3(0.4,0.3,0.1); //weak yellowish light
+    directionalLight.ambientCoefficient = 0.06;
+    
+    gLights.push_back(spotlight);
+    gLights.push_back(directionalLight);
 }
 
 glm::mat4 translate(GLfloat x, GLfloat y, GLfloat z) {
@@ -333,6 +348,15 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     return new tdogl::Program(shaders);
 }
 
+template <typename T>
+void SetLightUniform(tdogl::Program* shaders, const char* propertyName, size_t lightIndex, const T& value) {
+    std::ostringstream ss;
+    ss << "allLights[" << lightIndex << "]." << propertyName;
+    std::string uniformName = ss.str();
+    
+    shaders->setUniform(uniformName.c_str(), value);
+}
+
 - (void) RenderInstance: (const ModelInstance&)inst
 {
     ModelAsset* asset = inst.asset;
@@ -341,9 +365,18 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     //bind the shaders
     shaders->use();
     
-    shaders->setUniform("light.position", gLight.position);
-    shaders->setUniform("light.intensities", gLight.intensities);
+    GLint numLightsSlot = glGetUniformLocation(shaders->object(), "numLights");
+    glUniform1i(numLightsSlot, (int)gLights.size());
     
+    for(size_t i = 0; i < gLights.size(); ++i){
+        SetLightUniform(shaders, "position", i, gLights[i].position);
+        SetLightUniform(shaders, "intensities", i, gLights[i].intensities);
+        SetLightUniform(shaders, "attenuation", i, gLights[i].attenuation);
+        SetLightUniform(shaders, "ambientCoefficient", i, gLights[i].ambientCoefficient);
+        SetLightUniform(shaders, "coneAngle", i, gLights[i].coneAngle);
+        SetLightUniform(shaders, "coneDirection", i, gLights[i].coneDirection);
+    }
+
     //set the shader uniforms
     shaders->setUniform("camera", gCamera.matrix());
     shaders->setUniform("model", inst.transform);
@@ -356,10 +389,6 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
     
     shaders->setUniform("materialShininess", asset->shininess);
     shaders->setUniform("materialSpecularColor", asset->specularColor);
-    shaders->setUniform("light.position", gLight.position);
-    shaders->setUniform("light.intensities", gLight.intensities);
-    shaders->setUniform("light.attenuation", gLight.attenuation);
-    shaders->setUniform("light.ambientCoefficient", gLight.ambientCoefficient);
     shaders->setUniform("cameraPosition", gCamera.position());
     
     //bind the texture
@@ -420,15 +449,15 @@ glm::mat4 scale(GLfloat x, GLfloat y, GLfloat z) {
         gCamera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
     }
     
-    if(self.lightPositionButton.highlighted)
-        gLight.position = gCamera.position();
-    
-    if(self.lightRedButton.highlighted)
-        gLight.intensities = glm::vec3(1,0,0); //red
-    else if(self.lightBlueButton.highlighted)
-        gLight.intensities = glm::vec3(0,0,1); //blue
-    else if(self.lightWhiteButton.highlighted)
-        gLight.intensities = glm::vec3(1,1,1); //white
+//    if(self.lightPositionButton.highlighted)
+//        gLight.position = gCamera.position();
+//    
+//    if(self.lightRedButton.highlighted)
+//        gLight.intensities = glm::vec3(1,0,0); //red
+//    else if(self.lightBlueButton.highlighted)
+//        gLight.intensities = glm::vec3(0,0,1); //blue
+//    else if(self.lightWhiteButton.highlighted)
+//        gLight.intensities = glm::vec3(1,1,1); //white
     
     const float mouseSensitivity = 0.1f;
     gCamera.offsetOrientation(mouseSensitivity * self.moveY, mouseSensitivity * self.moveX);
