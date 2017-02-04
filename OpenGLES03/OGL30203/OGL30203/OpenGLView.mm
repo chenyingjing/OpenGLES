@@ -127,17 +127,21 @@
     
     // Put the three triangle verticies into the VBO
     GLfloat vertexData[] = {
-        //  X     Y     Z
-        0.0f, 0.8f, 0.0f,
-        -0.8f,-0.8f, 0.0f,
-        0.8f,-0.8f, 0.0f,
+        //  X     Y     Z       R     G     B     A
+        0.0f, 0.8f, 0.0f,       1.0f, 0.0f, 0.0f, 1.0f,
+        -0.8f,-0.8f, 0.0f,      0.0f, 1.0f, 0.0f, 1.0f,
+        0.8f,-0.8f, 0.0f,       0.0f, 0.0f, 1.0f, 1.0f,
     };
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
     
     // connect the xyz to the "vert" attribute of the vertex shader
     glEnableVertexAttribArray(gProgram->attrib("vPosition"));
-    glVertexAttribPointer(gProgram->attrib("vPosition"), 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(gProgram->attrib("vPosition"), 3, GL_FLOAT, GL_FALSE, sizeof(vertexData[0]) * 7, NULL);
+
+    glEnableVertexAttribArray(gProgram->attrib("vColor"));
+    glVertexAttribPointer(gProgram->attrib("vColor"), 4, GL_FLOAT, GL_FALSE, sizeof(vertexData[0]) * 7, (const GLvoid* )(sizeof(vertexData[0]) * 3));
+
     
     // unbind the VBO and VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
