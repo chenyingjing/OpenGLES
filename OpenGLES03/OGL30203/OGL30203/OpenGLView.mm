@@ -10,6 +10,8 @@
 
 #include "Program.h"
 #include "ResourcePath/ResourcePath.hpp"
+#define GLM_FORCE_RADIANS
+#include <glm/gtc/matrix_transform.hpp>
 
 @interface OpenGLView() {
     tdogl::Program* gProgram;
@@ -113,6 +115,21 @@
     shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("VertexShader"), GL_VERTEX_SHADER));
     shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("FragmentShader"), GL_FRAGMENT_SHADER));
     gProgram = new tdogl::Program(shaders);
+    
+    gProgram->use();
+    
+    float scale = 1.0;
+    glm::mat4 model = glm::scale(glm::mat4(), glm::vec3(scale, scale, scale));
+    gProgram->setUniform("model", model);
+    
+    glm::mat4 camera = glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    gProgram->setUniform("camera", camera);
+    
+    float aspect = self.frame.size.width/self.frame.size.height;
+    glm::mat4 projection = glm::perspective(glm::radians(50.0f), aspect, 0.1f, 50.0f);
+    gProgram->setUniform("projection", projection);
+    
+    gProgram->stopUsing();
 }
 
 - (void)LoadTriangle
