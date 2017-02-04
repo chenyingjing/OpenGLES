@@ -128,9 +128,10 @@
     // Put the three triangle verticies into the VBO
     GLfloat vertexData[] = {
         //  X     Y     Z       R     G     B     A
-        0.0f, 0.8f, 0.0f,       1.0f, 0.0f, 0.0f, 1.0f,
-        -0.8f,-0.8f, 0.0f,      0.0f, 1.0f, 0.0f, 1.0f,
-        0.8f,-0.8f, 0.0f,       0.0f, 0.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f, 1.0f,
+         0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f, 1.0f,
+         0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f, 1.0f
     };
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
@@ -164,7 +165,7 @@
     glBindVertexArrayOES(gVAO);
     
     // draw the VAO
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     // unbind the VAO
     glBindVertexArrayOES(0);
