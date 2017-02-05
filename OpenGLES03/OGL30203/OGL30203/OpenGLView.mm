@@ -17,6 +17,8 @@
     tdogl::Program* gProgram;
     GLuint gVAO;
     GLuint gVBO;
+    GLfloat gDegreesRotated;
+    CADisplayLink * _displayLink;
 }
 
 - (void)setupLayer;
@@ -117,11 +119,7 @@
     gProgram = new tdogl::Program(shaders);
     
     gProgram->use();
-    
-    float scale = 1.0;
-    glm::mat4 model = glm::scale(glm::mat4(), glm::vec3(scale, scale, scale));
-    gProgram->setUniform("model", model);
-    
+        
     glm::mat4 camera = glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
     gProgram->setUniform("camera", camera);
     
@@ -170,13 +168,22 @@
 - (void)Render
 {
     // clear everything
-    glClearColor(0, 0, 0, 1); // black
+    glClearColor(0.5, 0.5, 0.5, 1); // grey
     glClear(GL_COLOR_BUFFER_BIT);
     
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     
     // bind the program (the shaders)
     glUseProgram(gProgram->object());
+    
+    glm::mat4 model = glm::mat4();
+    static float z = 0.0f;
+    z -= 0.01f;
+    model = glm::translate(model, glm::vec3(0, 0, z));
+    float scale = 0.8;
+    model = glm::scale(model, glm::vec3(scale, scale, scale));
+    model = glm::rotate(model, glm::radians(gDegreesRotated), glm::vec3(1,1,1));
+    gProgram->setUniform("model", model);
     
     // bind the VAO (the triangle)
     glBindVertexArrayOES(gVAO);
@@ -192,6 +199,48 @@
     
     // swap the display buffers (displays what was just drawn)
     [_context presentRenderbuffer:GL_RENDERBUFFER];
+}
+
+- (void)Update: (float)secondsElapsed
+{
+    const GLfloat degreesPerSecond = 180.0f;
+    gDegreesRotated += secondsElapsed * degreesPerSecond;
+    
+    //don't go over 360 degrees
+    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+}
+
+- (void)displayLinkCallback:(CADisplayLink*)displayLink
+{
+    [self Update:displayLink.duration];
+    
+    [self Render];
+}
+
+- (void)toggleDisplayLink
+{
+    if (_displayLink == nil) {
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
+        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    }
+    else {
+        [_displayLink invalidate];
+        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        _displayLink = nil;
+    }
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        
+        
+        [self toggleDisplayLink];
+        
+    }
+    
+    return self;
 }
 
 @end
