@@ -14,6 +14,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "gfx/gfx.h"
 
+OBJ *obj = NULL;
+OBJMESH *objmesh = NULL;
+
+#define OBJ_FILE (char *)"model.obj"
+
 @interface OpenGLView() {
     tdogl::Program* gProgram;
     GLuint gVAO;
@@ -140,6 +145,10 @@
     // make and bind the VBO
     glGenBuffers(1, &gVBO);
     glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+    
+    obj = OBJ_load(OBJ_FILE, 1);
+    
+    
     
     // Put the three triangle verticies into the VBO
     GLfloat vertexData[] = {

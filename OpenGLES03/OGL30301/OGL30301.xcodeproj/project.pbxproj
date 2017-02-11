@@ -225,6 +225,8 @@
 		2366F1CD1E4EB04E00A947FF /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = 2366F0D71E4EB04D00A947FF /* uncompr.c */; };
 		2366F1CE1E4EB04E00A947FF /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 2366F0D81E4EB04D00A947FF /* unzip.c */; };
 		2366F1CF1E4EB04E00A947FF /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2366F0DC1E4EB04D00A947FF /* zutil.c */; };
+		2366F1D31E4EB40B00A947FF /* model.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2366F1D11E4EB40B00A947FF /* model.mtl */; };
+		2366F1D41E4EB40B00A947FF /* model.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2366F1D21E4EB40B00A947FF /* model.obj */; };
 		238A8FEC1E4B5D21009D2D6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 238A8FEB1E4B5D21009D2D6B /* main.m */; };
 		238A8FEF1E4B5D21009D2D6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238A8FEE1E4B5D21009D2D6B /* AppDelegate.m */; };
 		238A8FF21E4B5D21009D2D6B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 238A8FF11E4B5D21009D2D6B /* ViewController.m */; };
@@ -839,6 +841,8 @@
 		2366F0DB1E4EB04D00A947FF /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		2366F0DC1E4EB04D00A947FF /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		2366F0DD1E4EB04D00A947FF /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
+		2366F1D11E4EB40B00A947FF /* model.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = model.mtl; sourceTree = "<group>"; };
+		2366F1D21E4EB40B00A947FF /* model.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = model.obj; sourceTree = "<group>"; };
 		238A8FE71E4B5D21009D2D6B /* OGL30301.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGL30301.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238A8FEB1E4B5D21009D2D6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		238A8FED1E4B5D21009D2D6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1698,6 +1702,15 @@
 			path = zlib;
 			sourceTree = "<group>";
 		};
+		2366F1D01E4EB40B00A947FF /* asset */ = {
+			isa = PBXGroup;
+			children = (
+				2366F1D11E4EB40B00A947FF /* model.mtl */,
+				2366F1D21E4EB40B00A947FF /* model.obj */,
+			);
+			path = asset;
+			sourceTree = "<group>";
+		};
 		238A8FDE1E4B5D21009D2D6B = {
 			isa = PBXGroup;
 			children = (
@@ -1717,6 +1730,7 @@
 		238A8FE91E4B5D21009D2D6B /* OGL30301 */ = {
 			isa = PBXGroup;
 			children = (
+				2366F1D01E4EB40B00A947FF /* asset */,
 				2366EEBF1E4EB04C00A947FF /* gfx */,
 				2366ECF51E4EA5B400A947FF /* templateApp_Prefix.pch */,
 				238E01511E4CA4F900FF2C02 /* tdogl */,
@@ -2242,6 +2256,7 @@
 				238A91501E4B5DF0009D2D6B /* fast_exponential.inl in Resources */,
 				238A914E1E4B5DF0009D2D6B /* extend.inl in Resources */,
 				238A91521E4B5DF0009D2D6B /* fast_trigonometry.inl in Resources */,
+				2366F1D31E4EB40B00A947FF /* model.mtl in Resources */,
 				238A91341E4B5DF0009D2D6B /* type_vec1.inl in Resources */,
 				238A91331E4B5DF0009D2D6B /* type_vec.inl in Resources */,
 				238A914A1E4B5DF0009D2D6B /* compatibility.inl in Resources */,
@@ -2259,6 +2274,7 @@
 				238A912F1E4B5DF0009D2D6B /* type_mat3x4.inl in Resources */,
 				238A91781E4B5DF0009D2D6B /* transform2.inl in Resources */,
 				238A915B1E4B5DF0009D2D6B /* matrix_cross_product.inl in Resources */,
+				2366F1D41E4EB40B00A947FF /* model.obj in Resources */,
 				238A91761E4B5DF0009D2D6B /* string_cast.inl in Resources */,
 				238A911A1E4B5DF0009D2D6B /* func_noise.inl in Resources */,
 				238A91161E4B5DF0009D2D6B /* func_exponential.inl in Resources */,
@@ -2628,6 +2644,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				DEVELOPMENT_TEAM = QLZX6CW3EE;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OGL30301/templateApp_Prefix.pch;
 				HEADER_SEARCH_PATHS = "${SRCROOT}/OGL30301/common/thirdparty/glm";
@@ -2645,6 +2662,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				DEVELOPMENT_TEAM = QLZX6CW3EE;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OGL30301/templateApp_Prefix.pch;
 				HEADER_SEARCH_PATHS = "${SRCROOT}/OGL30301/common/thirdparty/glm";
