@@ -1,6 +1,6 @@
 //
 //  OpenGLView.m
-//  Tutorial01
+//  OGL30301
 //
 //  Created by aa64mac on 01/11/2016.
 //  Copyright © 2016 cyj. All rights reserved.
@@ -112,7 +112,7 @@ OBJMESH *objmesh = NULL;
     
     [self LoadShaders];
 
-    [self LoadTriangle];
+    [self LoadModels];
     
     [self Render];
 }
@@ -136,50 +136,69 @@ OBJMESH *objmesh = NULL;
     gProgram->stopUsing();
 }
 
-- (void)LoadTriangle
+- (void)LoadModels
 {
-    // make and bind the VAO
-    glGenVertexArraysOES(1, &gVAO);
-    glBindVertexArrayOES(gVAO);
-    
-    // make and bind the VBO
-    glGenBuffers(1, &gVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-    
     obj = OBJ_load(OBJ_FILE, 1);
+    objmesh = &obj->objmesh[0];
     
+    unsigned char *vertex_array = NULL,
+    *vertex_start = NULL;
     
-    
-    // Put the three triangle verticies into the VBO
-    GLfloat vertexData[] = {
-        //  X     Y     Z       R     G     B     A
-        -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f, 1.0f,
-         0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f, 1.0f,
-         0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f, 1.0f
-    };
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+    unsigned int i = 0,
+    index = 0,
+    stride = 0,
+    size = 0;
 
+    size = objmesh->n_objvertexdata * (sizeof(vec3) + sizeof(vec3));
+    vertex_array = (unsigned char *)malloc(size);
+    vertex_start = vertex_array;
     
-    // connect the xyz to the "vert" attribute of the vertex shader
+    while (i != objmesh->n_objvertexdata) {
+        index = objmesh->objvertexdata[i].vertex_index;
+        memcpy(vertex_array, &obj->indexed_vertex[index], sizeof(vec3));
+        vertex_array += sizeof(vec3);
+        memcpy(vertex_array, &obj->indexed_normal[index], sizeof(vec3));
+        vertex_array += sizeof(vec3);
+        
+        i++;
+    }
+
+    glGenBuffers(1, &objmesh->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, objmesh->vbo);
+    glBufferData(GL_ARRAY_BUFFER, size, vertex_start, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    free(vertex_start);
+    
+    glGenBuffers(1, &objmesh->objtrianglelist[0].vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[0].vbo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[0].n_indice_array * sizeof(unsigned short), objmesh->objtrianglelist[0].indice_array, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+    stride = sizeof(vec3) + sizeof(vec3);
+
+    glGenVertexArraysOES(1, &objmesh->vao);
+    glBindVertexArrayOES(objmesh->vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, objmesh->vbo);
+
     glEnableVertexAttribArray(gProgram->attrib("vPosition"));
-    glVertexAttribPointer(gProgram->attrib("vPosition"), 3, GL_FLOAT, GL_FALSE, sizeof(vertexData[0]) * 7, NULL);
+    glVertexAttribPointer(gProgram->attrib("vPosition"), 3, GL_FLOAT, GL_FALSE, stride, NULL);
 
     glEnableVertexAttribArray(gProgram->attrib("vColor"));
-    glVertexAttribPointer(gProgram->attrib("vColor"), 4, GL_FLOAT, GL_FALSE, sizeof(vertexData[0]) * 7, (const GLvoid* )(sizeof(vertexData[0]) * 3));
+    glVertexAttribPointer(gProgram->attrib("vColor"), 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(vec3)));
 
     
-    // unbind the VBO and VAO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[0].vbo);
+    
     glBindVertexArrayOES(0);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     
 }
 
 - (void)Render
 {
     // clear everything
-    glClearColor(0.5, 0.5, 0.5, 1); // grey
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
     
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     
@@ -196,10 +215,10 @@ OBJMESH *objmesh = NULL;
     gProgram->setUniform("model", model);
     
     // bind the VAO (the triangle)
-    glBindVertexArrayOES(gVAO);
+    glBindVertexArrayOES(objmesh->vao);
     
     // draw the VAO
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawElements(GL_TRIANGLES, objmesh->objtrianglelist[0].n_indice_array, GL_UNSIGNED_SHORT, (void *)NULL);
     
     // unbind the VAO
     glBindVertexArrayOES(0);

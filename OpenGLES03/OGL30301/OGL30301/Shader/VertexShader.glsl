@@ -3,12 +3,12 @@ uniform mat4 camera;
 uniform mat4 model;
 
 attribute vec4 vPosition;
-attribute vec4 vColor;
+attribute vec3 vColor;
 varying vec4 fColor;
 
 void main(void)
 {
-    fColor = vColor;
+    fColor = vec4(vColor, 1.0);
     gl_Position = projection * camera * model * vPosition;
 }
 
