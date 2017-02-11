@@ -8,7 +8,7 @@ varying vec4 fColor;
 
 void main(void)
 {
-    fColor = vec4(vColor, 1.0);
+    fColor = vec4((vColor + 1.0) * 0.5, 1.0);
     gl_Position = projection * camera * model * vPosition;
 }
 

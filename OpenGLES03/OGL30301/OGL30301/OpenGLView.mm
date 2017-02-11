@@ -163,11 +163,11 @@ OBJMESH *objmesh = NULL;
     
     gProgram->use();
         
-    glm::mat4 camera = glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    glm::mat4 camera = glm::lookAt(glm::vec3(0,0,4), glm::vec3(0,0,0), glm::vec3(0,1,0));
     gProgram->setUniform("camera", camera);
     
     float aspect = self.frame.size.width/self.frame.size.height;
-    glm::mat4 projection = glm::perspective(glm::radians(50.0f), aspect, 0.1f, 50.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
     gProgram->setUniform("projection", projection);
     
     gProgram->stopUsing();
