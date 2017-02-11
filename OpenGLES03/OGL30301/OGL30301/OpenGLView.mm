@@ -8,10 +8,11 @@
 
 #import "OpenGLView.h"
 
-#include "Program.h"
+#include "tdogl/Program.h"
 #include "ResourcePath/ResourcePath.hpp"
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
+#include "gfx/gfx.h"
 
 @interface OpenGLView() {
     tdogl::Program* gProgram;
