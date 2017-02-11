@@ -88,12 +88,39 @@ OBJMESH *objmesh = NULL;
                               GL_RENDERBUFFER, _colorRenderBuffer);
 }
 
+- (void)setupDepthBuffer
+{
+    int width, height;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+    
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                              GL_RENDERBUFFER, _depthRenderBuffer);
+    
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    
+}
+
 - (void)destoryRenderAndFrameBuffer
 {
-    glDeleteFramebuffers(1, &_frameBuffer);
-    _frameBuffer = 0;
-    glDeleteRenderbuffers(1, &_colorRenderBuffer);
-    _colorRenderBuffer = 0;
+    if (_colorRenderBuffer != 0) {
+        glDeleteRenderbuffers(1, &_colorRenderBuffer);
+        _colorRenderBuffer = 0;
+    }
+    
+    if (_frameBuffer != 0) {
+        glDeleteFramebuffers(1, &_frameBuffer);
+        _frameBuffer = 0;
+    }
+    
+    if (_depthRenderBuffer != 0) {
+        glDeleteFramebuffers(1, &_depthRenderBuffer);
+        _depthRenderBuffer = 0;
+    }
 }
 
 - (void)layoutSubviews {
@@ -110,11 +137,21 @@ OBJMESH *objmesh = NULL;
     
     [self setupFrameBuffer];
     
+    [self setupDepthBuffer];
+    
+    [self initOpenGL];
+    
     [self LoadShaders];
 
     [self LoadModels];
     
     [self Render];
+}
+
+- (void)initOpenGL
+{
+    glEnable( GL_DEPTH_TEST );
+    glEnable( GL_CULL_FACE  );
 }
 
 - (void)LoadShaders
