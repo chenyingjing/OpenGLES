@@ -206,12 +206,12 @@ OBJMESH *objmesh = NULL;
     glUseProgram(gProgram->object());
     
     glm::mat4 model = glm::mat4();
-    static float z = 0.0f;
-    z -= 0.01f;
-    model = glm::translate(model, glm::vec3(0, 0, z));
-    float scale = 0.8;
-    model = glm::scale(model, glm::vec3(scale, scale, scale));
-    model = glm::rotate(model, glm::radians(gDegreesRotated), glm::vec3(1,1,1));
+//    static float z = 0.0f;
+//    z -= 0.01f;
+//    model = glm::translate(model, glm::vec3(0, 0, z));
+//    float scale = 0.8;
+//    model = glm::scale(model, glm::vec3(scale, scale, scale));
+    model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1,0,0));
     gProgram->setUniform("model", model);
     
     // bind the VAO (the triangle)
@@ -232,7 +232,7 @@ OBJMESH *objmesh = NULL;
 
 - (void)Update: (float)secondsElapsed
 {
-    const GLfloat degreesPerSecond = 180.0f;
+    const GLfloat degreesPerSecond = 0;//180.0f;
     gDegreesRotated += secondsElapsed * degreesPerSecond;
     
     //don't go over 360 degrees
