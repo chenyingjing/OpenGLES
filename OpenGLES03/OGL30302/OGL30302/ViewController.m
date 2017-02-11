@@ -25,5 +25,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)panAction:(UIPanGestureRecognizer *)sender {
+    CGPoint position = [sender translationInView:self.view];
+    
+    self.openGLView.moveX = position.x;
+    self.openGLView.moveY = position.y;
+    
+    [sender setTranslation:CGPointZero inView:self.view];
+}
 
 @end

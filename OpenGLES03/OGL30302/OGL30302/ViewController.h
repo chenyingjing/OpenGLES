@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OpenGLView.h"
 
 @interface ViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet OpenGLView *openGLView;
 
 @end
 

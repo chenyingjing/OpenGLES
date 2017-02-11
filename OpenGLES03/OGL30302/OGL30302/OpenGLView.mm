@@ -25,6 +25,7 @@ OBJMESH *objmesh = NULL;
     GLuint gVBO;
     GLfloat gDegreesRotated;
     CADisplayLink * _displayLink;
+    glm::mat4 _model;
 }
 
 - (void)setupLayer;
@@ -152,6 +153,9 @@ OBJMESH *objmesh = NULL;
 {
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_CULL_FACE  );
+    
+    _model = glm::mat4();
+    _model = glm::rotate(_model, glm::radians(-90.0f), glm::vec3(1,0,0));
 }
 
 - (void)LoadShaders
@@ -242,14 +246,14 @@ OBJMESH *objmesh = NULL;
     // bind the program (the shaders)
     glUseProgram(gProgram->object());
     
-    glm::mat4 model = glm::mat4();
+    
 //    static float z = 0.0f;
 //    z -= 0.01f;
 //    model = glm::translate(model, glm::vec3(0, 0, z));
 //    float scale = 0.8;
 //    model = glm::scale(model, glm::vec3(scale, scale, scale));
-    model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1,0,0));
-    gProgram->setUniform("model", model);
+//    _model = glm::rotate(_model, glm::radians(-90.0f), glm::vec3(1,0,0));
+    gProgram->setUniform("model", _model);
     
     // bind the VAO (the triangle)
     glBindVertexArrayOES(objmesh->vao);
@@ -269,11 +273,19 @@ OBJMESH *objmesh = NULL;
 
 - (void)Update: (float)secondsElapsed
 {
-    const GLfloat degreesPerSecond = 0;//180.0f;
-    gDegreesRotated += secondsElapsed * degreesPerSecond;
+//    const GLfloat degreesPerSecond = 0;//180.0f;
+//    gDegreesRotated += secondsElapsed * degreesPerSecond;
+//    
+//    //don't go over 360 degrees
+//    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
     
-    //don't go over 360 degrees
-    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+    const float sensitivity = 0.008f;
+    glm::mat4 r = glm::mat4();
+    r = glm::rotate(r, self.moveX * sensitivity, glm::vec3(0,1,0));
+    r = glm::rotate(r, self.moveY * sensitivity, glm::vec3(1,0,0));
+    _model = r * _model;
+    
+    
 }
 
 - (void)displayLinkCallback:(CADisplayLink*)displayLink

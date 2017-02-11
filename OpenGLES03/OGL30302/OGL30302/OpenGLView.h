@@ -21,4 +21,8 @@
     GLuint _positionSlot;
     
 }
+
+@property float moveX;
+@property float moveY;
+
 @end
