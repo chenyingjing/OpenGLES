@@ -225,8 +225,8 @@ OBJMESH *objmesh = NULL;
     glEnableVertexAttribArray(gProgram->attrib("vPosition"));
     glVertexAttribPointer(gProgram->attrib("vPosition"), 3, GL_FLOAT, GL_FALSE, stride, NULL);
 
-    glEnableVertexAttribArray(gProgram->attrib("vColor"));
-    glVertexAttribPointer(gProgram->attrib("vColor"), 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(vec3)));
+    glEnableVertexAttribArray(gProgram->attrib("vNormal"));
+    glVertexAttribPointer(gProgram->attrib("vNormal"), 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(vec3)));
 
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[0].vbo);
@@ -254,6 +254,12 @@ OBJMESH *objmesh = NULL;
 //    model = glm::scale(model, glm::vec3(scale, scale, scale));
 //    _model = glm::rotate(_model, glm::radians(-90.0f), glm::vec3(1,0,0));
     gProgram->setUniform("model", _model);
+    
+    glm::mat3 normalMatrix3 = glm::transpose(glm::inverse(glm::mat3(_model)));
+    gProgram->setUniform("normalMatrix", normalMatrix3);
+    
+    gProgram->setUniform("LIGHTPOSITION", glm::vec3(0,0,5));
+    
     
     // bind the VAO (the triangle)
     glBindVertexArrayOES(objmesh->vao);
