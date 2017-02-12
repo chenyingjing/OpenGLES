@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23512ECE1E505CA5006F7124 /* diffuse.png in Resources */ = {isa = PBXBuildFile; fileRef = 23512ECD1E505CA5006F7124 /* diffuse.png */; };
 		23D3F0BD1E5014EA0091D23B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D3F0BC1E5014EA0091D23B /* main.m */; };
 		23D3F0C01E5014EA0091D23B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D3F0BF1E5014EA0091D23B /* AppDelegate.m */; };
 		23D3F0C31E5014EA0091D23B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D3F0C21E5014EA0091D23B /* ViewController.m */; };
@@ -353,6 +354,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23512ECD1E505CA5006F7124 /* diffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = diffuse.png; sourceTree = "<group>"; };
 		23D3F0B81E5014EA0091D23B /* OGL30304.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGL30304.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D3F0BC1E5014EA0091D23B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23D3F0BE1E5014EA0091D23B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1188,6 +1190,7 @@
 		23D3F0D21E5015650091D23B /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				23512ECD1E505CA5006F7124 /* diffuse.png */,
 				23D3F0D31E5015650091D23B /* model.mtl */,
 				23D3F0D41E5015650091D23B /* model.obj */,
 			);
@@ -2271,6 +2274,7 @@
 				23D3F42C1E5015660091D23B /* matrix_interpolation.inl in Resources */,
 				23D3F44E1E5015660091D23B /* readme.txt in Resources */,
 				23D3F40B1E5015660091D23B /* matrix_inverse.inl in Resources */,
+				23512ECE1E505CA5006F7124 /* diffuse.png in Resources */,
 				23D3F3F41E5015660091D23B /* intrinsic_trigonometric.inl in Resources */,
 				23D3F3FE1E5015660091D23B /* type_mat3x3.inl in Resources */,
 				23D3F4161E5015660091D23B /* bit.inl in Resources */,
