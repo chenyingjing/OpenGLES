@@ -192,7 +192,8 @@ OBJMESH *objmesh = NULL;
     stride = 0,
     size = 0;
 
-    size = objmesh->n_objvertexdata * (sizeof(vec3) + sizeof(vec3) + sizeof(vec2));
+//    size = objmesh->n_objvertexdata * (sizeof(vec3) + sizeof(vec3) + sizeof(vec2));
+    size = objmesh->n_objvertexdata * (sizeof(vec3) + sizeof(vec2));
     vertex_array = (unsigned char *)malloc(size);
     vertex_start = vertex_array;
     
@@ -202,8 +203,8 @@ OBJMESH *objmesh = NULL;
         memcpy(vertex_array, &obj->indexed_vertex[index], sizeof(vec3));
         vertex_array += sizeof(vec3);
         
-        memcpy(vertex_array, &obj->indexed_normal[index], sizeof(vec3));
-        vertex_array += sizeof(vec3);
+//        memcpy(vertex_array, &obj->indexed_normal[index], sizeof(vec3));
+//        vertex_array += sizeof(vec3);
         
         memcpy(vertex_array, &obj->indexed_uv[objmesh->objvertexdata[i].uv_index], sizeof(vec2));
         vertex_array += sizeof(vec2);
@@ -222,7 +223,7 @@ OBJMESH *objmesh = NULL;
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[0].n_indice_array * sizeof(unsigned short), objmesh->objtrianglelist[0].indice_array, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
-    stride = sizeof(vec3) + sizeof(vec3) + sizeof(vec2);
+    stride = sizeof(vec3) + sizeof(vec2);
 
     glGenVertexArraysOES(1, &objmesh->vao);
     glBindVertexArrayOES(objmesh->vao);
@@ -232,11 +233,11 @@ OBJMESH *objmesh = NULL;
     glEnableVertexAttribArray(gProgram->attrib("vPosition"));
     glVertexAttribPointer(gProgram->attrib("vPosition"), 3, GL_FLOAT, GL_FALSE, stride, NULL);
 
-    glEnableVertexAttribArray(gProgram->attrib("vNormal"));
-    glVertexAttribPointer(gProgram->attrib("vNormal"), 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(vec3)));
+//    glEnableVertexAttribArray(gProgram->attrib("vNormal"));
+//    glVertexAttribPointer(gProgram->attrib("vNormal"), 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(vec3)));
 
     glEnableVertexAttribArray(gProgram->attrib("vertTexCoord"));
-    glVertexAttribPointer(gProgram->attrib("vertTexCoord"), 2, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(vec3) + sizeof(vec3)));
+    glVertexAttribPointer(gProgram->attrib("vertTexCoord"), 2, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(vec3)));
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[0].vbo);
     
@@ -271,10 +272,10 @@ OBJMESH *objmesh = NULL;
 //    _model = glm::rotate(_model, glm::radians(-90.0f), glm::vec3(1,0,0));
     gProgram->setUniform("model", _model);
     
-    glm::mat3 normalMatrix3 = glm::transpose(glm::inverse(glm::mat3(_model)));
-    gProgram->setUniform("normalMatrix", normalMatrix3);
+//    glm::mat3 normalMatrix3 = glm::transpose(glm::inverse(glm::mat3(_model)));
+//    gProgram->setUniform("normalMatrix", normalMatrix3);
     
-    gProgram->setUniform("LIGHTPOSITION", glm::vec3(10,0,3));
+//    gProgram->setUniform("LIGHTPOSITION", glm::vec3(10,0,3));
     
     GLint samplerSlot = glGetUniformLocation(gProgram->object(), "materialTex");
     glUniform1i(samplerSlot, 0); //set to 0 because the texture will be bound to GL_TEXTURE0
