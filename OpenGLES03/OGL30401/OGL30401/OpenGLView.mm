@@ -18,7 +18,7 @@
 OBJ *obj = NULL;
 OBJMESH *objmesh = NULL;
 
-#define OBJ_FILE (char *)"model.obj"
+#define OBJ_FILE (char *)"scene.obj"
 
 @interface OpenGLView() {
     tdogl::Program* gProgram;

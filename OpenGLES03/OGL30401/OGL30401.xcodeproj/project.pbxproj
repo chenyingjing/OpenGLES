@@ -351,6 +351,14 @@
 		23845BC41E53359A003AF115 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23845BC21E53359A003AF115 /* Main.storyboard */; };
 		23845BC61E53359A003AF115 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23845BC51E53359A003AF115 /* Assets.xcassets */; };
 		23845BC91E53359A003AF115 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23845BC71E53359A003AF115 /* LaunchScreen.storyboard */; };
+		23B0FF2F1E57DBBC003887E5 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF271E57DBBC003887E5 /* background.png */; };
+		23B0FF301E57DBBC003887E5 /* balloon.png in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF281E57DBBC003887E5 /* balloon.png */; };
+		23B0FF311E57DBBC003887E5 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF291E57DBBC003887E5 /* grass.png */; };
+		23B0FF321E57DBBC003887E5 /* leaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF2A1E57DBBC003887E5 /* leaf.png */; };
+		23B0FF331E57DBBC003887E5 /* momo.png in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF2B1E57DBBC003887E5 /* momo.png */; };
+		23B0FF341E57DBBC003887E5 /* scene.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF2C1E57DBBC003887E5 /* scene.mtl */; };
+		23B0FF351E57DBBC003887E5 /* scene.obj in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF2D1E57DBBC003887E5 /* scene.obj */; };
+		23B0FF361E57DBBC003887E5 /* tree.png in Resources */ = {isa = PBXBuildFile; fileRef = 23B0FF2E1E57DBBC003887E5 /* tree.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1125,6 +1133,14 @@
 		23845BC51E53359A003AF115 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		23845BC81E53359A003AF115 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		23845BCA1E53359A003AF115 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		23B0FF271E57DBBC003887E5 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		23B0FF281E57DBBC003887E5 /* balloon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = balloon.png; sourceTree = "<group>"; };
+		23B0FF291E57DBBC003887E5 /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
+		23B0FF2A1E57DBBC003887E5 /* leaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaf.png; sourceTree = "<group>"; };
+		23B0FF2B1E57DBBC003887E5 /* momo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = momo.png; sourceTree = "<group>"; };
+		23B0FF2C1E57DBBC003887E5 /* scene.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scene.mtl; sourceTree = "<group>"; };
+		23B0FF2D1E57DBBC003887E5 /* scene.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scene.obj; sourceTree = "<group>"; };
+		23B0FF2E1E57DBBC003887E5 /* tree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1141,6 +1157,14 @@
 		232F8EB91E53377700C90C65 /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				23B0FF271E57DBBC003887E5 /* background.png */,
+				23B0FF281E57DBBC003887E5 /* balloon.png */,
+				23B0FF291E57DBBC003887E5 /* grass.png */,
+				23B0FF2A1E57DBBC003887E5 /* leaf.png */,
+				23B0FF2B1E57DBBC003887E5 /* momo.png */,
+				23B0FF2C1E57DBBC003887E5 /* scene.mtl */,
+				23B0FF2D1E57DBBC003887E5 /* scene.obj */,
+				23B0FF2E1E57DBBC003887E5 /* tree.png */,
 				232F8EBA1E53377700C90C65 /* diffuse.png */,
 				232F8EBB1E53377700C90C65 /* model.mtl */,
 				232F8EBC1E53377700C90C65 /* model.obj */,
@@ -2199,9 +2223,11 @@
 				232F91F41E53377900C90C65 /* matrix_inverse.inl in Resources */,
 				232F91C91E53377800C90C65 /* diffuse.png in Resources */,
 				232F91F21E53377900C90C65 /* epsilon.inl in Resources */,
+				23B0FF301E57DBBC003887E5 /* balloon.png in Resources */,
 				232F91DF1E53377900C90C65 /* precision.inl in Resources */,
 				23845BC91E53359A003AF115 /* LaunchScreen.storyboard in Resources */,
 				232F92201E53377900C90C65 /* optimum_pow.inl in Resources */,
+				23B0FF311E57DBBC003887E5 /* grass.png in Resources */,
 				232F91D61E53377900C90C65 /* func_vector_relational.inl in Resources */,
 				232F91E51E53377900C90C65 /* type_mat2x4.inl in Resources */,
 				232F91D41E53377900C90C65 /* func_packing.inl in Resources */,
@@ -2219,6 +2245,7 @@
 				232F92171E53377900C90C65 /* matrix_operation.inl in Resources */,
 				232F91D91E53377900C90C65 /* intrinsic_exponential.inl in Resources */,
 				232F92051E53377900C90C65 /* dual_quaternion.inl in Resources */,
+				23B0FF321E57DBBC003887E5 /* leaf.png in Resources */,
 				232F920A1E53377900C90C65 /* fast_square_root.inl in Resources */,
 				232F91F31E53377900C90C65 /* matrix_access.inl in Resources */,
 				232F92291E53377900C90C65 /* scalar_relational.inl in Resources */,
@@ -2257,12 +2284,16 @@
 				232F91F81E53377900C90C65 /* quaternion.inl in Resources */,
 				232F921B1E53377900C90C65 /* multiple.inl in Resources */,
 				232F91EB1E53377900C90C65 /* type_mat4x4.inl in Resources */,
+				23B0FF331E57DBBC003887E5 /* momo.png in Resources */,
 				232F92181E53377900C90C65 /* matrix_query.inl in Resources */,
 				232F922A1E53377900C90C65 /* simd_mat4.inl in Resources */,
 				232F93141E53377900C90C65 /* FragmentShader.glsl in Resources */,
+				23B0FF341E57DBBC003887E5 /* scene.mtl in Resources */,
 				232F91F11E53377900C90C65 /* constants.inl in Resources */,
+				23B0FF351E57DBBC003887E5 /* scene.obj in Resources */,
 				232F91FB1E53377900C90C65 /* type_precision.inl in Resources */,
 				232F91DC1E53377900C90C65 /* intrinsic_matrix.inl in Resources */,
+				23B0FF361E57DBBC003887E5 /* tree.png in Resources */,
 				232F91E61E53377900C90C65 /* type_mat3x2.inl in Resources */,
 				232F92321E53377900C90C65 /* unsigned_int.inl in Resources */,
 				232F91FC1E53377900C90C65 /* type_ptr.inl in Resources */,
@@ -2273,6 +2304,7 @@
 				232F91EA1E53377900C90C65 /* type_mat4x3.inl in Resources */,
 				232F91CE1E53377900C90C65 /* func_common.inl in Resources */,
 				232F922E1E53377900C90C65 /* std_based_type.inl in Resources */,
+				23B0FF2F1E57DBBC003887E5 /* background.png in Resources */,
 				232F91CC1E53377800C90C65 /* copying.txt in Resources */,
 				232F92331E53377900C90C65 /* vec1.inl in Resources */,
 				232F92311E53377900C90C65 /* transform2.inl in Resources */,
