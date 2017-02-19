@@ -19,6 +19,8 @@
 OBJ *obj = NULL;
 OBJMESH *objmesh = NULL;
 
+extern void (*programBindAttribLocation)(GLuint);
+
 #define OBJ_FILE (char *)"scene.obj"
 
 struct ModelAsset {
@@ -193,6 +195,11 @@ void program_bind_attrib_location(void *ptr) {
     glBindAttribLocation(program->pid, 2, "TEXCOORD0");
 }
 
+void program_bind_attrib_location(GLuint pid) {
+    glBindAttribLocation(pid, 0, "POSITION");
+    glBindAttribLocation(pid, 2, "TEXCOORD0");
+}
+
 void material_draw_callback(void *ptr) {
     OBJMATERIAL *objmaterial = (OBJMATERIAL *)ptr;
     PROGRAM *program = objmaterial->program;
@@ -209,21 +216,10 @@ void material_draw_callback(void *ptr) {
     }
 }
 
-- (tdogl::Texture *)LoadTexture: (const char *)filename ext: (const char *)ext
-{
-    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath(filename, ext));
-//    bmp.flipVertically();
-    return new tdogl::Texture(bmp);
-}
-
 - (ModelAsset *)LoadAsset
 {
     ModelAsset *pAsset = new ModelAsset;//TODO: delete obj
     pAsset->shaders = [self LoadShaders:"VertexShader" fs:"FragmentShader"];
-//    pAsset->drawType = GL_TRIANGLES;
-//    pAsset->drawStart = 0;
-//    pAsset->drawCount = 6*2*3;
-//    pAsset->texture = [self LoadTexture:"wooden-crate" ext:"jpg"];
 
     return pAsset;
 }
@@ -254,17 +250,26 @@ void material_draw_callback(void *ptr) {
     while (i != obj->n_objmaterial) {
         OBJ_build_material(obj, i, NULL);
         
+        programBindAttribLocation = program_bind_attrib_location;
+        
         ModelInstance instance;
         instance.asset = [self LoadAsset];
-        unsigned int pid = instance.asset->shaders->object();
-        glBindAttribLocation(pid, 0, "POSITION");
-        glBindAttribLocation(pid, 2, "TEXCOORD0");
+//        unsigned int pid = instance.asset->shaders->object();
+//        glBindAttribLocation(pid, 0, "POSITION");
+//        glBindAttribLocation(pid, 2, "TEXCOORD0");
         
-//        dot.transform = glm::mat4();
         gInstances.push_back(instance);
         
         ++i;
     }
+    
+//    i = 0;
+//    while (i != obj->n_objmaterial) {
+//        OBJ_build_material(obj, i, NULL);
+//        obj->objmaterial[i].program = PROGRAM_create((char *)"default", (char *)"VertexShader.glsl", (char *)"FragmentShader.glsl", 1, 1, program_bind_attrib_location, NULL);
+//        OBJ_set_draw_callback_material(obj, i, material_draw_callback);
+//        ++i;
+//    }
 
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 }
@@ -294,16 +299,13 @@ void material_draw_callback(void *ptr) {
 //        GFX_translate(obj->objmesh[i].location.x,
 //                      obj->objmesh[i].location.y,
 //                      obj->objmesh[i].location.z);
-//        //OBJ_draw_mesh(obj, i);
-//        
-//        
-//        
-//        
+//        OBJ_draw_mesh(obj, i);
 //        GFX_pop_matrix();
 //        
 //        ++i;
 //    }
-    
+
+
     unsigned int i = 0;
     std::list<ModelInstance>::const_iterator it;
     for(it = gInstances.begin(); it != gInstances.end(); ++it){
@@ -315,7 +317,7 @@ void material_draw_callback(void *ptr) {
         GFX_pop_matrix();
         ++i;
     }
-    
+
     // swap the display buffers (displays what was just drawn)
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -349,7 +351,13 @@ void material_draw_callback(void *ptr) {
         TEXTURE *texture = objmesh->current_material->texture_diffuse;
         glBindTexture(texture->target, texture->tid);
         
-        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[ i ].vbo );
+        if( objmesh->vao )
+        {
+            if( objmesh->n_objtrianglelist != 1 )
+            { glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[ i ].vbo ); }
+        }
+        else
+        { glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, objmesh->objtrianglelist[ i ].vbo ); }
         
         glDrawElements( objmesh->objtrianglelist[ i ].mode,
                        objmesh->objtrianglelist[ i ].n_indice_array,

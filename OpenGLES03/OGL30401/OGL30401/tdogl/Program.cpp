@@ -22,6 +22,8 @@
 
 using namespace tdogl;
 
+void (*programBindAttribLocation)(GLuint);
+
 Program::Program(const std::vector<Shader>& shaders) :
     _object(0)
 {
@@ -37,6 +39,8 @@ Program::Program(const std::vector<Shader>& shaders) :
     for(unsigned i = 0; i < shaders.size(); ++i)
         glAttachShader(_object, shaders[i].object());
     
+    if (programBindAttribLocation) programBindAttribLocation(_object);
+        
     //link the shaders together
     glLinkProgram(_object);
     
