@@ -8,4 +8,4 @@
 
 #include <string>
 
-std::string ResourcePath(std::string fileName);
+std::string ResourcePath(std::string fileName, std::string ext);
