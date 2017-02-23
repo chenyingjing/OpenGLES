@@ -216,11 +216,17 @@ void material_draw_callback(void *ptr) {
     }
 }
 
-- (ModelAsset *)LoadAsset
+- (ModelAsset *)LoadAsset:(float)dissolve
 {
-    ModelAsset *pAsset = new ModelAsset;//TODO: delete obj
-    pAsset->shaders = [self LoadShaders:"VertexShader" fs:"FragmentShader"];
-
+    ModelAsset *pAsset = new ModelAsset;//TODO: delete pAsset
+    if (dissolve == 1.0f) {
+        pAsset->shaders = [self LoadShaders:"VertexShader" fs:"SolidFragmentShader"];
+    } else if (!dissolve) {
+        pAsset->shaders = [self LoadShaders:"VertexShader" fs:"AlphaTestedFragmentShader"];
+        NSLog(@"AlphaTestedFragmentShader");
+    } else {
+        pAsset->shaders = [self LoadShaders:"VertexShader" fs:"TransparentFragmentShader"];
+    }
     return pAsset;
 }
 
@@ -237,6 +243,19 @@ void material_draw_callback(void *ptr) {
     while (i != obj->n_objmesh) {
         OBJ_build_mesh(obj, i);
         OBJ_free_mesh_vertex_data(obj, i);
+        
+        OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
+        float dissolve = objmaterial->dissolve;
+
+        programBindAttribLocation = program_bind_attrib_location;
+        
+        ModelInstance instance;
+        instance.asset = [self LoadAsset: dissolve];
+        
+        gInstances.push_back(instance);
+        NSLog(@"i:%d\tpid:%d", i, instance.asset->shaders->object());
+        
+        
         ++i;
     }
     
@@ -249,27 +268,9 @@ void material_draw_callback(void *ptr) {
     i = 0;
     while (i != obj->n_objmaterial) {
         OBJ_build_material(obj, i, NULL);
-        
-        programBindAttribLocation = program_bind_attrib_location;
-        
-        ModelInstance instance;
-        instance.asset = [self LoadAsset];
-//        unsigned int pid = instance.asset->shaders->object();
-//        glBindAttribLocation(pid, 0, "POSITION");
-//        glBindAttribLocation(pid, 2, "TEXCOORD0");
-        
-        gInstances.push_back(instance);
-        
         ++i;
     }
-    
-//    i = 0;
-//    while (i != obj->n_objmaterial) {
-//        OBJ_build_material(obj, i, NULL);
-//        obj->objmaterial[i].program = PROGRAM_create((char *)"default", (char *)"VertexShader.glsl", (char *)"FragmentShader.glsl", 1, 1, program_bind_attrib_location, NULL);
-//        OBJ_set_draw_callback_material(obj, i, material_draw_callback);
-//        ++i;
-//    }
+    NSLog(@"--------------------------");
 
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 }
@@ -308,16 +309,43 @@ void material_draw_callback(void *ptr) {
 
     unsigned int i = 0;
     std::list<ModelInstance>::const_iterator it;
+    
+    
     for(it = gInstances.begin(); it != gInstances.end(); ++it){
-        GFX_push_matrix();
-        GFX_translate(obj->objmesh[i].location.x,
-                      obj->objmesh[i].location.y,
-                      obj->objmesh[i].location.z);
-        [self RenderInstance:*it index: i];
-        GFX_pop_matrix();
+        OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
+        if( !objmaterial->dissolve || objmaterial->dissolve == 1.0f) {
+            //NSLog(@"AlphaTestedFragmentShader");
+            GFX_push_matrix();
+            GFX_translate(obj->objmesh[i].location.x,
+                          obj->objmesh[i].location.y,
+                          obj->objmesh[i].location.z);
+            [self RenderInstance:*it index: i];
+            GFX_pop_matrix();
+        }
+        //NSLog(@"i:%d\tpid:%d", i, (*it).asset->shaders->object());
         ++i;
     }
-
+    //NSLog(@"======================");
+    
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    
+    i = 0;
+    for(it = gInstances.begin(); it != gInstances.end(); ++it){
+        OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
+        if (objmaterial->dissolve > 0.0f && objmaterial->dissolve < 1.0f) {
+            GFX_push_matrix();
+            GFX_translate(obj->objmesh[i].location.x,
+                          obj->objmesh[i].location.y,
+                          obj->objmesh[i].location.z);
+            [self RenderInstance:*it index: i];
+            GFX_pop_matrix();
+        }
+        ++i;
+    }
+    
+    glDisable( GL_BLEND );
+    
     // swap the display buffers (displays what was just drawn)
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }

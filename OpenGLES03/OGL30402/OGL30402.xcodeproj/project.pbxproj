@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		236C07A61E5C796300D87470 /* AlphaTestedFragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 236C07A41E5C796300D87470 /* AlphaTestedFragmentShader.glsl */; };
+		236C07A71E5C796300D87470 /* TransparentFragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 236C07A51E5C796300D87470 /* TransparentFragmentShader.glsl */; };
 		23D886461E596F3A00D39B17 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D886451E596F3A00D39B17 /* main.m */; };
 		23D886491E596F3A00D39B17 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D886481E596F3A00D39B17 /* AppDelegate.m */; };
 		23D8864C1E596F3A00D39B17 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D8864B1E596F3A00D39B17 /* ViewController.m */; };
@@ -352,7 +354,7 @@
 		23D88AC31E596FBF00D39B17 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 23D8895D1E596FBF00D39B17 /* zutil.c */; };
 		23D88AC41E596FBF00D39B17 /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D889601E596FBF00D39B17 /* OpenGLView.mm */; };
 		23D88AC51E596FBF00D39B17 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23D889631E596FBF00D39B17 /* ResourcePath.mm */; };
-		23D88AC61E596FBF00D39B17 /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23D889651E596FBF00D39B17 /* FragmentShader.glsl */; };
+		23D88AC61E596FBF00D39B17 /* SolidFragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23D889651E596FBF00D39B17 /* SolidFragmentShader.glsl */; };
 		23D88AC71E596FBF00D39B17 /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23D889661E596FBF00D39B17 /* VertexShader.glsl */; };
 		23D88AC81E596FBF00D39B17 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D889681E596FBF00D39B17 /* Bitmap.cpp */; };
 		23D88AC91E596FBF00D39B17 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D8896A1E596FBF00D39B17 /* Camera.cpp */; };
@@ -362,6 +364,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		236C07A41E5C796300D87470 /* AlphaTestedFragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AlphaTestedFragmentShader.glsl; sourceTree = "<group>"; };
+		236C07A51E5C796300D87470 /* TransparentFragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TransparentFragmentShader.glsl; sourceTree = "<group>"; };
 		23D886411E596F3A00D39B17 /* OGL30402.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGL30402.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D886451E596F3A00D39B17 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23D886471E596F3A00D39B17 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1128,7 +1132,7 @@
 		23D889601E596FBF00D39B17 /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
 		23D889621E596FBF00D39B17 /* ResourcePath.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ResourcePath.hpp; sourceTree = "<group>"; };
 		23D889631E596FBF00D39B17 /* ResourcePath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
-		23D889651E596FBF00D39B17 /* FragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; };
+		23D889651E596FBF00D39B17 /* SolidFragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolidFragmentShader.glsl; sourceTree = "<group>"; };
 		23D889661E596FBF00D39B17 /* VertexShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VertexShader.glsl; sourceTree = "<group>"; };
 		23D889681E596FBF00D39B17 /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bitmap.cpp; sourceTree = "<group>"; };
 		23D889691E596FBF00D39B17 /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bitmap.h; sourceTree = "<group>"; };
@@ -2124,7 +2128,9 @@
 		23D889641E596FBF00D39B17 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
-				23D889651E596FBF00D39B17 /* FragmentShader.glsl */,
+				236C07A41E5C796300D87470 /* AlphaTestedFragmentShader.glsl */,
+				236C07A51E5C796300D87470 /* TransparentFragmentShader.glsl */,
+				23D889651E596FBF00D39B17 /* SolidFragmentShader.glsl */,
 				23D889661E596FBF00D39B17 /* VertexShader.glsl */,
 			);
 			path = Shader;
@@ -2225,7 +2231,7 @@
 				23D889D21E596FBF00D39B17 /* optimum_pow.inl in Resources */,
 				23D8898D1E596FBF00D39B17 /* intrinsic_integer.inl in Resources */,
 				23D889971E596FBF00D39B17 /* type_mat2x4.inl in Resources */,
-				23D88AC61E596FBF00D39B17 /* FragmentShader.glsl in Resources */,
+				23D88AC61E596FBF00D39B17 /* SolidFragmentShader.glsl in Resources */,
 				23D889921E596FBF00D39B17 /* type_gentype.inl in Resources */,
 				23D889901E596FBF00D39B17 /* intrinsic_vector_relational.inl in Resources */,
 				23D889D91E596FBF00D39B17 /* rotate_normalized_axis.inl in Resources */,
@@ -2273,7 +2279,9 @@
 				23D889741E596FBF00D39B17 /* balloon.png in Resources */,
 				23D889CC1E596FBF00D39B17 /* mixed_product.inl in Resources */,
 				23D889771E596FBF00D39B17 /* leaf.png in Resources */,
+				236C07A71E5C796300D87470 /* TransparentFragmentShader.glsl in Resources */,
 				23D889BB1E596FBF00D39B17 /* fast_exponential.inl in Resources */,
+				236C07A61E5C796300D87470 /* AlphaTestedFragmentShader.glsl in Resources */,
 				23D8898B1E596FBF00D39B17 /* intrinsic_exponential.inl in Resources */,
 				23D889E61E596FBF00D39B17 /* vector_angle.inl in Resources */,
 				23D889CE1E596FBF00D39B17 /* norm.inl in Resources */,
