@@ -33,6 +33,6 @@ void main( void )
 {
     lowp vec4 diffuse_color = texture2D( DIFFUSE, texcoord0 );
 
-    if( diffuse_color.a < 0.5 ) discard;
+    if( diffuse_color.a < 0.1 ) discard;
     else gl_FragColor = diffuse_color;
 }

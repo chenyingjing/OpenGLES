@@ -323,26 +323,6 @@ void material_draw_callback(void *ptr) {
         }
         ++i;
     }
-
-    i = 0;
-    for(it = gInstances.begin(); it != gInstances.end(); ++it){
-        OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
-        if (!objmaterial->dissolve) {
-            GFX_push_matrix();
-            GFX_translate(obj->objmesh[i].location.x,
-                          obj->objmesh[i].location.y,
-                          obj->objmesh[i].location.z);
-
-            glCullFace( GL_FRONT );
-            [self RenderInstance:*it index: i];
-
-            glCullFace( GL_BACK );
-            [self RenderInstance:*it index: i];
-
-            GFX_pop_matrix();
-        }
-        ++i;
-    }
     
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -350,7 +330,7 @@ void material_draw_callback(void *ptr) {
     i = 0;
     for(it = gInstances.begin(); it != gInstances.end(); ++it){
         OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
-        if (objmaterial->dissolve > 0.0f && objmaterial->dissolve < 1.0f) {
+        if (objmaterial->dissolve < 1.0f) {
             GFX_push_matrix();
             GFX_translate(obj->objmesh[i].location.x,
                           obj->objmesh[i].location.y,
