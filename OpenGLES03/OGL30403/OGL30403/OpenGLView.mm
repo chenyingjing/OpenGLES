@@ -313,8 +313,7 @@ void material_draw_callback(void *ptr) {
     
     for(it = gInstances.begin(); it != gInstances.end(); ++it){
         OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
-        if( !objmaterial->dissolve || objmaterial->dissolve == 1.0f) {
-            //NSLog(@"AlphaTestedFragmentShader");
+        if (objmaterial->dissolve == 1.0f) {
             GFX_push_matrix();
             GFX_translate(obj->objmesh[i].location.x,
                           obj->objmesh[i].location.y,
@@ -322,10 +321,28 @@ void material_draw_callback(void *ptr) {
             [self RenderInstance:*it index: i];
             GFX_pop_matrix();
         }
-        //NSLog(@"i:%d\tpid:%d", i, (*it).asset->shaders->object());
         ++i;
     }
-    //NSLog(@"======================");
+
+    i = 0;
+    for(it = gInstances.begin(); it != gInstances.end(); ++it){
+        OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
+        if (!objmaterial->dissolve) {
+            GFX_push_matrix();
+            GFX_translate(obj->objmesh[i].location.x,
+                          obj->objmesh[i].location.y,
+                          obj->objmesh[i].location.z);
+
+            glCullFace( GL_FRONT );
+            [self RenderInstance:*it index: i];
+
+            glCullFace( GL_BACK );
+            [self RenderInstance:*it index: i];
+
+            GFX_pop_matrix();
+        }
+        ++i;
+    }
     
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -338,7 +355,13 @@ void material_draw_callback(void *ptr) {
             GFX_translate(obj->objmesh[i].location.x,
                           obj->objmesh[i].location.y,
                           obj->objmesh[i].location.z);
+            
+            glCullFace( GL_FRONT );
             [self RenderInstance:*it index: i];
+            
+            glCullFace( GL_BACK );
+            [self RenderInstance:*it index: i];
+
             GFX_pop_matrix();
         }
         ++i;
