@@ -197,6 +197,7 @@ void program_bind_attrib_location(void *ptr) {
 
 void program_bind_attrib_location(GLuint pid) {
     glBindAttribLocation(pid, 0, "POSITION");
+    glBindAttribLocation(pid, 1, "NORMAL");
     glBindAttribLocation(pid, 2, "TEXCOORD0");
 }
 
@@ -277,6 +278,15 @@ void material_draw_callback(void *ptr) {
 
 - (void)Render
 {
+    static unsigned int start = get_milli_time(), fps = 0;
+    
+    if (get_milli_time() - start >= 1000) {
+        console_print("FPS: %d\n", fps);
+        start = get_milli_time();
+        fps = 0;
+    }
+    ++fps;
+    
     // clear everything
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
     
@@ -361,6 +371,10 @@ void material_draw_callback(void *ptr) {
     //bind the shaders
     shaders->use();
     
+    
+    
+    
+    
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
     glUniform1i(samplerSlot, 1); //set to 1 because the texture will be bound to GL_TEXTURE1
     
@@ -378,6 +392,48 @@ void material_draw_callback(void *ptr) {
     while( i != objmesh->n_objtrianglelist )
     {
         objmesh->current_material = objmesh->objtrianglelist[ i ].objmaterial;
+        
+        int lighting = objmesh->current_material->illumination_model ? 1 : 0;
+        GLint lightingShaderSlot = glGetUniformLocation(shaders->object(), "LIGHTING_SHADER");
+        glUniform1i(lightingShaderSlot, lighting);
+        
+        GLint dissolveSlot = glGetUniformLocation(shaders->object(), "DISSOLVE");
+        glUniform1f(dissolveSlot, objmesh->current_material->dissolve);
+        
+        GLint ambientSlot = glGetUniformLocation(shaders->object(), "AMBIENT_COLOR");
+        glUniform3fv(ambientSlot, 1, (float *)&objmesh->current_material->ambient);
+        
+        GLint diffuseSlot = glGetUniformLocation(shaders->object(), "DIFFUSE_COLOR");
+        glUniform3fv(diffuseSlot, 1, (float *)&objmesh->current_material->diffuse);
+        
+        GLint specularSlot = glGetUniformLocation(shaders->object(), "SPECULAR_COLOR");
+        glUniform3fv(specularSlot, 1, (float *)&objmesh->current_material->specular);
+        
+        GLint shininessSlot = glGetUniformLocation(shaders->object(), "SHININESS");
+        glUniform1f(shininessSlot, objmesh->current_material->specular_exponent * 0.128f);
+        
+        GLint modelviewMatrixSlot = glGetUniformLocation(shaders->object(), "MODELVIEWMATRIX");
+        glUniformMatrix4fv(modelviewMatrixSlot, 1, GL_FALSE, (float *)GFX_get_modelview_matrix());
+        
+        GLint projectionMatrixSlot = glGetUniformLocation(shaders->object(), "PROJECTIONMATRIX");
+        glUniformMatrix4fv(projectionMatrixSlot, 1, GL_FALSE, (float *)GFX_get_projection_matrix());
+        
+        GLint normalMatrixSlot = glGetUniformLocation(shaders->object(), "NORMALMATRIX");
+        glUniformMatrix3fv(normalMatrixSlot, 1, GL_FALSE, (float *)GFX_get_normal_matrix());
+        
+        GLint lightPositionSlot = glGetUniformLocation(shaders->object(), "LIGHTPOSITION");
+        vec3 position    = { 0.0f, -3.0f, 10.0f };
+        vec3 eyeposition = { 0.0f,  0.0f,  0.0f };
+        
+        vec3_multiply_mat4( &eyeposition,
+                           &position,
+                           &gfx.modelview_matrix[ gfx.modelview_matrix_index - 1 ] );
+        
+        glUniform3fv( lightPositionSlot,
+                     1,
+                     ( float * )&eyeposition );
+        
+        
         
         TEXTURE *texture = objmesh->current_material->texture_diffuse;
         glBindTexture(texture->target, texture->tid);
