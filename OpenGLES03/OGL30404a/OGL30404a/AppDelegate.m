@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  OGL30403a
+//  OGL30404a
 //
 //  Created by aa64mac on 04/03/2017.
 //  Copyright © 2017 cyj. All rights reserved.
@@ -47,9 +47,5 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
-{
-    return UIInterfaceOrientationMaskPortrait;
-}
 
 @end
