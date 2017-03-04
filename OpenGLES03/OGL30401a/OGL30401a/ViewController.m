@@ -16,7 +16,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+
+    self.openGLView.leftButton = self.leftButton;
+    self.openGLView.backwardButton = self.backwardButton;
+    self.openGLView.forwardButton = self.forwardButton;
+    self.openGLView.rightButton = self.rightButton;
+    self.openGLView.downButton = self.downButton;
+    self.openGLView.upButton = self.upButton;
+    
+    self.openGLView.scale = 1;
 }
 
 
@@ -32,6 +40,10 @@
     self.openGLView.moveY = position.y;
     
     [sender setTranslation:CGPointZero inView:self.view];
+}
+
+- (IBAction)pinchAction:(UIPinchGestureRecognizer *)sender {
+    self.openGLView.scale = sender.scale;
 }
 
 @end
