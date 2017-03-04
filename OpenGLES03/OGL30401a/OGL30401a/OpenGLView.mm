@@ -210,11 +210,6 @@ void program_bind_attrib_location(GLuint pid) {
 
 - (void)LoadModels
 {
-    GFX_set_matrix_mode(PROJECTION_MATRIX);
-    GFX_load_identity();
-    float aspect = self.frame.size.width/self.frame.size.height;
-    GFX_set_perspective(45.0f, aspect, 0.1f, 100.0f, -90.0f);
-
     obj = OBJ_load(OBJ_FILE, 1);
     
     unsigned int i = 0;
@@ -339,9 +334,9 @@ void program_bind_attrib_location(GLuint pid) {
         gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.right());
     }
     if (self.downButton.highlighted){
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * -glm::vec3(0,1,0));
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.up());
     } else if (self.upButton.highlighted){
-        gCamera.offsetPosition(secondsElapsed * moveSpeed * glm::vec3(0,1,0));
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.up());
     }
 
     const float mouseSensitivity = 0.1f;

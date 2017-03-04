@@ -135,8 +135,12 @@ void Camera::normalizeAngles() {
     if(_horizontalAngle < 0.0f)
         _horizontalAngle += 360.0f;
 
-    if(_verticalAngle > MaxVerticalAngle)
-        _verticalAngle = MaxVerticalAngle;
-    else if(_verticalAngle < -MaxVerticalAngle)
-        _verticalAngle = -MaxVerticalAngle;
+//    if(_verticalAngle > MaxVerticalAngle)
+//        _verticalAngle = MaxVerticalAngle;
+//    else if(_verticalAngle < -MaxVerticalAngle)
+//        _verticalAngle = -MaxVerticalAngle;
+    
+    _verticalAngle = fmodf(_verticalAngle, 360.0f);
+    if(_verticalAngle < 0.0f)
+        _verticalAngle += 360.0f;
 }
