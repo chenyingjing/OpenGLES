@@ -199,32 +199,9 @@ struct ModelInstance {
     return new tdogl::Program(shaders);
 }
 
-void program_bind_attrib_location(void *ptr) {
-    PROGRAM *program = (PROGRAM *)ptr;
-    
-    glBindAttribLocation(program->pid, 0, "POSITION");
-    glBindAttribLocation(program->pid, 2, "TEXCOORD0");
-}
-
 void program_bind_attrib_location(GLuint pid) {
     glBindAttribLocation(pid, 0, "POSITION");
     glBindAttribLocation(pid, 2, "TEXCOORD0");
-}
-
-void material_draw_callback(void *ptr) {
-    OBJMATERIAL *objmaterial = (OBJMATERIAL *)ptr;
-    PROGRAM *program = objmaterial->program;
-    unsigned int i = 0;
-    while (i != program->uniform_count) {
-        if (!strcmp(program->uniform_array[i].name, "DIFFUSE")) {
-            glUniform1i(program->uniform_array[i].location, 1);
-        } else if (!strcmp(program->uniform_array[i].name, "MODELVIEWPROJECTIONMATRIX")) {
-            glUniformMatrix4fv(program->uniform_array[i].location, 1, GL_FALSE, (float *)GFX_get_modelview_projection_matrix());
-        }
-        
-        
-        i++;
-    }
 }
 
 - (ModelAsset *)LoadAsset:(float)dissolve
@@ -243,11 +220,6 @@ void material_draw_callback(void *ptr) {
 
 - (void)LoadModels
 {
-//    GFX_set_matrix_mode(PROJECTION_MATRIX);
-//    GFX_load_identity();
-//    float aspect = self.frame.size.width/self.frame.size.height;
-//    GFX_set_perspective(45.0f, aspect, 0.1f, 100.0f, -90.0f);
-
     obj = OBJ_load(OBJ_FILE, 1);
     
     unsigned int i = 0;
@@ -283,6 +255,8 @@ void material_draw_callback(void *ptr) {
     }
     NSLog(@"--------------------------");
 
+    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 }
 
@@ -291,33 +265,6 @@ void material_draw_callback(void *ptr) {
     // clear everything
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
     
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-
-    GFX_set_matrix_mode(MODELVIEW_MATRIX);
-    GFX_load_identity();
-    vec3 e = {0.0f, -6.0f, 1.35f},
-    c = {0.0f, -5.0f, 1.35f},
-    u = {0.0f, 0.0f, 1.0f};
-//    vec3 e = {0.0f, 1.35f, -6.0f},
-//    c = {0.0f, 1.35f, -5.0f},
-//    u = {0.0f, 1.0f, 0.0f};
-    GFX_look_at(&e, &c, &u);
-    
-//    unsigned int i = 0;
-//    
-//    while (i != obj->n_objmesh) {
-//        
-//        GFX_push_matrix();
-//        GFX_translate(obj->objmesh[i].location.x,
-//                      obj->objmesh[i].location.y,
-//                      obj->objmesh[i].location.z);
-//        OBJ_draw_mesh(obj, i);
-//        GFX_pop_matrix();
-//        
-//        ++i;
-//    }
-
-
     unsigned int i = 0;
     std::list<ModelInstance>::const_iterator it;
     
@@ -325,18 +272,10 @@ void material_draw_callback(void *ptr) {
     for(it = gInstances.begin(); it != gInstances.end(); ++it){
         OBJMATERIAL *objmaterial = obj->objmesh[ i ].objtrianglelist[ 0 ].objmaterial;
         if( !objmaterial->dissolve || objmaterial->dissolve == 1.0f) {
-            //NSLog(@"AlphaTestedFragmentShader");
-            GFX_push_matrix();
-            GFX_translate(obj->objmesh[i].location.x,
-                          obj->objmesh[i].location.y,
-                          obj->objmesh[i].location.z);
             [self RenderInstance:*it index: i];
-            GFX_pop_matrix();
         }
-        //NSLog(@"i:%d\tpid:%d", i, (*it).asset->shaders->object());
         ++i;
     }
-    //NSLog(@"======================");
     
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -371,10 +310,7 @@ void material_draw_callback(void *ptr) {
     
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
     glUniform1i(samplerSlot, 1); //set to 1 because the texture will be bound to GL_TEXTURE1
-    
-//    GLint modelViewProMatrixSlot = glGetUniformLocation(shaders->object(), "MODELVIEWPROJECTIONMATRIX");
-//    glUniformMatrix4fv(modelViewProMatrixSlot, 1, GL_FALSE, (float *)GFX_get_modelview_projection_matrix());
-    
+
     OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     glm::mat4 move = glm::mat4();
     move = glm::translate(move, glm::vec3(objmesh->location.x, objmesh->location.y, objmesh->location.z));
@@ -391,8 +327,6 @@ void material_draw_callback(void *ptr) {
     
     glActiveTexture(GL_TEXTURE1);
 
-//    OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
-    
     glBindVertexArrayOES(objmesh->vao);
     
     unsigned int i = 0;
