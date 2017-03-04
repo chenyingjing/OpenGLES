@@ -10,9 +10,11 @@
 
 #include "tdogl/Program.h"
 #include "tdogl/Texture.h"
+#include "tdogl/Camera.h"
 #include "ResourcePath/ResourcePath.hpp"
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "gfx/gfx.h"
 #include <list>
 
@@ -46,8 +48,10 @@ struct ModelInstance {
     GLfloat gDegreesRotated;
     CADisplayLink * _displayLink;
     glm::mat4 _model;
+    glm::mat4 projection;
     tdogl::Texture* gTexture;
     std::list<ModelInstance> gInstances;
+    tdogl::Camera gCamera;
 }
 
 - (void)setupLayer;
@@ -176,8 +180,15 @@ struct ModelInstance {
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_CULL_FACE  );
     
+    projection = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(0,0,1));
+    projection = glm::rotate(projection, glm::radians(-90.0f), glm::vec3(1,0,0));
     _model = glm::mat4();
-    _model = glm::rotate(_model, glm::radians(-90.0f), glm::vec3(1,0,0));
+    
+    gCamera.setFieldOfView(45.0f);
+    gCamera.lookAt(glm::vec3(1.35, 0, 5));
+    gCamera.setPosition(glm::vec3(1.35, 0, 6));
+    gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
+    gCamera.setNearAndFarPlanes(0.1, 5000);
 }
 
 - (tdogl::Program *)LoadShaders: (const char *)vShader fs:(const char *)fShader
@@ -232,10 +243,10 @@ void material_draw_callback(void *ptr) {
 
 - (void)LoadModels
 {
-    GFX_set_matrix_mode(PROJECTION_MATRIX);
-    GFX_load_identity();
-    float aspect = self.frame.size.width/self.frame.size.height;
-    GFX_set_perspective(45.0f, aspect, 0.1f, 100.0f, -90.0f);
+//    GFX_set_matrix_mode(PROJECTION_MATRIX);
+//    GFX_load_identity();
+//    float aspect = self.frame.size.width/self.frame.size.height;
+//    GFX_set_perspective(45.0f, aspect, 0.1f, 100.0f, -90.0f);
 
     obj = OBJ_load(OBJ_FILE, 1);
     
@@ -361,12 +372,26 @@ void material_draw_callback(void *ptr) {
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
     glUniform1i(samplerSlot, 1); //set to 1 because the texture will be bound to GL_TEXTURE1
     
-    GLint modelViewProMatrixSlot = glGetUniformLocation(shaders->object(), "MODELVIEWPROJECTIONMATRIX");
-    glUniformMatrix4fv(modelViewProMatrixSlot, 1, GL_FALSE, (float *)GFX_get_modelview_projection_matrix());
+//    GLint modelViewProMatrixSlot = glGetUniformLocation(shaders->object(), "MODELVIEWPROJECTIONMATRIX");
+//    glUniformMatrix4fv(modelViewProMatrixSlot, 1, GL_FALSE, (float *)GFX_get_modelview_projection_matrix());
+    
+    OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
+    glm::mat4 move = glm::mat4();
+    move = glm::translate(move, glm::vec3(objmesh->location.x, objmesh->location.y, objmesh->location.z));
+    move = move * _model;
+    
+    GLint modelSlot = glGetUniformLocation(shaders->object(), "model");
+    glUniformMatrix4fv(modelSlot, 1, GL_FALSE, glm::value_ptr(move));
+    
+    GLint cameraSlot = glGetUniformLocation(shaders->object(), "camera");
+    glUniformMatrix4fv(cameraSlot, 1, GL_FALSE, glm::value_ptr(gCamera.matrix()));
+    
+    GLint projectionSlot = glGetUniformLocation(shaders->object(), "projection");
+    glUniformMatrix4fv(projectionSlot, 1, GL_FALSE, glm::value_ptr(projection));
     
     glActiveTexture(GL_TEXTURE1);
 
-    OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
+//    OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     
     glBindVertexArrayOES(objmesh->vao);
     
@@ -400,19 +425,32 @@ void material_draw_callback(void *ptr) {
 
 - (void)Update: (float)secondsElapsed
 {
-//    const GLfloat degreesPerSecond = 0;//180.0f;
-//    gDegreesRotated += secondsElapsed * degreesPerSecond;
-//    
-//    //don't go over 360 degrees
-//    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+    //move position of camera based on WASD keys
+    const float moveSpeed = 2.0; //units per second
+    if (self.backwardButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.forward());
+    } else if (self.forwardButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.forward());
+    }
+    if (self.leftButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.right());
+    } else if (self.rightButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.right());
+    }
+    if (self.downButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.up());
+    } else if (self.upButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.up());
+    }
     
-    const float sensitivity = 0.008f;
-    glm::mat4 r = glm::mat4();
-    r = glm::rotate(r, self.moveX * sensitivity, glm::vec3(0,1,0));
-    r = glm::rotate(r, self.moveY * sensitivity, glm::vec3(1,0,0));
-    _model = r * _model;
+    const float mouseSensitivity = 0.1f;
+    gCamera.offsetOrientation(mouseSensitivity * self.moveY, mouseSensitivity * self.moveX);
     
-    
+    float fieldOfView = 50;
+    fieldOfView *= self.scale;
+    if(fieldOfView < 5.0f) fieldOfView = 5.0f;
+    if(fieldOfView > 130.0f) fieldOfView = 130.0f;
+    gCamera.setFieldOfView(fieldOfView);
 }
 
 - (void)displayLinkCallback:(CADisplayLink*)displayLink
