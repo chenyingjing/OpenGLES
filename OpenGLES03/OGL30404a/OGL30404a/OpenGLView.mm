@@ -358,19 +358,32 @@ void program_bind_attrib_location(GLuint pid) {
 
 - (void)Update: (float)secondsElapsed
 {
-//    const GLfloat degreesPerSecond = 0;//180.0f;
-//    gDegreesRotated += secondsElapsed * degreesPerSecond;
-//    
-//    //don't go over 360 degrees
-//    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+    //move position of camera based on WASD keys
+    const float moveSpeed = 2.0; //units per second
+    if (self.backwardButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.forward());
+    } else if (self.forwardButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.forward());
+    }
+    if (self.leftButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.right());
+    } else if (self.rightButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.right());
+    }
+    if (self.downButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * -gCamera.up());
+    } else if (self.upButton.highlighted){
+        gCamera.offsetPosition(secondsElapsed * moveSpeed * gCamera.up());
+    }
     
-//    const float sensitivity = 0.008f;
-//    glm::mat4 r = glm::mat4();
-//    r = glm::rotate(r, self.moveX * sensitivity, glm::vec3(0,1,0));
-//    r = glm::rotate(r, self.moveY * sensitivity, glm::vec3(1,0,0));
-//    _model = r * _model;
+    const float mouseSensitivity = 0.1f;
+    gCamera.offsetOrientation(mouseSensitivity * self.moveY, mouseSensitivity * self.moveX);
     
-    
+    float fieldOfView = 50;
+    fieldOfView *= self.scale;
+    if(fieldOfView < 5.0f) fieldOfView = 5.0f;
+    if(fieldOfView > 130.0f) fieldOfView = 130.0f;
+    gCamera.setFieldOfView(fieldOfView);
 }
 
 - (void)displayLinkCallback:(CADisplayLink*)displayLink
