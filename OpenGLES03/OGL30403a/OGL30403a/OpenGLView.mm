@@ -168,8 +168,6 @@ struct ModelInstance {
     
     [self initOpenGL];
     
-    //[self LoadShaders];
-
     [self LoadModels];
     
     [self Render];
@@ -203,22 +201,6 @@ void program_bind_attrib_location(GLuint pid) {
     glBindAttribLocation(pid, 0, "POSITION");
     glBindAttribLocation(pid, 2, "TEXCOORD0");
 }
-
-//void material_draw_callback(void *ptr) {
-//    OBJMATERIAL *objmaterial = (OBJMATERIAL *)ptr;
-//    PROGRAM *program = objmaterial->program;
-//    unsigned int i = 0;
-//    while (i != program->uniform_count) {
-//        if (!strcmp(program->uniform_array[i].name, "DIFFUSE")) {
-//            glUniform1i(program->uniform_array[i].location, 1);
-//        } else if (!strcmp(program->uniform_array[i].name, "MODELVIEWPROJECTIONMATRIX")) {
-//            glUniformMatrix4fv(program->uniform_array[i].location, 1, GL_FALSE, (float *)GFX_get_modelview_projection_matrix());
-//        }
-//        
-//        
-//        i++;
-//    }
-//}
 
 - (ModelAsset *)LoadAsset:(float)dissolve
 {
@@ -342,9 +324,6 @@ void program_bind_attrib_location(GLuint pid) {
     
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
     glUniform1i(samplerSlot, 1); //set to 1 because the texture will be bound to GL_TEXTURE1
-    
-//    GLint modelViewProMatrixSlot = glGetUniformLocation(shaders->object(), "MODELVIEWPROJECTIONMATRIX");
-//    glUniformMatrix4fv(modelViewProMatrixSlot, 1, GL_FALSE, (float *)GFX_get_modelview_projection_matrix());
     
     OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     glm::mat4 move = glm::mat4();
