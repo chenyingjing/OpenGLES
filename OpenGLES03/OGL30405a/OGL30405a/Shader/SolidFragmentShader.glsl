@@ -17,6 +17,8 @@ varying mediump vec3 position;
 
 varying lowp vec3 normal;
 
+uniform mediump vec3 EYEPOSTITION;
+
 
 uniform sampler2D DIFFUSE;
 
@@ -32,7 +34,8 @@ void main( void )
         
         mediump vec3 L = normalize( LIGHTPOSITION - position );
         
-        mediump vec3 E = normalize( -position );
+        //mediump vec3 E = normalize( -position );
+        mediump vec3 E = normalize(EYEPOSTITION - position );
         
         mediump vec3 R = normalize( -reflect( L, normal ) );
         
@@ -44,11 +47,11 @@ void main( void )
         
         mediump vec4 specular = vec4( SPECULAR_COLOR, 1.0 ) *
         pow( max( dot( R, E ), 0.0 ),
-            SHININESS * 0.3 );
+            SHININESS );
         
         diffuse_color = vec4( 0.1 ) +
         ambient +
-        diffuse +
+        diffuse; +
         specular;
         
         diffuse_color.a = alpha;
