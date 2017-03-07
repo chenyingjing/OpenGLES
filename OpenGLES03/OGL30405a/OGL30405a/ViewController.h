@@ -12,6 +12,12 @@
 @interface ViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet OpenGLView *openGLView;
+@property (weak, nonatomic) IBOutlet UIButton *leftButton;
+@property (weak, nonatomic) IBOutlet UIButton *downButton;
+@property (weak, nonatomic) IBOutlet UIButton *upButton;
+@property (weak, nonatomic) IBOutlet UIButton *rightButton;
+@property (weak, nonatomic) IBOutlet UIButton *backwardButton;
+@property (weak, nonatomic) IBOutlet UIButton *forwardButton;
 
 @end
 

@@ -22,7 +22,15 @@
     
 }
 
+@property (weak, nonatomic) UIButton *leftButton;
+@property (weak, nonatomic) UIButton *backwardButton;
+@property (weak, nonatomic) UIButton *forwardButton;
+@property (weak, nonatomic) UIButton *rightButton;
+@property (weak, nonatomic) UIButton *downButton;
+@property (weak, nonatomic) UIButton *upButton;
+
 @property float moveX;
 @property float moveY;
+@property float scale;
 
 @end
