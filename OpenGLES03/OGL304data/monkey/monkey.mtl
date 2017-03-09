@@ -1,0 +1,13 @@
+# Blender MTL File: 'monkey.blend'
+# Material Count: 1
+
+newmtl momo
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/momo.png
