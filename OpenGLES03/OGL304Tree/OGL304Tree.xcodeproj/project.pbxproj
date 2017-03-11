@@ -365,6 +365,8 @@
 		2305F5451E73F4350054325D /* scene.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2305F5361E73F4350054325D /* scene.mtl */; };
 		2305F5461E73F4350054325D /* scene.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2305F5371E73F4350054325D /* scene.obj */; };
 		2305F5471E73F4350054325D /* tree.png in Resources */ = {isa = PBXBuildFile; fileRef = 2305F5381E73F4350054325D /* tree.png */; };
+		2305F54A1E73F4D00054325D /* tree.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2305F5481E73F4D00054325D /* tree.mtl */; };
+		2305F54B1E73F4D00054325D /* tree.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2305F5491E73F4D00054325D /* tree.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1153,6 +1155,8 @@
 		2305F5361E73F4350054325D /* scene.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scene.mtl; sourceTree = "<group>"; };
 		2305F5371E73F4350054325D /* scene.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scene.obj; sourceTree = "<group>"; };
 		2305F5381E73F4350054325D /* tree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree.png; sourceTree = "<group>"; };
+		2305F5481E73F4D00054325D /* tree.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tree.mtl; sourceTree = "<group>"; };
+		2305F5491E73F4D00054325D /* tree.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tree.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2146,6 +2150,8 @@
 		2305F5291E73F4350054325D /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				2305F5481E73F4D00054325D /* tree.mtl */,
+				2305F5491E73F4D00054325D /* tree.obj */,
 				2305F52A1E73F4350054325D /* background.png */,
 				2305F52B1E73F4350054325D /* ball.mtl */,
 				2305F52C1E73F4350054325D /* ball.obj */,
@@ -2235,6 +2241,7 @@
 				2305F40D1E73F2500054325D /* color_space.inl in Resources */,
 				2305F43C1E73F2500054325D /* transform.inl in Resources */,
 				2305F5451E73F4350054325D /* scene.mtl in Resources */,
+				2305F54B1E73F4D00054325D /* tree.obj in Resources */,
 				2305F4161E73F2500054325D /* fast_square_root.inl in Resources */,
 				2305F53F1E73F4350054325D /* leaf.png in Resources */,
 				2305F53A1E73F4350054325D /* ball.mtl in Resources */,
@@ -2278,6 +2285,7 @@
 				2305F0C01E73F1AA0054325D /* Assets.xcassets in Resources */,
 				2305F3D81E73F2500054325D /* copying.txt in Resources */,
 				2305F4211E73F2500054325D /* matrix_interpolation.inl in Resources */,
+				2305F54A1E73F4D00054325D /* tree.mtl in Resources */,
 				2305F3FC1E73F2500054325D /* type_vec4.inl in Resources */,
 				2305F3E91E73F2500054325D /* intrinsic_trigonometric.inl in Resources */,
 				2305F40C1E73F2500054325D /* closest_point.inl in Resources */,
