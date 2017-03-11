@@ -23,7 +23,7 @@ OBJMESH *objmesh = NULL;
 
 extern void (*programBindAttribLocation)(GLuint);
 
-#define OBJ_FILE (char *)"monkey.obj"
+#define OBJ_FILE (char *)"ball.obj"
 
 struct ModelAsset {
     tdogl::Program* shaders;
@@ -386,7 +386,7 @@ void program_bind_attrib_location(GLuint pid) {
 //                           &position,
 //                           &gfx.modelview_matrix[ gfx.modelview_matrix_index - 1 ] );
 
-        vec3 lightPosition    = { 0.0f, -3.0f, 10.0f };
+        vec3 lightPosition    = { 0.0f, 2.0f, 2.0f };
         glUniform3fv( lightPositionSlot,
                      1,
                      (float *)&lightPosition );

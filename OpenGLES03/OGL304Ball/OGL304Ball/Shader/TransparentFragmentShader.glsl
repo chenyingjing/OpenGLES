@@ -47,7 +47,7 @@ void main( void )
         pow( max( dot( R, E ), 0.0 ),
             SHININESS );
         
-        diffuse_color = vec4( 0.1 ) +
+        diffuse_color =
         ambient +
         diffuse +
         specular;

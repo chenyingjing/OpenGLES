@@ -363,6 +363,8 @@
 		2305F0A01E73A5BE0054325D /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2305EF3E1E73A5BD0054325D /* Program.cpp */; };
 		2305F0A11E73A5BE0054325D /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2305EF401E73A5BD0054325D /* Shader.cpp */; };
 		2305F0A21E73A5BE0054325D /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2305EF421E73A5BD0054325D /* Texture.cpp */; };
+		2305F0A51E73A7390054325D /* ball.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2305F0A31E73A7390054325D /* ball.mtl */; };
+		2305F0A61E73A7390054325D /* ball.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2305F0A41E73A7390054325D /* ball.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1149,6 +1151,8 @@
 		2305EF421E73A5BD0054325D /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		2305EF431E73A5BD0054325D /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		2305EF441E73A5BD0054325D /* templateApp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = templateApp_Prefix.pch; sourceTree = "<group>"; };
+		2305F0A31E73A7390054325D /* ball.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ball.mtl; sourceTree = "<group>"; };
+		2305F0A41E73A7390054325D /* ball.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ball.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1214,6 +1218,8 @@
 		2305EC291E73A5BC0054325D /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				2305F0A31E73A7390054325D /* ball.mtl */,
+				2305F0A41E73A7390054325D /* ball.obj */,
 				2305EC2A1E73A5BC0054325D /* background.png */,
 				2305EC2B1E73A5BC0054325D /* balloon.png */,
 				2305EC2C1E73A5BC0054325D /* diffuse.png */,
@@ -2230,6 +2236,7 @@
 				2305EF9B1E73A5BD0054325D /* matrix_interpolation.inl in Resources */,
 				2305EFBB1E73A5BD0054325D /* vector_query.inl in Resources */,
 				2305EF761E73A5BD0054325D /* type_vec4.inl in Resources */,
+				2305F0A61E73A7390054325D /* ball.obj in Resources */,
 				2305EF9C1E73A5BD0054325D /* matrix_major_storage.inl in Resources */,
 				2305EF871E73A5BD0054325D /* color_space.inl in Resources */,
 				2305EF771E73A5BD0054325D /* constants.inl in Resources */,
@@ -2240,6 +2247,7 @@
 				2305EF9E1E73A5BD0054325D /* matrix_query.inl in Resources */,
 				2305EF7B1E73A5BD0054325D /* matrix_transform.inl in Resources */,
 				2305EF9A1E73A5BD0054325D /* matrix_cross_product.inl in Resources */,
+				2305F0A51E73A7390054325D /* ball.mtl in Resources */,
 				2305EC221E73A5520054325D /* LaunchScreen.storyboard in Resources */,
 				2305EF661E73A5BD0054325D /* type_gentype.inl in Resources */,
 				2305EF631E73A5BD0054325D /* intrinsic_trigonometric.inl in Resources */,
