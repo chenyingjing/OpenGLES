@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2305EC041E7387990054325D /* monkey.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2305EC021E7387990054325D /* monkey.mtl */; };
+		2305EC051E7387990054325D /* monkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2305EC031E7387990054325D /* monkey.obj */; };
 		23EA9CBC1E7190BD009A79B7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23EA9CBB1E7190BD009A79B7 /* main.m */; };
 		23EA9CBF1E7190BD009A79B7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 23EA9CBE1E7190BD009A79B7 /* AppDelegate.m */; };
 		23EA9CC21E7190BD009A79B7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23EA9CC11E7190BD009A79B7 /* ViewController.m */; };
@@ -364,6 +366,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2305EC021E7387990054325D /* monkey.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = monkey.mtl; sourceTree = "<group>"; };
+		2305EC031E7387990054325D /* monkey.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = monkey.obj; sourceTree = "<group>"; };
 		23EA9CB71E7190BD009A79B7 /* OGL304Monkey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGL304Monkey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23EA9CBB1E7190BD009A79B7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23EA9CBD1E7190BD009A79B7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1210,6 +1214,8 @@
 		23EA9CD11E7191E8009A79B7 /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				2305EC021E7387990054325D /* monkey.mtl */,
+				2305EC031E7387990054325D /* monkey.obj */,
 				23EA9CD21E7191E8009A79B7 /* background.png */,
 				23EA9CD31E7191E8009A79B7 /* balloon.png */,
 				23EA9CD41E7191E8009A79B7 /* diffuse.png */,
@@ -2239,12 +2245,14 @@
 				23EAA05D1E7191E9009A79B7 /* vec1.inl in Resources */,
 				23EAA01F1E7191E9009A79B7 /* matrix_transform.inl in Resources */,
 				23EA9FFA1E7191E9009A79B7 /* func_geometric.inl in Resources */,
+				2305EC041E7387990054325D /* monkey.mtl in Resources */,
 				23EA9FF41E7191E9009A79B7 /* scene.obj in Resources */,
 				23EA9FEE1E7191E9009A79B7 /* grass.png in Resources */,
 				23EA9CCA1E7190BD009A79B7 /* LaunchScreen.storyboard in Resources */,
 				23EAA0611E7191E9009A79B7 /* readme.txt in Resources */,
 				23EAA0221E7191E9009A79B7 /* quaternion.inl in Resources */,
 				23EAA0491E7191E9009A79B7 /* number_precision.inl in Resources */,
+				2305EC051E7387990054325D /* monkey.obj in Resources */,
 				23EAA0381E7191E9009A79B7 /* inertia.inl in Resources */,
 				23EA9FF81E7191E9009A79B7 /* func_common.inl in Resources */,
 				23EA9FFF1E7191E9009A79B7 /* func_trigonometric.inl in Resources */,

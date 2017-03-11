@@ -23,7 +23,7 @@ OBJMESH *objmesh = NULL;
 
 extern void (*programBindAttribLocation)(GLuint);
 
-#define OBJ_FILE (char *)"scene.obj"
+#define OBJ_FILE (char *)"monkey.obj"
 
 struct ModelAsset {
     tdogl::Program* shaders;
@@ -178,13 +178,14 @@ struct ModelInstance {
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_CULL_FACE  );
     
-    projection = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(0,0,1));
-    projection = glm::rotate(projection, glm::radians(-90.0f), glm::vec3(1,0,0));
+//    projection = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(0,0,1));
+//    projection = glm::rotate(projection, glm::radians(-90.0f), glm::vec3(1,0,0));
+//    projection = glm::mat4();
     _model = glm::mat4();
     
     gCamera.setFieldOfView(45.0f);
-    gCamera.lookAt(glm::vec3(1.35, 0, 5));
-    gCamera.setPosition(glm::vec3(1.35, 0, 6));
+    gCamera.lookAt(glm::vec3(0, 0, 0));
+    gCamera.setPosition(glm::vec3(0, 0, 3));
     gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
     gCamera.setNearAndFarPlanes(0.1, 5000);
 }
@@ -318,11 +319,8 @@ void program_bind_attrib_location(GLuint pid) {
     shaders->use();
 
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
-    glUniform1i(samplerSlot, 1); //set to 1 because the texture will be bound to GL_TEXTURE1
+    glUniform1i(samplerSlot, 7); //set to 7 because the texture will be bound to GL_TEXTURE7
     
-//    GLint modelViewProMatrixSlot = glGetUniformLocation(shaders->object(), "MODELVIEWPROJECTIONMATRIX");
-//    glUniformMatrix4fv(modelViewProMatrixSlot, 1, GL_FALSE, (float *)GFX_get_modelview_projection_matrix());
-
     OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     glm::mat4 move = glm::mat4();
     move = glm::translate(move, glm::vec3(objmesh->location.x, objmesh->location.y, objmesh->location.z));
@@ -338,7 +336,7 @@ void program_bind_attrib_location(GLuint pid) {
     glUniformMatrix4fv(projectionSlot, 1, GL_FALSE, glm::value_ptr(projection));
     
     
-    glActiveTexture(GL_TEXTURE1);
+    glActiveTexture(GL_TEXTURE7);
 
     
     glBindVertexArrayOES(objmesh->vao);
