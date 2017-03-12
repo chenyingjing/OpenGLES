@@ -1,0 +1,36 @@
+# Blender MTL File: 'tree.blend'
+# Material Count: 3
+
+newmtl ground
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/grass.png
+
+newmtl leaf
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/leaf.png
+map_d  /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/leaf.png
+
+newmtl tree
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/tree.png
