@@ -22,6 +22,9 @@ as being the original software.
 */
 
 #include "gfx.h"
+#include "../tdogl/Texture.h"
+#include "Bitmap.h"
+using namespace tdogl;
 
 void OBJMESH_add_vertex_data( OBJMESH		  *objmesh,
 							  OBJTRIANGLELIST *objtrianglelist,
@@ -160,6 +163,73 @@ void OBJ_build_texture( OBJ			  *obj,
 	}
 }
 
+static GLenum TextureFormatForBitmapFormat(Bitmap::Format format)
+{
+    switch (format) {
+        case Bitmap::Format_Grayscale: return GL_LUMINANCE;
+        case Bitmap::Format_GrayscaleAlpha: return GL_LUMINANCE_ALPHA;
+        case Bitmap::Format_RGB: return GL_RGB;
+        case Bitmap::Format_RGBA: return GL_RGBA;
+        default: throw std::runtime_error("Unrecognised Bitmap::Format");
+    }
+}
+
+static GLenum BitmapFormat(Bitmap::Format format)
+{
+    switch (format) {
+        case Bitmap::Format_Grayscale: return GL_LUMINANCE;
+        case Bitmap::Format_GrayscaleAlpha: return GL_LUMINANCE_ALPHA;
+        case Bitmap::Format_RGB: return GL_RGB;
+        case Bitmap::Format_RGBA: return GL_BGRA;
+        default: throw std::runtime_error("Unrecognised Bitmap::Format");
+    }
+}
+
+void OBJ_build_texture1( OBJ			  *obj,
+                       unsigned int  texture_index,
+                       char		  *texture_path,
+                       unsigned int  flags,
+                       unsigned char filter,
+                       float		  anisotropic_filter )
+{
+    TEXTURE *texture = obj->texture[ texture_index ];
+    
+    char filename[ MAX_PATH ] = {""};
+    
+    sprintf( filename, "%s%s", texture_path, texture->name  );
+    
+    tdogl::Bitmap bitmap = tdogl::Bitmap::bitmapFromFile(filename);
+//    bitmap.flipVertically();
+//    texture->width = bitmap.width();
+//    texture->height = bitmap.height();
+    
+
+    if( texture->tid ) TEXTURE_delete_id( texture );
+    
+    glGenTextures( 1, &texture->tid );
+    
+    glBindTexture( texture->target, texture->tid );
+    
+    
+    
+    //glGenTextures(1, &_object);
+    //glBindTexture(GL_TEXTURE_2D, _object);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 TextureFormatForBitmapFormat(bitmap.format()),
+                 (GLsizei)bitmap.width(),
+                 (GLsizei)bitmap.height(),
+                 0,
+                 TextureFormatForBitmapFormat(bitmap.format()),
+                 GL_UNSIGNED_BYTE,
+                 bitmap.pixelBuffer());
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+}
 
 void OBJ_build_program( OBJ							*obj,
 						unsigned int				program_index,

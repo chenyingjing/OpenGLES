@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		231881D31E7CDDEB00CEC49E /* th.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 231881D21E7CDDEB00CEC49E /* th.jpg */; };
+		231881D51E7D0C5000CEC49E /* skybluskybox.png in Resources */ = {isa = PBXBuildFile; fileRef = 231881D41E7D0C5000CEC49E /* skybluskybox.png */; };
+		233D1D611E797E1A00615D29 /* skybox.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 233D1D5F1E797E1A00615D29 /* skybox.mtl */; };
+		233D1D621E797E1A00615D29 /* skybox.obj in Resources */ = {isa = PBXBuildFile; fileRef = 233D1D601E797E1A00615D29 /* skybox.obj */; };
 		23ABD2691E74EDE200D271EF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23ABD2681E74EDE200D271EF /* main.m */; };
 		23ABD26C1E74EDE200D271EF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 23ABD26B1E74EDE200D271EF /* AppDelegate.m */; };
 		23ABD26F1E74EDE200D271EF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23ABD26E1E74EDE200D271EF /* ViewController.m */; };
@@ -367,9 +371,15 @@
 		23ABD6FD1E74EEDD00D271EF /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ABD5971E74EEDD00D271EF /* Program.cpp */; };
 		23ABD6FE1E74EEDD00D271EF /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ABD5991E74EEDD00D271EF /* Shader.cpp */; };
 		23ABD6FF1E74EEDD00D271EF /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ABD59B1E74EEDD00D271EF /* Texture.cpp */; };
+		23ABD7021E74F31600D271EF /* bigscene.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 23ABD7001E74F31600D271EF /* bigscene.mtl */; };
+		23ABD7031E74F31600D271EF /* bigscene.obj in Resources */ = {isa = PBXBuildFile; fileRef = 23ABD7011E74F31600D271EF /* bigscene.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		231881D21E7CDDEB00CEC49E /* th.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = th.jpg; sourceTree = "<group>"; };
+		231881D41E7D0C5000CEC49E /* skybluskybox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skybluskybox.png; sourceTree = "<group>"; };
+		233D1D5F1E797E1A00615D29 /* skybox.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = skybox.mtl; sourceTree = "<group>"; };
+		233D1D601E797E1A00615D29 /* skybox.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = skybox.obj; sourceTree = "<group>"; };
 		23ABD2641E74EDE200D271EF /* OGL304bigscene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGL304bigscene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23ABD2681E74EDE200D271EF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23ABD26A1E74EDE200D271EF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1157,6 +1167,8 @@
 		23ABD59B1E74EEDD00D271EF /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		23ABD59C1E74EEDD00D271EF /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		23ABD59D1E74EEDD00D271EF /* templateApp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = templateApp_Prefix.pch; sourceTree = "<group>"; };
+		23ABD7001E74F31600D271EF /* bigscene.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bigscene.mtl; sourceTree = "<group>"; };
+		23ABD7011E74F31600D271EF /* bigscene.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bigscene.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1222,6 +1234,12 @@
 		23ABD27E1E74EEDB00D271EF /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				231881D41E7D0C5000CEC49E /* skybluskybox.png */,
+				231881D21E7CDDEB00CEC49E /* th.jpg */,
+				233D1D5F1E797E1A00615D29 /* skybox.mtl */,
+				233D1D601E797E1A00615D29 /* skybox.obj */,
+				23ABD7001E74F31600D271EF /* bigscene.mtl */,
+				23ABD7011E74F31600D271EF /* bigscene.obj */,
 				23ABD27F1E74EEDB00D271EF /* background.png */,
 				23ABD2801E74EEDB00D271EF /* ball.mtl */,
 				23ABD2811E74EEDB00D271EF /* ball.obj */,
@@ -2259,8 +2277,10 @@
 				23ABD5AA1E74EEDD00D271EF /* scene.mtl in Resources */,
 				23ABD5C91E74EEDD00D271EF /* type_mat3x2.inl in Resources */,
 				23ABD5D51E74EEDD00D271EF /* epsilon.inl in Resources */,
+				231881D51E7D0C5000CEC49E /* skybluskybox.png in Resources */,
 				23ABD5D11E74EEDD00D271EF /* type_vec2.inl in Resources */,
 				23ABD5DD1E74EEDD00D271EF /* reciprocal.inl in Resources */,
+				233D1D611E797E1A00615D29 /* skybox.mtl in Resources */,
 				23ABD5EB1E74EEDD00D271EF /* extented_min_max.inl in Resources */,
 				23ABD5DF1E74EEDD00D271EF /* type_ptr.inl in Resources */,
 				23ABD6091E74EEDD00D271EF /* raw_data.inl in Resources */,
@@ -2301,7 +2321,10 @@
 				23ABD5E61E74EEDD00D271EF /* compatibility.inl in Resources */,
 				23ABD5FE1E74EEDD00D271EF /* multiple.inl in Resources */,
 				23ABD5CF1E74EEDD00D271EF /* type_vec.inl in Resources */,
+				231881D31E7CDDEB00CEC49E /* th.jpg in Resources */,
 				23ABD6001E74EEDD00D271EF /* normal.inl in Resources */,
+				23ABD7021E74F31600D271EF /* bigscene.mtl in Resources */,
+				23ABD7031E74F31600D271EF /* bigscene.obj in Resources */,
 				23ABD5AE1E74EEDD00D271EF /* tree.png in Resources */,
 				23ABD6171E74EEDD00D271EF /* vector_angle.inl in Resources */,
 				23ABD5B31E74EEDD00D271EF /* func_geometric.inl in Resources */,
@@ -2332,6 +2355,7 @@
 				23ABD5A51E74EEDD00D271EF /* model.mtl in Resources */,
 				23ABD5B41E74EEDD00D271EF /* func_integer.inl in Resources */,
 				23ABD5F41E74EEDD00D271EF /* intersect.inl in Resources */,
+				233D1D621E797E1A00615D29 /* skybox.obj in Resources */,
 				23ABD5E31E74EEDD00D271EF /* closest_point.inl in Resources */,
 				23ABD5F71E74EEDD00D271EF /* matrix_cross_product.inl in Resources */,
 				23ABD5D61E74EEDD00D271EF /* matrix_access.inl in Resources */,
@@ -2724,7 +2748,7 @@
 				HEADER_SEARCH_PATHS = "${SRCROOT}/OGL304bigscene/common/thirdparty/glm";
 				INFOPLIST_FILE = OGL304bigscene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cyj.OGL304bigscene;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyj.OGL304bigscene1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_PNG_TEXT = NO;
 			};
@@ -2741,7 +2765,7 @@
 				HEADER_SEARCH_PATHS = "${SRCROOT}/OGL304bigscene/common/thirdparty/glm";
 				INFOPLIST_FILE = OGL304bigscene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cyj.OGL304bigscene;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyj.OGL304bigscene1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_PNG_TEXT = NO;
 			};

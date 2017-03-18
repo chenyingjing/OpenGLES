@@ -208,6 +208,7 @@ typedef struct
 
 
 void OBJ_build_texture( OBJ *obj, unsigned int texture_index, char *texture_path, unsigned int flags, unsigned char filter, float anisotropic_filter );
+void OBJ_build_texture1( OBJ *obj, unsigned int texture_index, char *texture_path, unsigned int flags, unsigned char filter, float anisotropic_filter );
 
 void OBJ_build_program( OBJ	*obj, unsigned int program_index, PROGRAMBINDATTRIBCALLBACK *programbindattribcallback, PROGRAMDRAWCALLBACK *programdrawcallback, unsigned char debug_shader, char *program_path );
 

@@ -23,7 +23,9 @@ OBJMESH *objmesh = NULL;
 
 extern void (*programBindAttribLocation)(GLuint);
 
-#define OBJ_FILE (char *)"tree.obj"
+//#define OBJ_FILE (char *)"bigscene.obj"
+#define OBJ_FILE (char *)"skybox.obj"
+
 
 struct ModelAsset {
     tdogl::Program* shaders;
@@ -176,7 +178,7 @@ struct ModelInstance {
 - (void)initOpenGL
 {
     glEnable( GL_DEPTH_TEST );
-    glEnable( GL_CULL_FACE  );
+    //glEnable( GL_CULL_FACE  );
     
     projection = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(0,0,1));
 //    projection = glm::rotate(projection, glm::radians(-90.0f), glm::vec3(1,0,0));
@@ -244,7 +246,7 @@ void program_bind_attrib_location(GLuint pid) {
     
     i = 0;
     while (i != obj->n_texture) {
-        OBJ_build_texture(obj, i, obj->texture_path, TEXTURE_MIPMAP, TEXTURE_FILTER_2X, 0.0f);
+        OBJ_build_texture1(obj, i, obj->texture_path, TEXTURE_MIPMAP, TEXTURE_FILTER_2X, 0.0f);
         ++i;
     }
     
@@ -319,7 +321,7 @@ void program_bind_attrib_location(GLuint pid) {
     shaders->use();
 
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
-    glUniform1i(samplerSlot, 7); //set to 7 because the texture will be bound to GL_TEXTURE7
+    glUniform1i(samplerSlot, 1); //set to 7 because the texture will be bound to GL_TEXTURE7
     
     OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     glm::mat4 move = glm::mat4();
@@ -336,7 +338,7 @@ void program_bind_attrib_location(GLuint pid) {
     glUniformMatrix4fv(projectionSlot, 1, GL_FALSE, glm::value_ptr(projection));
     
     
-    glActiveTexture(GL_TEXTURE7);
+    glActiveTexture(GL_TEXTURE1);
 
     
     glBindVertexArrayOES(objmesh->vao);
@@ -386,7 +388,7 @@ void program_bind_attrib_location(GLuint pid) {
 //                           &position,
 //                           &gfx.modelview_matrix[ gfx.modelview_matrix_index - 1 ] );
 
-        vec3 lightPosition    = { 0.0f, 4.0f, 2.0f };
+        vec3 lightPosition    = { 0.0f, 100.0f, 0.0f };
         glUniform3fv( lightPositionSlot,
                      1,
                      (float *)&lightPosition );
@@ -398,7 +400,9 @@ void program_bind_attrib_location(GLuint pid) {
         
         
         TEXTURE *texture = objmesh->current_material->texture_diffuse;
-        glBindTexture(texture->target, texture->tid);
+        if (texture) {
+            glBindTexture(texture->target, texture->tid);
+        }
         
         if( objmesh->vao )
         {

@@ -517,6 +517,15 @@ void TEXTURE_generate_id( TEXTURE *texture, unsigned int flags, unsigned char fi
 					  texture->format,
 					  texture->texel_type,
 					  texture->texel_array );
+//        glTexImage2D( texture->target,
+//                     0,
+//                     GL_RGBA,//texture->internal_format,
+//                     texture->width,
+//                     texture->height,
+//                     0,
+//                     GL_RGBA,
+//                     GL_UNSIGNED_SHORT_4_4_4_4,
+//                     texture->texel_array );
 	}
 
 
