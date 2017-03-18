@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		231881D31E7CDDEB00CEC49E /* th.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 231881D21E7CDDEB00CEC49E /* th.jpg */; };
 		231881D51E7D0C5000CEC49E /* skybluskybox.png in Resources */ = {isa = PBXBuildFile; fileRef = 231881D41E7D0C5000CEC49E /* skybluskybox.png */; };
+		231881D71E7D32D100CEC49E /* DaylightBoxUV.png in Resources */ = {isa = PBXBuildFile; fileRef = 231881D61E7D32D100CEC49E /* DaylightBoxUV.png */; };
 		233D1D611E797E1A00615D29 /* skybox.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 233D1D5F1E797E1A00615D29 /* skybox.mtl */; };
 		233D1D621E797E1A00615D29 /* skybox.obj in Resources */ = {isa = PBXBuildFile; fileRef = 233D1D601E797E1A00615D29 /* skybox.obj */; };
 		23ABD2691E74EDE200D271EF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23ABD2681E74EDE200D271EF /* main.m */; };
@@ -378,6 +379,7 @@
 /* Begin PBXFileReference section */
 		231881D21E7CDDEB00CEC49E /* th.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = th.jpg; sourceTree = "<group>"; };
 		231881D41E7D0C5000CEC49E /* skybluskybox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skybluskybox.png; sourceTree = "<group>"; };
+		231881D61E7D32D100CEC49E /* DaylightBoxUV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DaylightBoxUV.png; sourceTree = "<group>"; };
 		233D1D5F1E797E1A00615D29 /* skybox.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = skybox.mtl; sourceTree = "<group>"; };
 		233D1D601E797E1A00615D29 /* skybox.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = skybox.obj; sourceTree = "<group>"; };
 		23ABD2641E74EDE200D271EF /* OGL304bigscene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGL304bigscene.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1234,6 +1236,7 @@
 		23ABD27E1E74EEDB00D271EF /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				231881D61E7D32D100CEC49E /* DaylightBoxUV.png */,
 				231881D41E7D0C5000CEC49E /* skybluskybox.png */,
 				231881D21E7CDDEB00CEC49E /* th.jpg */,
 				233D1D5F1E797E1A00615D29 /* skybox.mtl */,
@@ -2248,6 +2251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				231881D71E7D32D100CEC49E /* DaylightBoxUV.png in Resources */,
 				23ABD5EF1E74EEDD00D271EF /* gradient_paint.inl in Resources */,
 				23ABD5D31E74EEDD00D271EF /* type_vec4.inl in Resources */,
 				23ABD6FA1E74EEDD00D271EF /* VertexShader.glsl in Resources */,

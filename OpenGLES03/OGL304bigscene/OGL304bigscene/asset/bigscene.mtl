@@ -1,5 +1,5 @@
 # Blender MTL File: 'scene1.blend'
-# Material Count: 7
+# Material Count: 6
 
 newmtl balloon
 Ns 66.666667
@@ -47,17 +47,6 @@ illum 2
 map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/momo.png
 
 newmtl sky
-Ns 96.078431
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 0
-map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/DaylightBoxUV.png
-
-newmtl sky_Daylight_Box_UV.png.001
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000

@@ -23,8 +23,8 @@ OBJMESH *objmesh = NULL;
 
 extern void (*programBindAttribLocation)(GLuint);
 
-//#define OBJ_FILE (char *)"bigscene.obj"
-#define OBJ_FILE (char *)"skybox.obj"
+#define OBJ_FILE (char *)"bigscene.obj"
+//#define OBJ_FILE (char *)"skybox.obj"
 
 
 struct ModelAsset {
