@@ -178,7 +178,7 @@ struct ModelInstance {
 - (void)initOpenGL
 {
     glEnable( GL_DEPTH_TEST );
-    //glEnable( GL_CULL_FACE  );
+    glEnable( GL_CULL_FACE  );
     
     projection = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(0,0,1));
 //    projection = glm::rotate(projection, glm::radians(-90.0f), glm::vec3(1,0,0));
@@ -326,7 +326,10 @@ void program_bind_attrib_location(GLuint pid) {
     OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     glm::mat4 move = glm::mat4();
     move = glm::translate(move, glm::vec3(objmesh->location.x, objmesh->location.y, objmesh->location.z));
-    move = move * _model;
+    if (!strcmp(objmesh->name, "Cube") ) {
+        move = glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)) * move;
+    }
+    //move = move * _model;
     
     GLint modelSlot = glGetUniformLocation(shaders->object(), "model");
     glUniformMatrix4fv(modelSlot, 1, GL_FALSE, glm::value_ptr(move));
@@ -425,6 +428,14 @@ void program_bind_attrib_location(GLuint pid) {
 
 - (void)Update: (float)secondsElapsed
 {
+    const GLfloat degreesPerSecond = -1.0f;//90.0f;
+    gDegreesRotated += secondsElapsed * degreesPerSecond;
+    
+    //don't go over 360 degrees
+    while(gDegreesRotated > 360.0f) gDegreesRotated -= 360.0f;
+    gInstances.front().transform = glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0));
+
+    
     //move position of camera based on WASD keys
     const float moveSpeed = 2.0; //units per second
     if (self.backwardButton.highlighted){

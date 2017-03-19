@@ -417,7 +417,7 @@ void TEXTURE_generate_id( TEXTURE *texture, unsigned int flags, unsigned char fi
 							
 			case TEXTURE_FILTER_2X:
 			{
-				glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
+                glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
 				glTexParameteri( texture->target, GL_TEXTURE_MAG_FILTER, GL_LINEAR );				
 				
 				break;

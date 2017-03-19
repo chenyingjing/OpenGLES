@@ -185,6 +185,181 @@ static GLenum BitmapFormat(Bitmap::Format format)
     }
 }
 
+void TEXTURE_generate_id1( TEXTURE *texture, const char *filename, unsigned int flags, unsigned char filter, float anisotropic_filter )
+{
+    if( texture->tid ) TEXTURE_delete_id( texture );
+    
+    glGenTextures( 1, &texture->tid );
+    
+    glBindTexture( texture->target, texture->tid );
+    
+    
+    if( !texture->compression )
+    {
+        switch( texture->byte )
+        {
+            case 1: glPixelStorei( GL_PACK_ALIGNMENT, 1 ); break;
+            case 2: glPixelStorei( GL_PACK_ALIGNMENT, 2 ); break;
+            case 3:
+            case 4: glPixelStorei( GL_PACK_ALIGNMENT, 4 ); break;
+        }
+        
+        if( flags & TEXTURE_16_BITS ) TEXTURE_convert_16_bits( texture, flags & TEXTURE_16_BITS_5551 );
+    }
+    
+    
+    if( flags & TEXTURE_CLAMP )
+    {
+        glTexParameteri( texture->target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+        glTexParameteri( texture->target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    }
+    else
+    {
+        glTexParameteri( texture->target, GL_TEXTURE_WRAP_S, GL_REPEAT );
+        glTexParameteri( texture->target, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    }
+    
+    
+    if( anisotropic_filter )
+    {
+        static float texture_max_anisotropy = 0.0f;
+        
+        if( !texture_max_anisotropy ) glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,
+                                                  &texture_max_anisotropy );
+        
+        anisotropic_filter = CLAMP( anisotropic_filter,
+                                   0.0f,
+                                   texture_max_anisotropy );
+        
+        glTexParameterf( texture->target,
+                        GL_TEXTURE_MAX_ANISOTROPY_EXT,
+                        anisotropic_filter );
+    }
+    
+    
+    if( flags & TEXTURE_MIPMAP )
+    {
+        switch( filter )
+        {
+            case TEXTURE_FILTER_1X:
+            {
+                glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR );
+                glTexParameteri( texture->target, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+                
+                break;
+            }
+                
+            case TEXTURE_FILTER_2X:
+            {
+                glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
+                glTexParameteri( texture->target, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+                
+                break;
+            }
+                
+            case TEXTURE_FILTER_3X:
+            {
+                glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+                glTexParameteri( texture->target, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+                
+                break;
+            }
+                
+            case TEXTURE_FILTER_0X:
+            default:
+            {
+                glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST );
+                glTexParameteri( texture->target, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+                
+                break;
+            }
+        }
+    }
+    else
+    {
+        switch( filter )
+        {
+            case TEXTURE_FILTER_0X:
+            {
+                glTexParameteri( texture->target, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+                glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+                
+                break;
+            }
+                
+            default:
+            {
+                glTexParameteri( texture->target, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+                glTexParameteri( texture->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+                
+                break;
+            }
+        }
+    }
+    
+    
+    if( texture->compression )
+    {
+        unsigned int i		= 0,
+        width  = texture->width,
+        height = texture->height,
+        size	= 0,
+        offset = 0,
+        bsize  = texture->byte == 4 ? 16 : 32,
+        bwidth,
+        bheight;
+        
+        while( i != texture->n_mipmap )
+        {
+            if( width  < 1 ){ width  = 1; }
+            if( height < 1 ){ height = 1; }
+            
+            bwidth = texture->byte == 4 ?
+            width >> 2:
+            width >> 3;
+            
+            bheight = height >> 2;
+            
+            size = bwidth * bheight * ( ( bsize * texture->byte ) >> 3 );
+            
+            if( size < 32 ){ size = 32; }
+            
+            glCompressedTexImage2D( texture->target,
+                                   i,											
+                                   texture->compression,
+                                   width,
+                                   height,
+                                   0,
+                                   size,
+                                   &texture->texel_array[ offset ] );
+            width  >>= 1;
+            height >>= 1;
+            
+            offset += size;
+            
+            ++i;
+        }
+    }
+    else
+    {
+        tdogl::Bitmap bitmap = tdogl::Bitmap::bitmapFromFile(filename);
+
+        
+        glTexImage2D( texture->target,
+                     0,
+                     TextureFormatForBitmapFormat(bitmap.format()),
+                     (GLsizei)bitmap.width(),
+                     (GLsizei)bitmap.height(),
+                     0,
+                     TextureFormatForBitmapFormat(bitmap.format()),
+                     texture->texel_type,
+                     bitmap.pixelBuffer());
+    }
+    
+    
+    if( flags & TEXTURE_MIPMAP && !texture->n_mipmap ) glGenerateMipmap( texture->target );
+}
+
 void OBJ_build_texture1( OBJ			  *obj,
                        unsigned int  texture_index,
                        char		  *texture_path,
@@ -198,22 +373,32 @@ void OBJ_build_texture1( OBJ			  *obj,
     
     sprintf( filename, "%s%s", texture_path, texture->name  );
     
-    tdogl::Bitmap bitmap = tdogl::Bitmap::bitmapFromFile(filename);
-//    bitmap.flipVertically();
-//    texture->width = bitmap.width();
-//    texture->height = bitmap.height();
+//    MEMORY *m = NULL;
+//    m = mopen( filename, 0 );
+//    
+//    if( m )
+//    {
+//        TEXTURE_load( texture, m );
+//        
+//        TEXTURE_generate_id1( texture,
+//                             filename,
+//                            flags,
+//                            filter,
+//                            anisotropic_filter );
+//        
+//        TEXTURE_free_texel_array( texture );
+//        
+//        mclose( m );
+//    }
     
+    tdogl::Bitmap bitmap = tdogl::Bitmap::bitmapFromFile(filename);
 
     if( texture->tid ) TEXTURE_delete_id( texture );
     
     glGenTextures( 1, &texture->tid );
     
     glBindTexture( texture->target, texture->tid );
-    
-    
-    
-    //glGenTextures(1, &_object);
-    //glBindTexture(GL_TEXTURE_2D, _object);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
