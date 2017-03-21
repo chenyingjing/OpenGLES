@@ -226,6 +226,10 @@ void program_bind_attrib_location(GLuint pid) {
     
     unsigned int i = 0;
     while (i != obj->n_objmesh) {
+        console_print("%s: %d: GL_TRIANGLES\n", obj->objmesh[i].name, obj->objmesh[i].objtrianglelist[0].n_indice_array);
+        OBJ_optimize_mesh(obj, i, 64);
+        console_print("%s: %d: GL_TRIANGLES\n", obj->objmesh[i].name, obj->objmesh[i].objtrianglelist[0].n_indice_array);
+        
         OBJ_build_mesh(obj, i);
         OBJ_free_mesh_vertex_data(obj, i);
         
