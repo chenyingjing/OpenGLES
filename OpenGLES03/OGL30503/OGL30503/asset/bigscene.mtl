@@ -20,7 +20,7 @@ Ks 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
-illum 2
+illum 0
 map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/grass.png
 
 newmtl leaf
@@ -54,7 +54,7 @@ Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
-illum 2
+illum 0
 map_Kd /Users/aa64mac/Documents/lianxi/OpenGLES/OpenGLES03/OGL304data/DaylightBoxUV.png
 
 newmtl tree
