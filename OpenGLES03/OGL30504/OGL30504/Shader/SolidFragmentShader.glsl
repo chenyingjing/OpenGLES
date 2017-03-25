@@ -38,8 +38,12 @@ void main( void )
     gl_FragColor = vec4( 0.1 );
     
     if( intensity > 0.0 ) {
+        lowp vec3 reflectionvector = normalize( -reflect( lightdirection_ts, normal ) );
         
-        gl_FragColor += texture2D( DIFFUSE, texcoord0 ) * vec4( DIFFUSE_COLOR, 1.0 ) * intensity;
+        gl_FragColor += texture2D( DIFFUSE, texcoord0 ) * vec4( DIFFUSE_COLOR, 1.0 ) * intensity +
+        
+        vec4( SPECULAR_COLOR, 1.0 ) *
+        pow( max( dot( reflectionvector, position ), 0.0 ), SHININESS );
     }
     
 //    if (LIGHTING_SHADER) {

@@ -378,7 +378,7 @@ void program_bind_attrib_location(GLuint pid) {
         glUniform3fv(specularSlot, 1, (float *)&objmesh->current_material->specular);
         
         GLint shininessSlot = glGetUniformLocation(shaders->object(), "SHININESS");
-        glUniform1f(shininessSlot, objmesh->current_material->specular_exponent);
+        glUniform1f(shininessSlot, objmesh->current_material->specular_exponent * 0.128f);
         
 //        GLint modelviewMatrixSlot = glGetUniformLocation(shaders->object(), "MODELVIEWMATRIX");
 //        glUniformMatrix4fv(modelviewMatrixSlot, 1, GL_FALSE, (float *)GFX_get_modelview_matrix());
