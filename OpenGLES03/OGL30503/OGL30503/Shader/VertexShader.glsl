@@ -27,12 +27,15 @@ uniform mediump mat4 PROJECTIONMATRIX;
 
 uniform mediump mat3 NORMALMATRIX;
 
-attribute lowp vec3 NORMAL;
+uniform mediump vec3 LIGHTPOSITION;
 
+attribute lowp vec3 NORMAL;
+attribute lowp vec3 TANGENT0;
 varying lowp vec3 normal;
 
 varying mediump vec3 position;
 
+varying lowp vec3 lightdirection_ts;
 
 uniform mat4 projection;
 uniform mat4 camera;
@@ -47,15 +50,35 @@ varying mediump vec2 texcoord0;
 
 void main( void )
 {
+    mediump vec3 tmp;
+    
     texcoord0 = TEXCOORD0;
 
-    if (LIGHTING_SHADER) {
-        position = vec3( model * vec4( POSITION, 1.0 ) );
+//    if (LIGHTING_SHADER) {
+    position = vec3( model * vec4( POSITION, 1.0 ) );
+    
+    normal   = NORMALMATRIX * NORMAL;
+    lowp vec3 tangent  = NORMALMATRIX * TANGENT0;
+    lowp vec3 binormal = cross( normal, tangent );
+    
         
-        normal = normalize( NORMALMATRIX * NORMAL );
-        
-        gl_Position = camera * projection * vec4( position, 1.0 );
-    } else {
-        gl_Position = camera * projection * model * vec4( POSITION, 1.0 );
-    }
+    gl_Position = camera * projection * vec4( position, 1.0 );
+    
+    position = vec3(projection * vec4( position, 1.0 ));
+    
+    lowp vec3 lightdirection_es = normalize( LIGHTPOSITION - position );
+    
+    lightdirection_ts.x = dot( lightdirection_es, tangent );
+    lightdirection_ts.y = dot( lightdirection_es, binormal );
+    lightdirection_ts.z = dot( lightdirection_es, normal );
+
+    tmp.x = dot( position, tangent );
+    tmp.y = dot( position, binormal );
+    tmp.z = dot( position, normal );
+    
+    position = -normalize( tmp );
+
+//    } else {
+//        gl_Position = camera * projection * model * vec4( POSITION, 1.0 );
+//    }
 }

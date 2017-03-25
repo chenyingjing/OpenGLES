@@ -203,6 +203,7 @@ void program_bind_attrib_location(GLuint pid) {
     glBindAttribLocation(pid, 0, "POSITION");
     glBindAttribLocation(pid, 1, "NORMAL");
     glBindAttribLocation(pid, 2, "TEXCOORD0");
+    glBindAttribLocation(pid, 3, "TANGENT0");
 }
 
 - (ModelAsset *)LoadAsset:(float)dissolve
@@ -324,8 +325,11 @@ void program_bind_attrib_location(GLuint pid) {
     shaders->use();
 
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
-    glUniform1i(samplerSlot, 1); //set to 7 because the texture will be bound to GL_TEXTURE7
-    
+    glUniform1i(samplerSlot, 1); //set to 1 because the texture will be bound to GL_TEXTURE1
+
+    GLint bumpSlot = glGetUniformLocation(shaders->object(), "BUMP");
+    glUniform1i(bumpSlot, 4); //set to 4 because the texture will be bound to GL_TEXTURE4
+
     OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     glm::mat4 move = glm::mat4();
     move = glm::translate(move, glm::vec3(objmesh->location.x, objmesh->location.y, objmesh->location.z));
@@ -344,7 +348,7 @@ void program_bind_attrib_location(GLuint pid) {
     glUniformMatrix4fv(projectionSlot, 1, GL_FALSE, glm::value_ptr(projection));
     
     
-    glActiveTexture(GL_TEXTURE1);
+    //glActiveTexture(GL_TEXTURE1);
 
     
     glBindVertexArrayOES(objmesh->vao);
@@ -407,7 +411,13 @@ void program_bind_attrib_location(GLuint pid) {
         
         TEXTURE *texture = objmesh->current_material->texture_diffuse;
         if (texture) {
+            glActiveTexture(GL_TEXTURE1);
             glBindTexture(texture->target, texture->tid);
+        }
+        TEXTURE *bumpTexture = objmesh->current_material->texture_bump;
+        if (bumpTexture) {
+            glActiveTexture(GL_TEXTURE4);
+            glBindTexture(bumpTexture->target, bumpTexture->tid);
         }
         
         if( objmesh->vao )
