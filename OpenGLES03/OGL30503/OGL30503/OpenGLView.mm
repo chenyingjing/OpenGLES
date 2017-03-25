@@ -23,8 +23,7 @@ OBJMESH *objmesh = NULL;
 
 extern void (*programBindAttribLocation)(GLuint);
 
-#define OBJ_FILE (char *)"bigscene.obj"
-//#define OBJ_FILE (char *)"skybox.obj"
+#define OBJ_FILE (char *)"ram.obj"
 
 
 struct ModelAsset {
@@ -180,14 +179,14 @@ struct ModelInstance {
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_CULL_FACE  );
     
-    projection = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(0,0,1));
-//    projection = glm::rotate(projection, glm::radians(-90.0f), glm::vec3(1,0,0));
+//    projection = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(0,0,1));
+    projection = glm::rotate(projection, glm::radians(-90.0f), glm::vec3(1,0,0));
 //    projection = glm::mat4();
     _model = glm::mat4();
     
     gCamera.setFieldOfView(45.0f);
     gCamera.lookAt(glm::vec3(0, 0, 0));
-    gCamera.setPosition(glm::vec3(2, 0, 7));
+    gCamera.setPosition(glm::vec3(0, 0, 3));
     gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
     gCamera.setNearAndFarPlanes(0.1, 5000);
 }
@@ -395,7 +394,7 @@ void program_bind_attrib_location(GLuint pid) {
 //                           &position,
 //                           &gfx.modelview_matrix[ gfx.modelview_matrix_index - 1 ] );
 
-        vec3 lightPosition    = { 0.0f, 100.0f, 0.0f };
+        vec3 lightPosition    = { 3.0f, -10.0f, 0.0f };
         glUniform3fv( lightPositionSlot,
                      1,
                      (float *)&lightPosition );

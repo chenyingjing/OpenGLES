@@ -374,6 +374,10 @@
 		23CD2A9F1E860C59004DF6EA /* vector_query.inl in Resources */ = {isa = PBXBuildFile; fileRef = 23CD2A1F1E860C59004DF6EA /* vector_query.inl */; };
 		23CD2AA01E860C59004DF6EA /* wrap.inl in Resources */ = {isa = PBXBuildFile; fileRef = 23CD2A211E860C59004DF6EA /* wrap.inl */; };
 		23CD2AA11E860C59004DF6EA /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 23CD2A331E860C59004DF6EA /* readme.txt */; };
+		23CD2AA51E861DFA004DF6EA /* char_ram_col.png in Resources */ = {isa = PBXBuildFile; fileRef = 23CD2AA21E861DFA004DF6EA /* char_ram_col.png */; };
+		23CD2AA61E861DFA004DF6EA /* ram.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 23CD2AA31E861DFA004DF6EA /* ram.mtl */; };
+		23CD2AA71E861DFA004DF6EA /* ram.obj in Resources */ = {isa = PBXBuildFile; fileRef = 23CD2AA41E861DFA004DF6EA /* ram.obj */; };
+		23CD2AA91E8622B8004DF6EA /* char_ram_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = 23CD2AA81E8622B8004DF6EA /* char_ram_nor.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1171,6 +1175,10 @@
 		23CD2A321E860C59004DF6EA /* vector_relational.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vector_relational.hpp; sourceTree = "<group>"; };
 		23CD2A331E860C59004DF6EA /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		23CD2A351E860C59004DF6EA /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		23CD2AA21E861DFA004DF6EA /* char_ram_col.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = char_ram_col.png; sourceTree = "<group>"; };
+		23CD2AA31E861DFA004DF6EA /* ram.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.mtl; sourceTree = "<group>"; };
+		23CD2AA41E861DFA004DF6EA /* ram.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.obj; sourceTree = "<group>"; };
+		23CD2AA81E8622B8004DF6EA /* char_ram_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = char_ram_nor.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1236,6 +1244,10 @@
 		23CD26121E860913004DF6EA /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				23CD2AA81E8622B8004DF6EA /* char_ram_nor.png */,
+				23CD2AA21E861DFA004DF6EA /* char_ram_col.png */,
+				23CD2AA31E861DFA004DF6EA /* ram.mtl */,
+				23CD2AA41E861DFA004DF6EA /* ram.obj */,
 				23CD26131E860913004DF6EA /* background.png */,
 				23CD26141E860913004DF6EA /* ball.mtl */,
 				23CD26151E860913004DF6EA /* ball.obj */,
@@ -2281,6 +2293,7 @@
 				23CD2A7D1E860C59004DF6EA /* log_base.inl in Resources */,
 				23CD2A671E860C59004DF6EA /* ulp.inl in Resources */,
 				23CD2A531E860C59004DF6EA /* type_mat4x2.inl in Resources */,
+				23CD2AA91E8622B8004DF6EA /* char_ram_nor.png in Resources */,
 				23CD2A4B1E860C59004DF6EA /* type_half.inl in Resources */,
 				23CD2A721E860C59004DF6EA /* extented_min_max.inl in Resources */,
 				23CD2A511E860C59004DF6EA /* type_mat3x3.inl in Resources */,
@@ -2296,6 +2309,7 @@
 				23CD28351E860914004DF6EA /* ball.obj in Resources */,
 				23CD2A761E860C59004DF6EA /* gradient_paint.inl in Resources */,
 				23CD2AA11E860C59004DF6EA /* readme.txt in Resources */,
+				23CD2AA51E861DFA004DF6EA /* char_ram_col.png in Resources */,
 				23CD2A461E860C59004DF6EA /* intrinsic_matrix.inl in Resources */,
 				23CD28451E860914004DF6EA /* skybox.mtl in Resources */,
 				23CD2A541E860C59004DF6EA /* type_mat4x3.inl in Resources */,
@@ -2324,6 +2338,7 @@
 				23CD28481E860914004DF6EA /* tree.mtl in Resources */,
 				23CD28381E860914004DF6EA /* bigscene.obj in Resources */,
 				23CD2A5C1E860C59004DF6EA /* epsilon.inl in Resources */,
+				23CD2AA61E861DFA004DF6EA /* ram.mtl in Resources */,
 				23CD2A4C1E860C59004DF6EA /* type_mat.inl in Resources */,
 				23CD2A7C1E860C59004DF6EA /* io.inl in Resources */,
 				23CD2A851E860C59004DF6EA /* multiple.inl in Resources */,
@@ -2361,6 +2376,7 @@
 				23CD28391E860914004DF6EA /* DaylightBoxUV.png in Resources */,
 				23CD2A891E860C59004DF6EA /* number_precision.inl in Resources */,
 				23CD2A681E860C59004DF6EA /* associated_min_max.inl in Resources */,
+				23CD2AA71E861DFA004DF6EA /* ram.obj in Resources */,
 				23CD2A871E860C59004DF6EA /* normal.inl in Resources */,
 				23CD2A5F1E860C59004DF6EA /* matrix_transform.inl in Resources */,
 				23CD2A6A1E860C59004DF6EA /* closest_point.inl in Resources */,
