@@ -378,6 +378,14 @@
 		23E32DE21E8767F9009D19E5 /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E32C711E8767F9009D19E5 /* Program.cpp */; };
 		23E32DE31E8767F9009D19E5 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E32C731E8767F9009D19E5 /* Shader.cpp */; };
 		23E32DE41E8767FA009D19E5 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E32C751E8767F9009D19E5 /* Texture.cpp */; };
+		23E32DEA1E876F21009D19E5 /* box.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DE51E876F21009D19E5 /* box.mtl */; };
+		23E32DEB1E876F21009D19E5 /* box.obj in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DE61E876F21009D19E5 /* box.obj */; };
+		23E32DEC1E876F21009D19E5 /* bricks.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DE71E876F21009D19E5 /* bricks.jpg */; };
+		23E32DED1E876F21009D19E5 /* normal_map.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DE81E876F21009D19E5 /* normal_map.jpg */; };
+		23E32DEE1E876F21009D19E5 /* normal_up.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DE91E876F21009D19E5 /* normal_up.jpg */; };
+		23E32DF21E8773BC009D19E5 /* bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DEF1E8773BC009D19E5 /* bricks.png */; };
+		23E32DF31E8773BC009D19E5 /* normal_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DF01E8773BC009D19E5 /* normal_map.png */; };
+		23E32DF41E8773BC009D19E5 /* normal_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 23E32DF11E8773BC009D19E5 /* normal_up.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1179,6 +1187,14 @@
 		23E32C751E8767F9009D19E5 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		23E32C761E8767F9009D19E5 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		23E32C771E8767F9009D19E5 /* templateApp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = templateApp_Prefix.pch; sourceTree = "<group>"; };
+		23E32DE51E876F21009D19E5 /* box.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = box.mtl; sourceTree = "<group>"; };
+		23E32DE61E876F21009D19E5 /* box.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = box.obj; sourceTree = "<group>"; };
+		23E32DE71E876F21009D19E5 /* bricks.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bricks.jpg; sourceTree = "<group>"; };
+		23E32DE81E876F21009D19E5 /* normal_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = normal_map.jpg; sourceTree = "<group>"; };
+		23E32DE91E876F21009D19E5 /* normal_up.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = normal_up.jpg; sourceTree = "<group>"; };
+		23E32DEF1E8773BC009D19E5 /* bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bricks.png; sourceTree = "<group>"; };
+		23E32DF01E8773BC009D19E5 /* normal_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal_map.png; sourceTree = "<group>"; };
+		23E32DF11E8773BC009D19E5 /* normal_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal_up.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1244,6 +1260,14 @@
 		23E3294D1E8767F7009D19E5 /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				23E32DEF1E8773BC009D19E5 /* bricks.png */,
+				23E32DF01E8773BC009D19E5 /* normal_map.png */,
+				23E32DF11E8773BC009D19E5 /* normal_up.png */,
+				23E32DE51E876F21009D19E5 /* box.mtl */,
+				23E32DE61E876F21009D19E5 /* box.obj */,
+				23E32DE71E876F21009D19E5 /* bricks.jpg */,
+				23E32DE81E876F21009D19E5 /* normal_map.jpg */,
+				23E32DE91E876F21009D19E5 /* normal_up.jpg */,
 				23E3294E1E8767F7009D19E5 /* background.png */,
 				23E3294F1E8767F7009D19E5 /* ball.mtl */,
 				23E329501E8767F7009D19E5 /* ball.obj */,
@@ -2265,6 +2289,7 @@
 			files = (
 				23E32CBE1E8767F9009D19E5 /* noise.inl in Resources */,
 				23E32CEB1E8767F9009D19E5 /* polar_coordinates.inl in Resources */,
+				23E32DF41E8773BC009D19E5 /* normal_up.png in Resources */,
 				23E32CEF1E8767F9009D19E5 /* rotate_normalized_axis.inl in Resources */,
 				23E32DDE1E8767F9009D19E5 /* TransparentFragmentShader.glsl in Resources */,
 				23E32C911E8767F9009D19E5 /* tree.mtl in Resources */,
@@ -2309,6 +2334,7 @@
 				23E32C841E8767F9009D19E5 /* model.mtl in Resources */,
 				23E32C7D1E8767F9009D19E5 /* bigscene.obj in Resources */,
 				23E32CD41E8767F9009D19E5 /* gradient_paint.inl in Resources */,
+				23E32DED1E876F21009D19E5 /* normal_map.jpg in Resources */,
 				23E32CFF1E8767F9009D19E5 /* readme.txt in Resources */,
 				23E32DDD1E8767F9009D19E5 /* SolidFragmentShader.glsl in Resources */,
 				23E32CA41E8767F9009D19E5 /* intrinsic_matrix.inl in Resources */,
@@ -2320,6 +2346,7 @@
 				23E32CFA1E8767F9009D19E5 /* unsigned_int.inl in Resources */,
 				23E32C871E8767F9009D19E5 /* monkey.mtl in Resources */,
 				23E32C8D1E8767F9009D19E5 /* skybluskybox.png in Resources */,
+				23E32DEA1E876F21009D19E5 /* box.mtl in Resources */,
 				23E32CF81E8767F9009D19E5 /* transform.inl in Resources */,
 				23E32C9D1E8767F9009D19E5 /* func_trigonometric.inl in Resources */,
 				23E32CB91E8767F9009D19E5 /* constants.inl in Resources */,
@@ -2333,6 +2360,7 @@
 				23E32C8A1E8767F9009D19E5 /* ram.obj in Resources */,
 				23E32CEC1E8767F9009D19E5 /* projection.inl in Resources */,
 				23E32CC31E8767F9009D19E5 /* type_precision.inl in Resources */,
+				23E32DEC1E876F21009D19E5 /* bricks.jpg in Resources */,
 				23E32CD91E8767F9009D19E5 /* intersect.inl in Resources */,
 				23E32C791E8767F9009D19E5 /* ball.mtl in Resources */,
 				23E32CE61E8767F9009D19E5 /* normalize_dot.inl in Resources */,
@@ -2347,6 +2375,7 @@
 				23E32CAE1E8767F9009D19E5 /* type_mat3x2.inl in Resources */,
 				23E32C941E8767F9009D19E5 /* copying.txt in Resources */,
 				23E32CA01E8767F9009D19E5 /* intrinsic_common.inl in Resources */,
+				23E32DEB1E876F21009D19E5 /* box.obj in Resources */,
 				23E32CA11E8767F9009D19E5 /* intrinsic_exponential.inl in Resources */,
 				23E32CE81E8767F9009D19E5 /* optimum_pow.inl in Resources */,
 				23E32CF11E8767F9009D19E5 /* scalar_relational.inl in Resources */,
@@ -2374,6 +2403,7 @@
 				23E32CDF1E8767F9009D19E5 /* matrix_operation.inl in Resources */,
 				23E32C9A1E8767F9009D19E5 /* func_matrix.inl in Resources */,
 				23E32CF21E8767F9009D19E5 /* simd_mat4.inl in Resources */,
+				23E32DF31E8773BC009D19E5 /* normal_map.png in Resources */,
 				23E32C8B1E8767F9009D19E5 /* scene.mtl in Resources */,
 				23E32CE71E8767F9009D19E5 /* number_precision.inl in Resources */,
 				23E32CC61E8767F9009D19E5 /* associated_min_max.inl in Resources */,
@@ -2388,6 +2418,8 @@
 				23E32CBC1E8767F9009D19E5 /* matrix_inverse.inl in Resources */,
 				23E32CF31E8767F9009D19E5 /* simd_quat.inl in Resources */,
 				23E32CB31E8767F9009D19E5 /* type_mat4x4.inl in Resources */,
+				23E32DF21E8773BC009D19E5 /* bricks.png in Resources */,
+				23E32DEE1E876F21009D19E5 /* normal_up.jpg in Resources */,
 				23E329411E876767009D19E5 /* Main.storyboard in Resources */,
 				23E32C8F1E8767F9009D19E5 /* skybox.obj in Resources */,
 				23E32CCB1E8767F9009D19E5 /* compatibility.inl in Resources */,

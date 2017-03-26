@@ -23,7 +23,7 @@ OBJMESH *objmesh = NULL;
 
 extern void (*programBindAttribLocation)(GLuint);
 
-#define OBJ_FILE (char *)"ram.obj"
+#define OBJ_FILE (char *)"box.obj"
 
 
 struct ModelAsset {
@@ -185,8 +185,9 @@ struct ModelInstance {
     _model = glm::mat4();
     
     gCamera.setFieldOfView(45.0f);
-    gCamera.lookAt(glm::vec3(0, 0, 0));
-    gCamera.setPosition(glm::vec3(0, 0, 3));
+    gCamera.setPosition(glm::vec3(0, 2.5, 7));
+    gCamera.offsetOrientation(20, 0);
+    //gCamera.lookAt(glm::vec3(0, 10, 5));
     gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
     gCamera.setNearAndFarPlanes(0.1, 5000);
 }
@@ -334,7 +335,7 @@ void program_bind_attrib_location(GLuint pid) {
     glm::mat4 move = glm::mat4();
     move = glm::translate(move, glm::vec3(objmesh->location.x, objmesh->location.y, objmesh->location.z));
     if (!strcmp(objmesh->name, "Cube") ) {
-        move = glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,1,0)) * move;
+        move = glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0,0,1)) * move;
     }
     //move = move * _model;
     
@@ -398,7 +399,7 @@ void program_bind_attrib_location(GLuint pid) {
 //                           &position,
 //                           &gfx.modelview_matrix[ gfx.modelview_matrix_index - 1 ] );
 
-        vec3 lightPosition    = { 3.0f, -10.0f, 0.0f };
+        vec3 lightPosition    = { 3.0f, -20.0f, 0.0f };
         glUniform3fv( lightPositionSlot,
                      1,
                      (float *)&lightPosition );
@@ -441,7 +442,7 @@ void program_bind_attrib_location(GLuint pid) {
 
 - (void)Update: (float)secondsElapsed
 {
-    const GLfloat degreesPerSecond = -1.0f;//90.0f;
+    const GLfloat degreesPerSecond = 45.0f;
     gDegreesRotated += secondsElapsed * degreesPerSecond;
     
     //don't go over 360 degrees
