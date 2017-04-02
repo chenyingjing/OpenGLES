@@ -11,6 +11,7 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 #import "GLESMath.h"
+#import "TextureHelper.h"
 
 @interface DrawableVBO : NSObject
 
@@ -46,6 +47,20 @@
     GLint _diffuseSlot;
     GLint _specularSlot;
     GLint _shininessSlot;
+    
+    // For texture
+    //
+    NSUInteger _textureCount;
+//    GLuint * _textures;
+    GLuint _textureSampler;
+    GLuint _textureBump;
+    
+    GLint _textureCoordSlot;
+    GLint _samplerSlot;
+    GLint _bumpSlot;
+    GLint _wrapMode;
+    GLint _filterMode;
+    NSUInteger _textureIndex;
     
     KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;

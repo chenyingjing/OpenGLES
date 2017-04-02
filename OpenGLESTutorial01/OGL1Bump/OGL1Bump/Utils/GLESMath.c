@@ -12,6 +12,16 @@
 void * memcpy(void *, const void *, size_t);
 void * memset(void *, int, size_t);
 
+unsigned int ksNextPot(unsigned int n)
+{
+    n--;
+    n |= n >> 1; n |= n >> 2;
+    n |= n >> 4; n |= n >> 8;
+    n |= n >> 16;
+    n++;
+    return n;
+}
+
 //
 // Matrix math utils
 //

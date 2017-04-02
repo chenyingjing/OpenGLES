@@ -399,11 +399,13 @@ const int SurfaceMaxCount = 4;
     
     int stride = [vbo vertexSize] * sizeof(GLfloat);
     const GLvoid* normalOffset = (const GLvoid*)(3 * sizeof(GLfloat));
+    const GLvoid* texCoordOffset = (const GLvoid*)(6 * sizeof(GLfloat));
     
     glBindBuffer(GL_ARRAY_BUFFER, [vbo vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
-    glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
-    
+    glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);    
+    glVertexAttribPointer(_textureCoordSlot, 2, GL_FLOAT, GL_FALSE, stride, texCoordOffset);
+
     // Draw the triangles.
     //
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [vbo triangleIndexBuffer]);
@@ -438,6 +440,7 @@ const int SurfaceMaxCount = 4;
         [self setupProgram];
         [self setupProjection];
         [self setupLights];
+        [self setupTextures];
         
         [self resetRotation];
         
@@ -574,6 +577,10 @@ const int SurfaceMaxCount = 4;
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
     _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
+    
+    _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
+    _samplerSlot = glGetUniformLocation(_programHandle, "Sampler");
+    _bumpSlot = glGetUniformLocation(_programHandle, "Bump");
 }
 
 - (void)setupLights
@@ -603,6 +610,36 @@ const int SurfaceMaxCount = 4;
     glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
     glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
     glUniform1f(_shininessSlot, _shininess);
+}
+
+- (void)setupTextures
+{
+//    NSArray * textureFiles = [NSArray arrayWithObjects:
+//                              @"bricks.png",
+//                              @"normal_map.png",
+//                              nil];
+    
+    _textureCount = 2;//[textureFiles count];
+//    _textures = new GLuint[_textureCount];
+    
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(_samplerSlot, 0);
+    _textureSampler = [TextureHelper createTexture:@"bricks.png" isPVR:NO];
+//    _textureBump = [TextureHelper createTexture:@"normal_map.png" isPVR:NO];
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+//    glActiveTexture(GL_TEXTURE1);
+//    glBindTexture(GL_TEXTURE_2D, _textureBump);
+//    glUniform1i(_bumpSlot, 1);
+//    
+    _textureIndex = 0;  // Current bind texture for stage 0.
+    _wrapMode = GL_REPEAT;
+    _filterMode = GL_LINEAR;
+    
+    glEnableVertexAttribArray(_textureCoordSlot);
+    
 }
 
 @end
