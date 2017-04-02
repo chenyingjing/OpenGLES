@@ -624,9 +624,8 @@ const int SurfaceMaxCount = 4;
     
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(_samplerSlot, 0);
-    _textureSampler = [TextureHelper createTexture:@"wooden.png" isPVR:NO];
-    //_textureSampler = [TextureHelper createTexture:@"bricks.png" isPVR:NO];
-//    _textureBump = [TextureHelper createTexture:@"normal_map.png" isPVR:NO];
+    //_textureSampler = [TextureHelper createTexture:@"normal_map.png" isPVR:NO];
+    _textureSampler = [TextureHelper createTexture:@"bricks.png" isPVR:NO];
     
 
 //    glActiveTexture(GL_TEXTURE1);
