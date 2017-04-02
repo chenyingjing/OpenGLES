@@ -624,11 +624,10 @@ const int SurfaceMaxCount = 4;
     
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(_samplerSlot, 0);
-    _textureSampler = [TextureHelper createTexture:@"bricks.png" isPVR:NO];
+    _textureSampler = [TextureHelper createTexture:@"wooden.png" isPVR:NO];
+    //_textureSampler = [TextureHelper createTexture:@"bricks.png" isPVR:NO];
 //    _textureBump = [TextureHelper createTexture:@"normal_map.png" isPVR:NO];
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 //    glActiveTexture(GL_TEXTURE1);
 //    glBindTexture(GL_TEXTURE_2D, _textureBump);
@@ -638,6 +637,9 @@ const int SurfaceMaxCount = 4;
     _wrapMode = GL_REPEAT;
     _filterMode = GL_LINEAR;
     
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
+
     glEnableVertexAttribArray(_textureCoordSlot);
     
 }
