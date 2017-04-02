@@ -13,11 +13,8 @@
 		2313528B1E8BEFB600F1768C /* Wizards_Hat copy.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2313526F1E8BEFB600F1768C /* Wizards_Hat copy.obj */; };
 		2313528C1E8BEFB600F1768C /* Wizards_Hat.obj in Resources */ = {isa = PBXBuildFile; fileRef = 231352701E8BEFB600F1768C /* Wizards_Hat.obj */; };
 		2313528D1E8BEFB600F1768C /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 231352721E8BEFB600F1768C /* OpenGLView.mm */; };
-		2313528E1E8BEFB600F1768C /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 231352741E8BEFB600F1768C /* FragmentShader.glsl */; };
 		2313528F1E8BEFB600F1768C /* PerPixelFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 231352751E8BEFB600F1768C /* PerPixelFragment.glsl */; };
-		231352901E8BEFB600F1768C /* PerPixelToonFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 231352761E8BEFB600F1768C /* PerPixelToonFragment.glsl */; };
 		231352911E8BEFB600F1768C /* PerPixelVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 231352771E8BEFB600F1768C /* PerPixelVertex.glsl */; };
-		231352921E8BEFB600F1768C /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 231352781E8BEFB600F1768C /* VertexShader.glsl */; };
 		231352931E8BEFB600F1768C /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2313527A1E8BEFB600F1768C /* Cube.cpp */; };
 		231352941E8BEFB600F1768C /* ModelSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2313527C1E8BEFB600F1768C /* ModelSurface.cpp */; };
 		231352951E8BEFB600F1768C /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2313527F1E8BEFB600F1768C /* ParametricSurface.cpp */; };
@@ -39,11 +36,8 @@
 		231352701E8BEFB600F1768C /* Wizards_Hat.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Wizards_Hat.obj; sourceTree = "<group>"; };
 		231352711E8BEFB600F1768C /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		231352721E8BEFB600F1768C /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
-		231352741E8BEFB600F1768C /* FragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; };
 		231352751E8BEFB600F1768C /* PerPixelFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerPixelFragment.glsl; sourceTree = "<group>"; };
-		231352761E8BEFB600F1768C /* PerPixelToonFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerPixelToonFragment.glsl; sourceTree = "<group>"; };
 		231352771E8BEFB600F1768C /* PerPixelVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerPixelVertex.glsl; sourceTree = "<group>"; };
-		231352781E8BEFB600F1768C /* VertexShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VertexShader.glsl; sourceTree = "<group>"; };
 		2313527A1E8BEFB600F1768C /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
 		2313527B1E8BEFB600F1768C /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		2313527C1E8BEFB600F1768C /* ModelSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModelSurface.cpp; sourceTree = "<group>"; };
@@ -95,11 +89,8 @@
 		231352731E8BEFB600F1768C /* Shader */ = {
 			isa = PBXGroup;
 			children = (
-				231352741E8BEFB600F1768C /* FragmentShader.glsl */,
 				231352751E8BEFB600F1768C /* PerPixelFragment.glsl */,
-				231352761E8BEFB600F1768C /* PerPixelToonFragment.glsl */,
 				231352771E8BEFB600F1768C /* PerPixelVertex.glsl */,
-				231352781E8BEFB600F1768C /* VertexShader.glsl */,
 			);
 			path = Shader;
 			sourceTree = "<group>";
@@ -237,13 +228,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2313528C1E8BEFB600F1768C /* Wizards_Hat.obj in Resources */,
-				2313528E1E8BEFB600F1768C /* FragmentShader.glsl in Resources */,
-				231352921E8BEFB600F1768C /* VertexShader.glsl in Resources */,
 				231352911E8BEFB600F1768C /* PerPixelVertex.glsl in Resources */,
 				231352891E8BEFB600F1768C /* Monkey.obj in Resources */,
 				2313528B1E8BEFB600F1768C /* Wizards_Hat copy.obj in Resources */,
 				2313528F1E8BEFB600F1768C /* PerPixelFragment.glsl in Resources */,
-				231352901E8BEFB600F1768C /* PerPixelToonFragment.glsl in Resources */,
 				231352881E8BEFB600F1768C /* Monkey.mtl in Resources */,
 				2375D6801E8BEEBB0071FCA7 /* LaunchScreen.storyboard in Resources */,
 				2375D67D1E8BEEBB0071FCA7 /* Assets.xcassets in Resources */,

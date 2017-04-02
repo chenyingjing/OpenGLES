@@ -19,15 +19,15 @@ int Cube::GetVertexSize() const
     int floatsPerVertex = 3;
     if (m_vertexFlags & VertexFlagsNormals)
         floatsPerVertex += 3;
-//    if (m_vertexFlags & VertexFlagsTexCoords)
-//    floatsPerVertex += 2;
+    if (m_vertexFlags & VertexFlagsTexCoords)
+        floatsPerVertex += 2;
     
     return floatsPerVertex;
 }
 
 int Cube::GetVertexCount()
 {
-    return 8;
+    return 24;
 }
 
 int Cube::GetLineIndexCount() const
@@ -45,16 +45,16 @@ void Cube::GenerateVertices(float * vertices) const
     if (!vertices) {
         return;
     }
-
+    
     const GLfloat verticesData[] = {
         -1.5f, -1.5f, 1.5f,
         -1.5f, 1.5f, 1.5f,
-        1.5f, 1.5f, 1.5f, 
+        1.5f, 1.5f, 1.5f,
         1.5f, -1.5f, 1.5f,
         
-        1.5f, -1.5f, -1.5f, 
+        1.5f, -1.5f, -1.5f,
         1.5f, 1.5f, -1.5f,
-        -1.5f, 1.5f, -1.5f, 
+        -1.5f, 1.5f, -1.5f,
         -1.5f, -1.5f, -1.5f
     };
     
@@ -69,7 +69,57 @@ void Cube::GenerateVertices(float * vertices) const
         -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350,
         -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350
     };
-    if (m_vertexFlags & VertexFlagsNormals) {
+    
+    //    const GLfloat verticesDataWithNormalAndTexCoords[] = {
+    //        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350, 1, 1,
+    //        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350, 1, 0,
+    //        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350, 0, 0,
+    //        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350, 0, 1,
+    //
+    //        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 1, 1,
+    //        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 1, 0,
+    //        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 0, 0,
+    //        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 0, 1
+    //    };
+    
+    GLfloat size = 1.5;
+    
+    const GLfloat verticesDataWithNormalAndTexCoords[] = {
+        -size, -size, size, 0, 0, 1, 0, 1,
+        -size, size, size, 0, 0, 1, 0, 0,
+        size, size, size, 0, 0, 1, 1, 0,
+        size, -size, size, 0, 0, 1, 1, 1,
+        
+        size, -size, -size, 0.577350, -0.577350, -0.577350, 0, 1,
+        size, size, -size, 0.577350, 0.577350, -0.577350, 0, 0,
+        -size, size, -size, -0.577350, 0.577350, -0.577350, 1, 0,
+        -size, -size, -size, -0.577350, -0.577350, -0.577350, 1, 1,
+        
+        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,
+        -size, size, -size, -0.577350, 0.577350, -0.577350, 0, 0,
+        -size, size, size, -0.577350, 0.577350, 0.577350, 1, 0,
+        -size, -size, size, -0.577350, -0.577350, 0.577350, 1, 1,
+        
+        size, -size, size, 0.577350, -0.577350, 0.577350, 0, 1,
+        size, size, size, 0.577350, 0.577350, 0.577350, 0, 0,
+        size, size, -size, 0.577350, 0.577350, -0.577350, 1, 0,
+        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1,
+        
+        -size, size, size, 0, 1, 0, 0, 2,
+        -size, size, -size, 0, 1, 0, 0, 0,
+        size, size, -size, 0, 1, 0, 2, 0,
+        size, size, size, 0, 1, 0, 2, 2,
+        
+        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,
+        -size, -size, size, -0.577350, -0.577350, 0.577350, 0, 0,
+        size, -size, size, 0.577350, -0.577350, 0.577350, 1, 0,
+        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1
+    };
+    
+    
+    if ((m_vertexFlags & VertexFlagsNormals) && (m_vertexFlags & VertexFlagsTexCoords)) {
+        memcpy(vertices, verticesDataWithNormalAndTexCoords, sizeof(verticesDataWithNormalAndTexCoords));
+    } else if (m_vertexFlags & VertexFlagsNormals) {
         memcpy(vertices, verticesDataWithNormal, sizeof(verticesDataWithNormal));
     } else {
         memcpy(vertices, verticesData, sizeof(verticesData));
@@ -111,24 +161,44 @@ void Cube::GenerateTriangleIndices(unsigned short * indices) const
         return;
     }
     
+    //    const GLushort indicesData[] = {
+    //        // Front face
+    //        3, 2, 1, 3, 1, 0,
+    //
+    //        // Back face
+    //        7, 5, 4, 7, 6, 5,
+    //
+    //        // Left face
+    //        0, 1, 7, 7, 1, 6,
+    //
+    //        // Right face
+    //        3, 4, 5, 3, 5, 2,
+    //
+    //        // Up face
+    //        1, 2, 5, 1, 5, 6,
+    //
+    //        // Down face
+    //        0, 7, 3, 3, 7, 4
+    //    };
+    
     const GLushort indicesData[] = {
         // Front face
-        3, 2, 1, 3, 1, 0,
+        0, 3, 1, 3, 2, 1,
         
         // Back face
         7, 5, 4, 7, 6, 5,
         
         // Left face
-        0, 1, 7, 7, 1, 6,
+        11, 10, 8, 8, 10, 9,
         
         // Right face
-        3, 4, 5, 3, 5, 2,
+        12, 15, 13, 15, 14, 13,
         
         // Up face
-        1, 2, 5, 1, 5, 6,
+        16, 18, 17, 16, 19, 18,
         
         // Down face
-        0, 7, 3, 3, 7, 4
+        20, 23, 22, 20, 22, 21
     };
     
     memcpy(indices, indicesData, sizeof(indicesData));

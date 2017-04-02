@@ -13,13 +13,6 @@
 #include "Cube.h"
 #import "ModelSurface.h"
 
-enum LightMode {
-    PerVertex,
-    PerPixel,
-    PerPixelToon,
-    PerPixelSelfShadowing
-};
-const enum LightMode CurrentLightMode = PerPixel;
 
 
 //
@@ -201,25 +194,12 @@ const enum LightMode CurrentLightMode = PerPixel;
     NSString * fragmentShaderPath = nil;
     
     
-    if (CurrentLightMode == PerVertex) {
-        vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"VertexShader"
-                                                           ofType:@"glsl"];
-        fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"FragmentShader"
-                                                             ofType:@"glsl"];
-    }
-    else if (CurrentLightMode == PerPixelToon) {
-        vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"PerPixelVertex"
-                                                           ofType:@"glsl"];
-        fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"PerPixelToonFragment"
-                                                             ofType:@"glsl"];
-    }
-    else  {
-        // default per-pixel light
-        vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"PerPixelVertex"
-                                                           ofType:@"glsl"];
-        fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"PerPixelFragment"
-                                                             ofType:@"glsl"];
-    }
+    // default per-pixel light
+    vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"PerPixelVertex"
+                                                       ofType:@"glsl"];
+    fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"PerPixelFragment"
+                                                         ofType:@"glsl"];
+
     
     _programHandle = [GLESUtils loadProgram:vertexShaderPath
                  withFragmentShaderFilepath:fragmentShaderPath];
@@ -265,24 +245,6 @@ const int SurfaceMaxCount = 4;
 {
     ISurface * surface = NULL;
     
-//    if (type == SurfaceSphere) {
-//        surface = new Sphere(3.0f);
-//    }
-//    else if (type == SurfaceCone) {
-//        surface = new Cone(4, 1);
-//    }
-//    else if (type == SurfaceTorus) {
-//        surface = new Torus(2.0f, 0.3f);
-//    }
-//    else if (type == SurfaceTrefoilKnot) {
-//        surface = new TrefoilKnot(2.4f);
-//    }
-//    else if (type == SurfaceKleinBottle) {
-//        surface = new KleinBottle(0.25f);
-//    }
-//    else if (type == SurfaceMobiusStrip) {
-//        surface = new MobiusStrip(1.4);
-//    }
     if (type == SurfaceCube) {
         surface = new Cube();
     }
@@ -321,7 +283,7 @@ const int SurfaceMaxCount = 4;
 {
     ISurface * surface = [self createSurface:surfaceType];
     
-    surface->SetVertexFlags(VertexFlagsNormals);
+    surface->SetVertexFlags(VertexFlagsNormals| VertexFlagsTexCoords);
     
     // Get vertice from surface.
     //
@@ -454,7 +416,7 @@ const int SurfaceMaxCount = 4;
     if (_context == nil)
         return;
     
-    glClearColor(0.0, 1.0, 0.0, 1.0);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Setup viewport
