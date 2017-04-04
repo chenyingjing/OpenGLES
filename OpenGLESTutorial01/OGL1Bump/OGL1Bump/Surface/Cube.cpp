@@ -9,6 +9,26 @@
 #include<cstring>
 #include "Cube.h"
 
+const GLushort indicesData[] = {
+    // Front face
+    0, 3, 1, 3, 2, 1,
+    
+    // Back face
+    7, 5, 4, 7, 6, 5,
+    
+    // Left face
+    11, 10, 8, 8, 10, 9,
+    
+    // Right face
+    12, 15, 13, 15, 14, 13,
+    
+    // Up face
+    16, 18, 17, 16, 19, 18,
+    
+    // Down face
+    20, 23, 22, 20, 22, 21
+};
+
 void Cube::SetVertexFlags(unsigned char flags)
 {
     m_vertexFlags = flags;
@@ -20,7 +40,7 @@ int Cube::GetVertexSize() const
     if (m_vertexFlags & VertexFlagsNormals)
         floatsPerVertex += 3;
     if (m_vertexFlags & VertexFlagsTexCoords)
-        floatsPerVertex += 2;
+        floatsPerVertex += (2+3);
     
     return floatsPerVertex;
 }
@@ -70,51 +90,73 @@ void Cube::GenerateVertices(float * vertices) const
         -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350
     };
     
-    //    const GLfloat verticesDataWithNormalAndTexCoords[] = {
-    //        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350, 1, 1,
-    //        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350, 1, 0,
-    //        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350, 0, 0,
-    //        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350, 0, 1,
-    //
-    //        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 1, 1,
-    //        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 1, 0,
-    //        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 0, 0,
-    //        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 0, 1
-    //    };
-    
     GLfloat size = 1.5;
     
-    const GLfloat verticesDataWithNormalAndTexCoords[] = {
-        -size, -size, size, 0, 0, 1, 0, 1,
-        -size, size, size, 0, 0, 1, 0, 0,
-        size, size, size, 0, 0, 1, 1, 0,
-        size, -size, size, 0, 0, 1, 1, 1,
+//    const GLfloat verticesDataWithNormalAndTexCoords[] = {
+//        -size, -size, size, 0, 0, 1, 0, 1,
+//        -size, size, size, 0, 0, 1, 0, 0,
+//        size, size, size, 0, 0, 1, 1, 0,
+//        size, -size, size, 0, 0, 1, 1, 1,
+//        
+//        size, -size, -size, 0.577350, -0.577350, -0.577350, 0, 1,
+//        size, size, -size, 0.577350, 0.577350, -0.577350, 0, 0,
+//        -size, size, -size, -0.577350, 0.577350, -0.577350, 1, 0,
+//        -size, -size, -size, -0.577350, -0.577350, -0.577350, 1, 1,
+//        
+//        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,
+//        -size, size, -size, -0.577350, 0.577350, -0.577350, 0, 0,
+//        -size, size, size, -0.577350, 0.577350, 0.577350, 1, 0,
+//        -size, -size, size, -0.577350, -0.577350, 0.577350, 1, 1,
+//        
+//        size, -size, size, 0.577350, -0.577350, 0.577350, 0, 1,
+//        size, size, size, 0.577350, 0.577350, 0.577350, 0, 0,
+//        size, size, -size, 0.577350, 0.577350, -0.577350, 1, 0,
+//        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1,
+//        
+//        -size, size, size, 0, 1, 0, 0, 2,
+//        -size, size, -size, 0, 1, 0, 0, 0,
+//        size, size, -size, 0, 1, 0, 2, 0,
+//        size, size, size, 0, 1, 0, 2, 2,
+//        
+//        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,
+//        -size, -size, size, -0.577350, -0.577350, 0.577350, 0, 0,
+//        size, -size, size, 0.577350, -0.577350, 0.577350, 1, 0,
+//        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1
+//    };
+    
+    GLfloat verticesDataWithNormalAndTexCoords[] = {
+        -size, -size, size, 0, 0, 1, 0, 1,  0, 0, 0,
+        -size, size, size, 0, 0, 1, 0, 0,  0, 0, 0,
+        size, size, size, 0, 0, 1, 1, 0,  0, 0, 0,
+        size, -size, size, 0, 0, 1, 1, 1,  0, 0, 0,
         
-        size, -size, -size, 0.577350, -0.577350, -0.577350, 0, 1,
-        size, size, -size, 0.577350, 0.577350, -0.577350, 0, 0,
-        -size, size, -size, -0.577350, 0.577350, -0.577350, 1, 0,
-        -size, -size, -size, -0.577350, -0.577350, -0.577350, 1, 1,
+        size, -size, -size, 0.577350, -0.577350, -0.577350, 0, 1,  0, 0, 0,
+        size, size, -size, 0.577350, 0.577350, -0.577350, 0, 0,  0, 0, 0,
+        -size, size, -size, -0.577350, 0.577350, -0.577350, 1, 0,  0, 0, 0,
+        -size, -size, -size, -0.577350, -0.577350, -0.577350, 1, 1,  0, 0, 0,
         
-        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,
-        -size, size, -size, -0.577350, 0.577350, -0.577350, 0, 0,
-        -size, size, size, -0.577350, 0.577350, 0.577350, 1, 0,
-        -size, -size, size, -0.577350, -0.577350, 0.577350, 1, 1,
+        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,  0, 0, 0,
+        -size, size, -size, -0.577350, 0.577350, -0.577350, 0, 0,  0, 0, 0,
+        -size, size, size, -0.577350, 0.577350, 0.577350, 1, 0,  0, 0, 0,
+        -size, -size, size, -0.577350, -0.577350, 0.577350, 1, 1,  0, 0, 0,
         
-        size, -size, size, 0.577350, -0.577350, 0.577350, 0, 1,
-        size, size, size, 0.577350, 0.577350, 0.577350, 0, 0,
-        size, size, -size, 0.577350, 0.577350, -0.577350, 1, 0,
-        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1,
+        size, -size, size, 0.577350, -0.577350, 0.577350, 0, 1,  0, 0, 0,
+        size, size, size, 0.577350, 0.577350, 0.577350, 0, 0,  0, 0, 0,
+        size, size, -size, 0.577350, 0.577350, -0.577350, 1, 0, 0, 0, 0,
+        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1,  0, 0, 0,
         
-        -size, size, size, 0, 1, 0, 0, 2,
-        -size, size, -size, 0, 1, 0, 0, 0,
-        size, size, -size, 0, 1, 0, 2, 0,
-        size, size, size, 0, 1, 0, 2, 2,
+        -size, size, size, 0, 1, 0, 0, 2,  0, 0, 0,
+        -size, size, -size, 0, 1, 0, 0, 0,  0, 0, 0,
+        size, size, -size, 0, 1, 0, 2, 0,  0, 0, 0,
+        size, size, size, 0, 1, 0, 2, 2,  0, 0, 0,
         
-        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,
-        -size, -size, size, -0.577350, -0.577350, 0.577350, 0, 0,
-        size, -size, size, 0.577350, -0.577350, 0.577350, 1, 0,
-        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1
+        -size, -size, -size, -0.577350, -0.577350, -0.577350, 0, 1,  0, 0, 0,
+        -size, -size, size, -0.577350, -0.577350, 0.577350, 0, 0,  0, 0, 0,
+        size, -size, size, 0.577350, -0.577350, 0.577350, 1, 0,  0, 0, 0,
+        size, -size, -size, 0.577350, -0.577350, -0.577350, 1, 1,  0, 0, 0
     };
+    
+    CalculateTangent(verticesDataWithNormalAndTexCoords, sizeof(verticesDataWithNormalAndTexCoords));
     
     
     if ((m_vertexFlags & VertexFlagsNormals) && (m_vertexFlags & VertexFlagsTexCoords)) {
@@ -124,6 +166,27 @@ void Cube::GenerateVertices(float * vertices) const
     } else {
         memcpy(vertices, verticesData, sizeof(verticesData));
     }
+}
+
+void Cube::CalculateTangent(GLfloat *data, size_t dataLength) const {
+    if (data == NULL) {
+        return;
+    }
+    
+    if (dataLength <= 0) {
+        return;
+    }
+    
+    //TODO:CalculateTangent
+    struct VData
+    {
+        vec3 vertex;
+        vec3 normal;
+        vec2 uv;
+        vec3 tangent;
+    };
+    size_t vDataLength = dataLength / sizeof(VData);
+    VData *vData = (VData *)data;
 }
 
 void Cube::GenerateLineIndices(unsigned short * indices) const
@@ -181,25 +244,7 @@ void Cube::GenerateTriangleIndices(unsigned short * indices) const
     //        0, 7, 3, 3, 7, 4
     //    };
     
-    const GLushort indicesData[] = {
-        // Front face
-        0, 3, 1, 3, 2, 1,
-        
-        // Back face
-        7, 5, 4, 7, 6, 5,
-        
-        // Left face
-        11, 10, 8, 8, 10, 9,
-        
-        // Right face
-        12, 15, 13, 15, 14, 13,
-        
-        // Up face
-        16, 18, 17, 16, 19, 18,
-        
-        // Down face
-        20, 23, 22, 20, 22, 21
-    };
+
     
     memcpy(indices, indicesData, sizeof(indicesData));
 }

@@ -230,41 +230,13 @@
     glEnable(GL_DEPTH_TEST);
 }
 
-//const int SurfaceSphere = 0;
-//const int SurfaceCone = 1;
-//const int SurfaceTorus = 2;
-//const int SurfaceTrefoilKnot = 3;
-//const int SurfaceKleinBottle = 4;
-//const int SurfaceMobiusStrip = 5;
-const int SurfaceCube = 0;
-
-//const int SurfaceMaxCount = 7;
-const int SurfaceMaxCount = 4;
+const int SurfaceMaxCount = 1;
 
 - (ISurface *)createSurface:(int)type
 {
     ISurface * surface = NULL;
-    
-    if (type == SurfaceCube) {
-        surface = new Cube();
-    }
-    else {
-        NSArray * modelList = [NSArray arrayWithObjects:
-                               @"Ninja",
-                               @"Wizards_Hat",
-                               @"Monkey",
-                               nil];
-        
-        type = (type - 1) % [modelList count];
-        
-        //ISurface * surface = NULL;
-        
-        NSString * modelpath = [[NSBundle mainBundle] pathForResource:[modelList objectAtIndex:type]
-                                                               ofType:@"obj"];
-        surface = new ModelSurface(modelpath.UTF8String);
-        
-        return surface;
-    }
+
+    surface = new Cube();
     
     return surface;
 }
@@ -400,12 +372,14 @@ const int SurfaceMaxCount = 4;
     int stride = [vbo vertexSize] * sizeof(GLfloat);
     const GLvoid* normalOffset = (const GLvoid*)(3 * sizeof(GLfloat));
     const GLvoid* texCoordOffset = (const GLvoid*)(6 * sizeof(GLfloat));
+    const GLvoid* tangentOffset = (const GLvoid*)(8 * sizeof(GLfloat));
     
     glBindBuffer(GL_ARRAY_BUFFER, [vbo vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
     glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);    
     glVertexAttribPointer(_textureCoordSlot, 2, GL_FLOAT, GL_FALSE, stride, texCoordOffset);
-
+    glVertexAttribPointer(_tangentSlot, 3, GL_FLOAT, GL_FALSE, stride, tangentOffset);
+    
     // Draw the triangles.
     //
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [vbo triangleIndexBuffer]);
@@ -579,6 +553,8 @@ const int SurfaceMaxCount = 4;
     _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
     
     _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
+    _tangentSlot = glGetAttribLocation(_programHandle, "vTangent");
+    
     _samplerSlot = glGetUniformLocation(_programHandle, "Sampler");
     _bumpSlot = glGetUniformLocation(_programHandle, "Bump");
 }
@@ -619,20 +595,19 @@ const int SurfaceMaxCount = 4;
 //                              @"normal_map.png",
 //                              nil];
     
-    _textureCount = 2;//[textureFiles count];
+//    _textureCount = 2;//[textureFiles count];
 //    _textures = new GLuint[_textureCount];
     
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(_samplerSlot, 0);
-    //_textureSampler = [TextureHelper createTexture:@"normal_map.png" isPVR:NO];
     _textureSampler = [TextureHelper createTexture:@"bricks.png" isPVR:NO];
     
 
-//    glActiveTexture(GL_TEXTURE1);
-//    glBindTexture(GL_TEXTURE_2D, _textureBump);
-//    glUniform1i(_bumpSlot, 1);
-//    
-    _textureIndex = 0;  // Current bind texture for stage 0.
+    glActiveTexture(GL_TEXTURE1);
+    glUniform1i(_bumpSlot, 1);
+    _textureBump = [TextureHelper createTexture:@"normal_map.png" isPVR:NO];
+    
+//    _textureIndex = 0;  // Current bind texture for stage 0.
     _wrapMode = GL_REPEAT;
     _filterMode = GL_LINEAR;
     

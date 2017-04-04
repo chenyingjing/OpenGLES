@@ -11,6 +11,8 @@ uniform highp vec4 vSpecularMaterial;
 uniform highp float shininess;
 
 uniform sampler2D Sampler;
+uniform sampler2D Bump;
+
 
 void main(void)
 {
@@ -37,6 +39,7 @@ void main(void)
 //    gl_FragColor = vAmbientMaterial + df * vDiffuse + sf * vSpecularMaterial;
     
     gl_FragColor = texture2D(Sampler, vTextureCoordOut);
+    //gl_FragColor = texture2D(Bump, vTextureCoordOut);
 
 }
 

@@ -43,6 +43,7 @@
     GLuint _lightPositionSlot;
     
     GLint _normalSlot;
+    GLint _tangentSlot;
     GLint _ambientSlot;
     GLint _diffuseSlot;
     GLint _specularSlot;

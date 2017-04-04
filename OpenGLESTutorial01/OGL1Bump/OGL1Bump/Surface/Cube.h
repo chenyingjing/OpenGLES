@@ -27,6 +27,8 @@ public:
     
 private:
     unsigned char m_vertexFlags;
+    
+    void CalculateTangent(GLfloat *data, size_t dataLength) const;
 };
 
 
