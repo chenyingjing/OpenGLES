@@ -546,11 +546,11 @@ const int SurfaceMaxCount = 1;
     _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
     _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
     _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
+    _diffuseSlot = glGetUniformLocation(_programHandle, "vDiffuseMaterial");
     _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
     
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
-    _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
     
     _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
     _tangentSlot = glGetAttribLocation(_programHandle, "vTangent");
@@ -565,18 +565,22 @@ const int SurfaceMaxCount = 1;
     //
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_normalSlot);
+    glEnableVertexAttribArray(_tangentSlot);
     
     // Set up some default material parameters.
     //
-    _lightPosition.x = _lightPosition.y = _lightPosition.z = 1.0;
+    _lightPosition.x = 10;
+    _lightPosition.y = 0;
+    _lightPosition.z = 10;
     
     _ambient.r = _ambient.g = _ambient.b = 0.04;
-    _specular.r = _specular.g = _specular.b = 0.5;
-    _diffuse.r = 0.0;
-    _diffuse.g = 0.5;
-    _diffuse.b = 1.0;
+    _specular.r = _specular.g = _specular.b = _specular.a = 1;
+    _diffuse.r = 1;
+    _diffuse.g = 1;
+    _diffuse.b = 1;
+    _diffuse.a = 1;
     
-    _shininess = 10;
+    _shininess = 100;
 }
 
 - (void)updateLights
@@ -584,7 +588,7 @@ const int SurfaceMaxCount = 1;
     glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
     glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
     glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
-    glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
+    glUniform4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
     glUniform1f(_shininessSlot, _shininess);
 }
 

@@ -177,7 +177,6 @@ void Cube::CalculateTangent(GLfloat *data, size_t dataLength) const {
         return;
     }
     
-    //TODO:CalculateTangent
     struct VData
     {
         vec3 vertex;
@@ -187,6 +186,39 @@ void Cube::CalculateTangent(GLfloat *data, size_t dataLength) const {
     };
     size_t vDataLength = dataLength / sizeof(VData);
     VData *vData = (VData *)data;
+
+
+    size_t indicesSize = sizeof(indicesData) / sizeof(indicesData[0]);
+    for (unsigned int i = 0 ; i < indicesSize ; i += 3) {
+        VData& v0 = vData[indicesData[i]];
+        VData& v1 = vData[indicesData[i+1]];
+        VData& v2 = vData[indicesData[i+2]];
+        
+        vec3 Edge1 = v1.vertex - v0.vertex;
+        vec3 Edge2 = v2.vertex - v0.vertex;
+        
+        float DeltaU1 = v1.uv.x - v0.uv.x;
+        float DeltaV1 = v1.uv.y - v0.uv.y;
+        float DeltaU2 = v2.uv.x - v0.uv.x;
+        float DeltaV2 = v2.uv.y - v0.uv.y;
+        
+        float f = 1.0f / (DeltaU1 * DeltaV2 - DeltaU2 * DeltaV1);
+
+        vec3 Tangent;
+        
+        Tangent.x = f * (DeltaV2 * Edge1.x - DeltaV1 * Edge2.x);
+        Tangent.y = f * (DeltaV2 * Edge1.y - DeltaV1 * Edge2.y);
+        Tangent.z = f * (DeltaV2 * Edge1.z - DeltaV1 * Edge2.z);
+        
+        v0.tangent += Tangent;
+        v1.tangent += Tangent;
+        v2.tangent += Tangent;
+    }
+    
+    for (unsigned int i = 0 ; i < vDataLength ; i++) {
+        vData[i].tangent.Normalize();
+    }
+
 }
 
 void Cube::GenerateLineIndices(unsigned short * indices) const
