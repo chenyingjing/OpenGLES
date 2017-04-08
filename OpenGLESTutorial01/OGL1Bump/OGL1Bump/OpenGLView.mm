@@ -574,7 +574,8 @@ const int SurfaceMaxCount = 1;
     _lightPosition.z = 10;
     
     _ambient.r = _ambient.g = _ambient.b = 0.04;
-    _specular.r = _specular.g = _specular.b = _specular.a = 1;
+    _specular.r = _specular.g = _specular.b = 0.001;
+    _specular.a = 1;
     _diffuse.r = 1;
     _diffuse.g = 1;
     _diffuse.b = 1;

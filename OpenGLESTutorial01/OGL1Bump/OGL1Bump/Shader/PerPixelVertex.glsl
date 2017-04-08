@@ -19,8 +19,12 @@ varying vec2 vTextureCoordOut;
 varying vec3 position;
 varying lowp vec3 lightdirection_ts;
 
+varying vec3 vNormal0;
+varying vec3 vTangent0;
+
 void main(void)
 {
+/*
     gl_Position = projection * modelView * vec4( vPosition, 1.0 );
     
     mediump vec3 tmp;
@@ -44,5 +48,12 @@ void main(void)
     tmp.z = dot( position, normal );
     
     position = -normalize( tmp );
+*/
+    
+    gl_Position = projection * modelView * vec4( vPosition, 1.0 );
+    vTextureCoordOut = vTextureCoord;
+    vNormal0   = normalMatrix * vNormal;
+    vTangent0  = normalMatrix * vTangent;
+    position = vec3(modelView * vec4( vPosition, 1.0 ));
 }
 
