@@ -191,11 +191,13 @@ enum LightMode {
     if (_vboArray == nil) {
         _vboArray = [[NSMutableArray alloc] init];
         
-        DrawableVBO * vbo = [DrawableVBOFactory createDrawableVBO:SurfaceSphere];
+        DrawableVBO * vbo = nil;
+        
+        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceCube];
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceCube];
+        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceSphere];
         [_vboArray addObject:vbo];
         vbo = nil;
         
