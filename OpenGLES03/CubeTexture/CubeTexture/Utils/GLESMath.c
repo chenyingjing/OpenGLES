@@ -262,7 +262,7 @@ void ksLookAt(KSMatrix4 * result, const KSVec3 * eye, const KSVec3 * target, con
     ksVectorSubtract(&forward, target, eye);
     ksVectorNormalize(&forward);
     
-    ksCrossProduct(&side, up, &forward);
+    ksCrossProduct(&side, &forward, up);
     ksVectorNormalize(&side );
     
     ksCrossProduct(&up2, &side, &forward);
