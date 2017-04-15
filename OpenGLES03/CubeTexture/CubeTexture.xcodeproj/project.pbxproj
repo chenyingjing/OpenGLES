@@ -20,9 +20,6 @@
 		23ACFC001E9A294D00735226 /* Wizards_Hat.obj in Resources */ = {isa = PBXBuildFile; fileRef = 23ACFBCE1E9A294D00735226 /* Wizards_Hat.obj */; };
 		23ACFC011E9A294D00735226 /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23ACFBD01E9A294D00735226 /* OpenGLView.mm */; };
 		23ACFC021E9A294D00735226 /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23ACFBD51E9A294D00735226 /* FragmentShader.glsl */; };
-		23ACFC031E9A294D00735226 /* PerPixelFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23ACFBD61E9A294D00735226 /* PerPixelFragment.glsl */; };
-		23ACFC041E9A294D00735226 /* PerPixelToonFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23ACFBD71E9A294D00735226 /* PerPixelToonFragment.glsl */; };
-		23ACFC051E9A294D00735226 /* PerPixelVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23ACFBD81E9A294D00735226 /* PerPixelVertex.glsl */; };
 		23ACFC061E9A294D00735226 /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 23ACFBD91E9A294D00735226 /* VertexShader.glsl */; };
 		23ACFC071E9A294D00735226 /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ACFBDB1E9A294D00735226 /* Cube.cpp */; };
 		23ACFC081E9A294D00735226 /* DrawableVBOFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23ACFBDE1E9A294D00735226 /* DrawableVBOFactory.mm */; };
@@ -67,9 +64,6 @@
 		23ACFBD21E9A294D00735226 /* PVRTGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRTGlobal.h; sourceTree = "<group>"; };
 		23ACFBD31E9A294D00735226 /* PVRTTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRTTexture.h; sourceTree = "<group>"; };
 		23ACFBD51E9A294D00735226 /* FragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; };
-		23ACFBD61E9A294D00735226 /* PerPixelFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerPixelFragment.glsl; sourceTree = "<group>"; };
-		23ACFBD71E9A294D00735226 /* PerPixelToonFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerPixelToonFragment.glsl; sourceTree = "<group>"; };
-		23ACFBD81E9A294D00735226 /* PerPixelVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerPixelVertex.glsl; sourceTree = "<group>"; };
 		23ACFBD91E9A294D00735226 /* VertexShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VertexShader.glsl; sourceTree = "<group>"; };
 		23ACFBDB1E9A294D00735226 /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
 		23ACFBDC1E9A294D00735226 /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
@@ -188,9 +182,6 @@
 			isa = PBXGroup;
 			children = (
 				23ACFBD51E9A294D00735226 /* FragmentShader.glsl */,
-				23ACFBD61E9A294D00735226 /* PerPixelFragment.glsl */,
-				23ACFBD71E9A294D00735226 /* PerPixelToonFragment.glsl */,
-				23ACFBD81E9A294D00735226 /* PerPixelVertex.glsl */,
 				23ACFBD91E9A294D00735226 /* VertexShader.glsl */,
 			);
 			path = Shader;
@@ -316,7 +307,6 @@
 				23ACFC061E9A294D00735226 /* VertexShader.glsl in Resources */,
 				23ACFC0F1E9A294D00735226 /* front.png in Resources */,
 				23ACFC111E9A294D00735226 /* left.png in Resources */,
-				23ACFC051E9A294D00735226 /* PerPixelVertex.glsl in Resources */,
 				23ACFC151E9A294D00735226 /* wooden.png in Resources */,
 				23ACFC0E1E9A294D00735226 /* flower.jpg in Resources */,
 				23ACFC0B1E9A294D00735226 /* back.png in Resources */,
@@ -324,9 +314,7 @@
 				23ACFC101E9A294D00735226 /* ground.png in Resources */,
 				23ACFC141E9A294D00735226 /* sky.png in Resources */,
 				23ACFBFF1E9A294D00735226 /* Wizards_Hat copy.obj in Resources */,
-				23ACFC031E9A294D00735226 /* PerPixelFragment.glsl in Resources */,
 				23ACFC121E9A294D00735226 /* light.png in Resources */,
-				23ACFC041E9A294D00735226 /* PerPixelToonFragment.glsl in Resources */,
 				23ACFBFC1E9A294D00735226 /* Monkey.mtl in Resources */,
 				23ACFBC21E9A285200735226 /* LaunchScreen.storyboard in Resources */,
 				23ACFBBF1E9A285200735226 /* Assets.xcassets in Resources */,

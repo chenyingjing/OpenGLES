@@ -201,7 +201,7 @@
 + (DrawableVBO *) createDrawableVBO:(SurfaceType) type
 {
     if (type == SurfaceCube) {
-        return [self createVBOsForCube:1.2];
+        return [self createVBOsForCube:20];
     }
 
     return [self createVBO:type];

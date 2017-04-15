@@ -321,7 +321,7 @@ enum LightMode {
     //
     ksMatrixLoadIdentity(&_projectionMatrix);
     float aspect = width / height;
-    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 12.0f);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 0.01f, 1000.0f);
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
@@ -329,7 +329,7 @@ enum LightMode {
     // Generate a view matrix
     //
     _eyePosition.x = _eyePosition.y = 0;
-    _eyePosition.z = 1.0;
+    _eyePosition.z = 0;
     KSVec3 target = {0.0, 0.0, -1};
     KSVec3 up = {0.0, 1.0, 0};
     ksMatrixLoadIdentity(&_viewBaseMatrix);
@@ -338,7 +338,11 @@ enum LightMode {
     // Initialize states
     //
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
+    //glDisable(GL_CULL_FACE);
+    glCullFace( GL_FRONT );
+    //glCullFace( GL_BACK );
+    //glDepthFunc(GL_LEQUAL);
 }
 
 
@@ -365,7 +369,7 @@ enum LightMode {
     //
     KSMatrix4 viewMatrix;
     ksCopyMatrix4(&viewMatrix, &_viewBaseMatrix);
-    ksTranslate(&viewMatrix, 0.0, 0.0, -9);
+    ksTranslate(&viewMatrix, 0.0, 0.0, 0);
     
     //ksMatrixMultiply(&viewMatrix, &_rotationMatrix, &viewMatrix); // Rotate camera
     
@@ -417,6 +421,7 @@ enum LightMode {
     
     glClearColor(0.0f, 1.0f, 0.0f, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glCullFace( GL_BACK );
     
     // Setup viewport
     //
