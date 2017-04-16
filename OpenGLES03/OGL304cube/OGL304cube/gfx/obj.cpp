@@ -367,29 +367,120 @@ void OBJ_build_texture1( OBJ			  *obj,
                        unsigned char filter,
                        float		  anisotropic_filter )
 {
+    //OBJMESH *objmesh = &obj->objmesh[ texture_index ];
     TEXTURE *texture = obj->texture[ texture_index ];
+    printf("texture name: %s\n", texture->name);
+    
+    if (!strcmp(texture->name, "DaylightBoxUV.png"))
+    {
+        printf("it is cube\n");
+        
+        TEXTURE *texture = obj->texture[ texture_index ];
+        
+        texture->target = GL_TEXTURE_CUBE_MAP;
+        
+        char filename[ MAX_PATH ] = {""};
+        
+        if( texture->tid ) TEXTURE_delete_id( texture );
+        
+        glGenTextures( 1, &texture->tid );
+        
+        glBindTexture( GL_TEXTURE_CUBE_MAP, texture->tid );
+        
+        glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+        
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        
+        
+        sprintf( filename, "%s%s", texture_path, "right.png"  );
+        tdogl::Bitmap bitmapR = tdogl::Bitmap::bitmapFromFile(filename);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+                     0,
+                     TextureFormatForBitmapFormat(bitmapR.format()),
+                     (GLsizei)bitmapR.width(),
+                     (GLsizei)bitmapR.height(),
+                     0,
+                     TextureFormatForBitmapFormat(bitmapR.format()),
+                     GL_UNSIGNED_BYTE,
+                     bitmapR.pixelBuffer());
+        
+        sprintf( filename, "%s%s", texture_path, "left.png"  );
+        tdogl::Bitmap bitmapL = tdogl::Bitmap::bitmapFromFile(filename);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+                     0,
+                     TextureFormatForBitmapFormat(bitmapL.format()),
+                     (GLsizei)bitmapL.width(),
+                     (GLsizei)bitmapL.height(),
+                     0,
+                     TextureFormatForBitmapFormat(bitmapL.format()),
+                     GL_UNSIGNED_BYTE,
+                     bitmapL.pixelBuffer());
+        
+        sprintf( filename, "%s%s", texture_path, "front.png"  );
+        tdogl::Bitmap bitmapF = tdogl::Bitmap::bitmapFromFile(filename);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+                     0,
+                     TextureFormatForBitmapFormat(bitmapF.format()),
+                     (GLsizei)bitmapF.width(),
+                     (GLsizei)bitmapF.height(),
+                     0,
+                     TextureFormatForBitmapFormat(bitmapF.format()),
+                     GL_UNSIGNED_BYTE,
+                     bitmapF.pixelBuffer());
+
+        sprintf( filename, "%s%s", texture_path, "back.png"  );
+        tdogl::Bitmap bitmapB = tdogl::Bitmap::bitmapFromFile(filename);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+                     0,
+                     TextureFormatForBitmapFormat(bitmapB.format()),
+                     (GLsizei)bitmapB.width(),
+                     (GLsizei)bitmapB.height(),
+                     0,
+                     TextureFormatForBitmapFormat(bitmapB.format()),
+                     GL_UNSIGNED_BYTE,
+                     bitmapB.pixelBuffer());
+    
+    
+        sprintf( filename, "%s%s", texture_path, "sky.png"  );
+        tdogl::Bitmap bitmapS = tdogl::Bitmap::bitmapFromFile(filename);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+                     0,
+                     TextureFormatForBitmapFormat(bitmapS.format()),
+                     (GLsizei)bitmapS.width(),
+                     (GLsizei)bitmapS.height(),
+                     0,
+                     TextureFormatForBitmapFormat(bitmapS.format()),
+                     GL_UNSIGNED_BYTE,
+                     bitmapS.pixelBuffer());
+
+        sprintf( filename, "%s%s", texture_path, "ground.png"  );
+        tdogl::Bitmap bitmapG = tdogl::Bitmap::bitmapFromFile(filename);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+                     0,
+                     TextureFormatForBitmapFormat(bitmapG.format()),
+                     (GLsizei)bitmapG.width(),
+                     (GLsizei)bitmapG.height(),
+                     0,
+                     TextureFormatForBitmapFormat(bitmapG.format()),
+                     GL_UNSIGNED_BYTE,
+                     bitmapG.pixelBuffer());
+        
+        glBindTexture( GL_TEXTURE_CUBE_MAP, 0 );
+        
+        return;
+    }
+    
+    
+    
+    
+    //TEXTURE *texture = obj->texture[ texture_index ];
     
     char filename[ MAX_PATH ] = {""};
     
     sprintf( filename, "%s%s", texture_path, texture->name  );
-    
-//    MEMORY *m = NULL;
-//    m = mopen( filename, 0 );
-//    
-//    if( m )
-//    {
-//        TEXTURE_load( texture, m );
-//        
-//        TEXTURE_generate_id1( texture,
-//                             filename,
-//                            flags,
-//                            filter,
-//                            anisotropic_filter );
-//        
-//        TEXTURE_free_texel_array( texture );
-//        
-//        mclose( m );
-//    }
     
     tdogl::Bitmap bitmap = tdogl::Bitmap::bitmapFromFile(filename);
 
@@ -401,8 +492,8 @@ void OBJ_build_texture1( OBJ			  *obj,
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexImage2D(GL_TEXTURE_2D,
                  0,
                  TextureFormatForBitmapFormat(bitmap.format()),
@@ -954,6 +1045,7 @@ PROGRAM *OBJ_get_program( OBJ *obj, const char *name, unsigned char exact_name )
 
 OBJMATERIAL *OBJ_get_material( OBJ *obj, const char *name, unsigned char exact_name )
 {
+    printf("material name: %s\n", name);
 	unsigned int i = 0;
 	
 	while( i != obj->n_objmaterial )

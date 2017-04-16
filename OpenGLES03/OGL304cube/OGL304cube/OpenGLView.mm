@@ -187,6 +187,7 @@ struct ModelInstance {
     
     gCamera.setFieldOfView(45.0f);
     gCamera.lookAt(glm::vec3(0, 0, 0));
+    //gCamera.setPosition(glm::vec3(2, 0, 250));
     gCamera.setPosition(glm::vec3(2, 0, 7));
     gCamera.setViewportAspectRatio(self.frame.size.width / self.frame.size.height);
     gCamera.setNearAndFarPlanes(0.1, 5000);
@@ -321,7 +322,11 @@ void program_bind_attrib_location(GLuint pid) {
     shaders->use();
 
     GLint samplerSlot = glGetUniformLocation(shaders->object(), "DIFFUSE");
-    glUniform1i(samplerSlot, 1); //set to 7 because the texture will be bound to GL_TEXTURE7
+    glUniform1i(samplerSlot, 1); //set to 1 because the texture will be bound to GL_TEXTURE1
+    
+    GLint cubeSamplerSlot = glGetUniformLocation(shaders->object(), "samplerForCube");
+    glUniform1i(cubeSamplerSlot, 2); //set to 2 because the texture will be bound to GL_TEXTURE2
+    
     
     OBJMESH *objmesh = &obj->objmesh[ mesh_index ];
     glm::mat4 move = glm::mat4();
@@ -340,8 +345,20 @@ void program_bind_attrib_location(GLuint pid) {
     GLint projectionSlot = glGetUniformLocation(shaders->object(), "projection");
     glUniformMatrix4fv(projectionSlot, 1, GL_FALSE, glm::value_ptr(projection));
     
+    GLint textureModeSlot = glGetUniformLocation(shaders->object(), "textureMode");
     
-    glActiveTexture(GL_TEXTURE1);
+    //NSLog(@"mesh name: %s", objmesh->name);
+    if (!strcmp(objmesh->name, "Cube") ) {
+        glActiveTexture(GL_TEXTURE2);
+        glUniform1i(textureModeSlot, 0);
+        //glCullFace( GL_FRONT );
+        //glBindTexture( GL_TEXTURE_CUBE_MAP, texture->tid );
+        
+    } else {
+        glActiveTexture(GL_TEXTURE1);
+        glUniform1i(textureModeSlot, 1);
+        //glCullFace( GL_BACK );
+    }
 
     
     glBindVertexArrayOES(objmesh->vao);
@@ -406,7 +423,7 @@ void program_bind_attrib_location(GLuint pid) {
         if (texture) {
             glBindTexture(texture->target, texture->tid);
         }
-        
+    
         if( objmesh->vao )
         {
             if( objmesh->n_objtrianglelist != 1 )

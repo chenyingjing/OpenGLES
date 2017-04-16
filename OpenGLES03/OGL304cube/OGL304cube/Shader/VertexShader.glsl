@@ -44,6 +44,7 @@ attribute mediump vec3 POSITION;
 attribute mediump vec2 TEXCOORD0;
 
 varying mediump vec2 texcoord0;
+varying vec3 cubeTexCoord0;
 
 void main( void )
 {
@@ -58,4 +59,5 @@ void main( void )
     } else {
         gl_Position = camera * projection * model * vec4( POSITION, 1.0 );
     }
+    cubeTexCoord0 = POSITION;
 }

@@ -19,45 +19,21 @@ varying lowp vec3 normal;
 
 uniform mediump vec3 EYEPOSTITION;
 
-
+uniform samplerCube samplerForCube;
 uniform sampler2D DIFFUSE;
 
 varying mediump vec2 texcoord0;
+varying mediump vec3 cubeTexCoord0;
+
+uniform mediump int textureMode;
 
 void main( void )
 {
-    lowp vec4 diffuse_color = texture2D( DIFFUSE, texcoord0 );
-
-//    if (LIGHTING_SHADER) {
-//        
-//        lowp float alpha = diffuse_color.a;
-//        
-//        mediump vec3 L = normalize( LIGHTPOSITION - position );
-//        
-//        //mediump vec3 E = normalize( -position );
-//        mediump vec3 E = normalize(EYEPOSTITION - position );
-//        
-//        mediump vec3 R = normalize( -reflect( L, normal ) );
-//        
-//        mediump vec4 ambient  = vec4( AMBIENT_COLOR, 1.0 );
-//        
-//        mediump vec4 diffuse  = vec4( DIFFUSE_COLOR *
-//                                     diffuse_color.rgb, 1.0 ) *
-//        max( dot( normal, L ), 0.0 );
-//        
-//        mediump vec4 specular = vec4( SPECULAR_COLOR, 1.0 ) *
-//        pow( max( dot( R, E ), 0.0 ),
-//            SHININESS );
-//        
-//        diffuse_color = 
-//        ambient +
-//        diffuse +
-//        specular;
+//    lowp vec4 diffuse_color = texture2D( DIFFUSE, texcoord0 );
 //
-//        
-//        diffuse_color.a = alpha;
-//        
-//    }
-    
-    gl_FragColor = diffuse_color;
+    if (textureMode == 0) {
+        gl_FragColor = textureCube(samplerForCube, cubeTexCoord0);
+    } else {
+        gl_FragColor = texture2D( DIFFUSE, texcoord0 );
+    }
 }
